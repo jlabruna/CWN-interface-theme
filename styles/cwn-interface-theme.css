@@ -1,0 +1,114 @@
+/* Theme only SWNR-generated chat cards marked by this module. */
+.chat-message.cwnit-chat-message {
+  --cwnit-accent: #176f80;
+  --cwnit-background: #e8e5dc;
+  --cwnit-background-raised: #f5f3ed;
+  --cwnit-border: #918b7d;
+  --cwnit-muted: #5c625f;
+  --cwnit-text: #1d2528;
+  background: var(--cwnit-background) !important;
+  background-image: none !important;
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.chat-message.cwnit-theme-dark {
+  --cwnit-accent: #54d7e8;
+  --cwnit-background: #141b22;
+  --cwnit-background-raised: #202a33;
+  --cwnit-border: #41616d;
+  --cwnit-muted: #a5b7be;
+  --cwnit-text: #e0ebef;
+  box-shadow: inset 3px 0 0 rgb(84 215 232 / 45%);
+}
+
+.cwnit-chat-message .message-header,
+.cwnit-chat-message .message-content,
+.cwnit-chat-message .chat-card,
+.cwnit-chat-message .chat-card h1,
+.cwnit-chat-message .chat-card h2,
+.cwnit-chat-message .chat-card h3,
+.cwnit-chat-message .chat-card h4,
+.cwnit-chat-message .chat-card h5 {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .message-metadata,
+.cwnit-chat-message .message-timestamp,
+.cwnit-chat-message .cwnce-damage-hint,
+.cwnit-chat-message .cwnce-weapon-ranges,
+.cwnit-chat-message .cwnce-notice {
+  color: var(--cwnit-muted);
+}
+
+.cwnit-chat-message .chat-card h4 {
+  border-bottom: 1px solid var(--cwnit-border);
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .dice-formula,
+.cwnit-chat-message .dice-total,
+.cwnit-chat-message .roll .dice-formula,
+.cwnit-chat-message .roll .dice-total {
+  background: var(--cwnit-background-raised);
+  border-color: var(--cwnit-border);
+  color: var(--cwnit-text);
+  text-shadow: none;
+}
+
+.cwnit-chat-message button,
+.cwnit-chat-message .cwnce-apply-damage {
+  background: var(--cwnit-background-raised);
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message button:hover,
+.cwnit-chat-message button:focus {
+  border-color: var(--cwnit-accent);
+  box-shadow: 0 0 0 1px var(--cwnit-accent);
+}
+
+.cwnit-chat-message .cwnce-results,
+.cwnit-chat-message .cwnce-damage-action {
+  border-color: var(--cwnit-border);
+}
+
+.cwnit-chat-message .cwnce-target {
+  background: rgb(0 0 0 / 7%);
+}
+
+.cwnit-theme-dark .cwnce-target {
+  background: rgb(255 255 255 / 6%);
+}
+
+/* Combat Enhancements compatibility: use colours suited to the card itself. */
+.cwnit-theme-light .cwnce-hit .cwnce-outcome,
+.cwnit-theme-light .cwnce-damage-applied {
+  color: #116b32;
+}
+
+.cwnit-theme-light .cwnce-miss .cwnce-outcome,
+.cwnit-theme-light .cwnce-out .cwnce-outcome {
+  color: #8d2020;
+}
+
+.cwnit-theme-light .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-light .cwnce-trauma .cwnce-damage-preview {
+  color: #1769aa;
+}
+
+.cwnit-theme-dark .cwnce-hit .cwnce-outcome,
+.cwnit-theme-dark .cwnce-damage-applied {
+  color: #58d486;
+}
+
+.cwnit-theme-dark .cwnce-miss .cwnce-outcome,
+.cwnit-theme-dark .cwnce-out .cwnce-outcome {
+  color: #ff7d87;
+}
+
+.cwnit-theme-dark .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-dark .cwnce-trauma .cwnce-damage-preview {
+  color: #60caff;
+}

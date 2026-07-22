@@ -1,0 +1,36 @@
+{
+  "id": "cwn-interface-theme",
+  "title": "CWN Interface Theme for SWNR",
+  "description": "Adaptive light and dark styling for SWNR chat cards, with optional visual compatibility for CWN Combat Enhancements.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "jlabruna"
+    }
+  ],
+  "url": "https://github.com/jlabruna/CWN-interface-theme",
+  "manifest": "https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.json",
+  "download": "https://github.com/jlabruna/CWN-interface-theme/releases/download/v0.1.0/cwn-interface-theme-v0.1.0.zip",
+  "bugs": "https://github.com/jlabruna/CWN-interface-theme/issues",
+  "compatibility": {
+    "minimum": "13.345",
+    "verified": "13.351"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "swnr",
+        "type": "system",
+        "compatibility": {
+          "minimum": "2.3.0"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/cwn-interface-theme.mjs"
+  ],
+  "styles": [
+    "styles/cwn-interface-theme.css"
+  ]
+}
