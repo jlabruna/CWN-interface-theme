@@ -9,6 +9,8 @@ running on **Systems Without Number Redux (SWNR)** in Foundry VTT v13.
 - Follows Foundry's **Interface** light/dark theme around the chat sidebar.
 - Provides a warm, readable light card and a charcoal cyberpunk dark card.
 - Themes roll totals, headings, buttons, metadata, and card borders.
+- Themes SWNR Day Refresh and Frail Rest result cards in both colour schemes.
+- Supplies the missing English label for SWNR's Frail Rest result card.
 - Includes optional styling for CWN Combat Enhancements Target Check results.
 - Does not require CWN Combat Enhancements and does not alter game rules.
 
@@ -21,7 +23,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.1.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.2.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -40,3 +42,11 @@ appearance.
 - Some cards produced by third-party modules may retain their own colours.
 - Actor sheets, item sheets, dialogs, and the remainder of the SWNR interface
   are outside the v0.1 scope.
+
+## Changes
+
+### 0.2.0
+
+- Added adaptive styling for per-actor and group refresh/rest chat cards.
+- Added a readable Frail Rest title in place of SWNR's unresolved localization
+  key.

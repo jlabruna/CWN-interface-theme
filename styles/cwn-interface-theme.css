@@ -33,6 +33,25 @@
   color: var(--cwnit-text);
 }
 
+.cwnit-chat-message .refresh-summary,
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary li,
+.cwnit-chat-message .refresh-summary strong {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .refresh-summary h3 {
+  border-bottom: 1px solid var(--cwnit-border);
+  color: var(--cwnit-accent);
+  margin: 0 0 0.35rem;
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary ul {
+  margin: 0.25rem 0;
+}
+
 .cwnit-chat-message .message-metadata,
 .cwnit-chat-message .message-timestamp,
 .cwnit-chat-message .cwnce-damage-hint,

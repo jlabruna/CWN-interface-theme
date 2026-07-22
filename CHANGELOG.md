@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0
+
+- Added light and dark theme styling for SWNR Day Refresh and Frail Rest chat
+  cards, including per-actor refresh messages that do not use SWNR's standard
+  `.chat-card` class.
+- Added the missing English Frail Rest localization so the result card no longer
+  displays `swnr.pools.refreshSummary.frailRest`.
+
 ## 0.1.1
 
 - Fixed mixed-theme configurations incorrectly following Foundry's Applications

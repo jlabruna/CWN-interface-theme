@@ -1,11 +1,12 @@
 const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
+const SYSTEM_CARD_SELECTOR = ".chat-card, .refresh-summary";
 
 Hooks.on("renderChatMessage", (_message, html) => {
   if (game.system.id !== "swnr") return;
 
   const root = html instanceof HTMLElement ? html : html?.[0];
-  if (!root?.querySelector(".chat-card")) return;
+  if (!root?.querySelector(SYSTEM_CARD_SELECTOR)) return;
   applyChatTheme(root);
 });
 
@@ -32,7 +33,7 @@ Hooks.once("ready", () => {
  * to decide how chat-sidebar content should appear.
  */
 function applyChatTheme(root) {
-  if (!root?.querySelector(".chat-card")) return;
+  if (!root?.querySelector(SYSTEM_CARD_SELECTOR)) return;
 
   const isDark = getInterfaceTheme() === "dark";
 
@@ -53,7 +54,9 @@ function getInterfaceTheme() {
 }
 
 function refreshChatThemes() {
-  for (const card of document.querySelectorAll(".chat-message .chat-card")) {
+  for (const card of document.querySelectorAll(
+    ".chat-message .chat-card, .chat-message .refresh-summary",
+  )) {
     const message = card.closest(".chat-message");
     if (message) applyChatTheme(message);
   }
