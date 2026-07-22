@@ -23,7 +23,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.2.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.2.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -44,6 +44,11 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.2.1
+
+- Renamed the normal rest result from **Day Refresh** to **Good Night's Rest**.
+- Renamed the no-HP rest result to **Rest Without HP Recovery**.
 
 ### 0.2.0
 

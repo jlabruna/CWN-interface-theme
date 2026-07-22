@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+- Changed the normal overnight-rest chat heading from **Day Refresh** to
+  **Good Night's Rest**.
+- Changed the frail-rest chat heading to **Rest Without HP Recovery** so it
+  directly matches the selected rest option.
+
 ## 0.2.0
 
 - Added light and dark theme styling for SWNR Day Refresh and Frail Rest chat
