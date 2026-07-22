@@ -14,6 +14,11 @@ Hooks.on("renderChatLog", () => {
   refreshChatThemes();
 });
 
+Hooks.on("updateSetting", (setting) => {
+  if (game.system.id !== "swnr" || setting.key !== "core.uiConfig") return;
+  requestAnimationFrame(refreshChatThemes);
+});
+
 Hooks.once("ready", () => {
   if (game.system.id !== "swnr") return;
   refreshChatThemes();
@@ -22,21 +27,29 @@ Hooks.once("ready", () => {
 });
 
 /**
- * Follow the closest interface theme rather than body.theme-dark. Foundry v13
- * uses the body class for its Applications preference, while the chat sidebar
- * can have a nearer Interface-specific theme ancestor.
+ * Follow Foundry v13's explicit Interface preference. The document body's
+ * theme class reflects the separate Applications preference and cannot be used
+ * to decide how chat-sidebar content should appear.
  */
 function applyChatTheme(root) {
   if (!root?.querySelector(".chat-card")) return;
 
-  const themeOwner = root.closest(".theme-light, .theme-dark");
-  const isDark = themeOwner
-    ? themeOwner.classList.contains("theme-dark")
-    : document.body.classList.contains("theme-dark");
+  const isDark = getInterfaceTheme() === "dark";
 
   root.classList.add("cwnit-chat-message");
   root.classList.remove(...THEME_CLASSES);
   root.classList.add(isDark ? "cwnit-theme-dark" : "cwnit-theme-light");
+}
+
+function getInterfaceTheme() {
+  const preference = game.settings
+    .get("core", "uiConfig")
+    ?.colorScheme?.interface;
+
+  if (preference === "dark" || preference === "light") return preference;
+  return globalThis.matchMedia?.("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 function refreshChatThemes() {
@@ -46,7 +59,7 @@ function refreshChatThemes() {
   }
 }
 
-/** Refresh existing cards when Foundry changes either Interface theme class. */
+/** Refresh existing cards when Foundry reapplies its UI configuration. */
 function observeChatThemeAncestors() {
   const chatLog = document.querySelector("#chat-log");
   if (!chatLog) return;
