@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.8
+
+- Halved the frequency of the **SYSTEM HALTED** text glitches by doubling the
+  intervals between animation cycles.
+- Preserved the existing glitch strength, colour separation, displacement, and
+  approximate duration of each individual burst.
+
+## 0.3.7
+
+- Replaced the pause dial with a brighter, predominantly white angular design.
+- Added asymmetric cyan and magenta chassis segments, locator shards, and
+  split-colour circuitry to match the **SYSTEM HALTED** glitch treatment.
+- Increased the dial opacity for stronger contrast while retaining the
+  existing glow, rotation, and reduced-motion behavior.
+
 ## 0.3.6
 
 - Increased the intensity and frequency of the **SYSTEM HALTED** text glitch.

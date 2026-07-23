@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="">
+  <g
+    fill="none"
+    stroke="#f5fbff"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  >
+    <!-- Broken twelve-sided outer chassis. -->
+    <path
+      stroke-width="3.5"
+      d="
+        M100 7 124 14 143 27
+        M157 39 173 57 181 77
+        M188 96 185 120 176 140
+        M166 157 146 174 126 183
+        M106 190 82 186 62 177
+        M44 166 28 146 18 126
+        M11 106 15 82 24 62
+        M35 44 54 29 75 18
+      "
+    />
+
+    <!-- Angular inner frames. -->
+    <path
+      stroke-width="2.8"
+      d="M100 29 146 48 169 91 153 141 112 169 61 154 31 113 42 62Z"
+    />
+    <path
+      stroke-width="2"
+      opacity="0.78"
+      d="M100 43 137 55 158 88 148 128 116 154 75 148 48 117 52 76 78 51Z"
+    />
+    <path
+      stroke-width="3.2"
+      d="M100 58 136 79 136 121 100 142 64 121 64 79Z"
+    />
+    <path
+      stroke-width="2"
+      opacity="0.82"
+      d="M100 70 125 84 125 116 100 130 75 116 75 84Z"
+    />
+
+    <!-- Four mechanical locking arms. -->
+    <path
+      stroke-width="4"
+      d="
+        M89 7 100 18 111 7
+        M193 89 182 100 193 111
+        M111 193 100 182 89 193
+        M7 111 18 100 7 89
+      "
+    />
+    <path
+      stroke-width="2.5"
+      d="
+        M54 21 59 38 77 42
+        M179 54 162 59 158 77
+        M146 179 141 162 123 158
+        M21 146 38 141 42 123
+      "
+    />
+
+    <!-- Asymmetric radial circuitry. -->
+    <path
+      stroke-width="2"
+      d="
+        M100 18v24
+        M158 42l-16 18
+        M182 100h-25
+        M158 158l-18-17
+        M100 182v-25
+        M42 158l17-18
+        M18 100h24
+        M42 42l18 17
+      "
+    />
+    <path
+      stroke-width="1.8"
+      opacity="0.72"
+      d="
+        M87 32v16M113 152v16
+        M152 87h16M32 113h16
+        M60 48l11 12M140 129l12 11
+        M152 60l-12 11M48 140l12-11
+      "
+    />
+
+    <!-- Central targeting lock. -->
+    <path stroke-width="3.5" d="m100 79 20 12v21l-20 12-20-12V91Z"/>
+    <path stroke-width="2.5" d="m100 88 11 7v13l-11 7-11-7V95Z"/>
+    <path stroke-width="4" d="M100 88v14l26 15"/>
+  </g>
+
+  <!-- Cyan split accents. -->
+  <g
+    fill="none"
+    stroke="#54d7e8"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  >
+    <path stroke-width="5" d="M124 14 143 27M181 77l7 19M62 177l20 9M18 126l10 20"/>
+    <path stroke-width="3.5" d="M146 48 158 69M153 141l-18 13M48 117l4 21M42 62l18-11"/>
+    <path stroke-width="3" d="M100 43v15M136 79l-11 6M64 121l11-6"/>
+  </g>
+
+  <!-- Magenta glitch accents and locator shards. -->
+  <g
+    fill="none"
+    stroke="#f04f9c"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  >
+    <path stroke-width="5" d="M157 39l16 18M176 140l-10 17M106 190l-17 3M24 62l11-18"/>
+    <path stroke-width="3.5" d="M169 91l-3 22M112 169l-21 1M31 113l3-21M100 29l20 8"/>
+    <path stroke-width="3" d="M64 79l11 6M136 121l-11-6M100 142v-12"/>
+  </g>
+
+  <g fill="#f5fbff">
+    <path d="m96 3 4-3 4 3-4 8Z"/>
+    <path d="m197 96 3 4-3 4-8-4Z"/>
+    <path d="m104 197-4 3-4-3 4-8Z"/>
+    <path d="m3 104-3-4 3-4 8 4Z"/>
+  </g>
+  <g fill="#54d7e8">
+    <path d="m150 20 8 1 2 8-8-1Z"/>
+    <path d="m50 180-8-1-2-8 8 1Z"/>
+  </g>
+  <g fill="#f04f9c">
+    <path d="m180 150-1 8-8 2 1-8Z"/>
+    <path d="m20 50 1-8 8-2-1 8Z"/>
+  </g>
+</svg>

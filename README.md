@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.6.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.8.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,20 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.8
+
+- Reduced the frequency of the **SYSTEM HALTED** glitch bursts by half.
+- Kept the existing displacement, cyan/magenta colour splitting, and individual
+  burst intensity.
+
+### 0.3.7
+
+- Reworked the rotating pause dial as a sharper, predominantly white angular
+  cyberpunk mechanism.
+- Added cyan and magenta split accents that match the animated text treatment.
+- Increased dial visibility without changing its position, rotation speed, or
+  Photosensitive Mode behavior.
 
 ### 0.3.6
 
