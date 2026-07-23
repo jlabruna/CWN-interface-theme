@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,21 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.3
+
+- Moved the **SYSTEM HALTED** pause strip and its graphical elements to the
+  lower third of the viewport.
+- Reduced the strip opacity to more closely match Foundry's default translucent
+  pause presentation.
+
+### 0.3.2
+
+- Fixed the v0.3.1 replacement pause elements being suppressed by Foundry.
+- The rotating dial and **SYSTEM HALTED** caption are now rendered as CSS
+  layers on the confirmed-working pause strip.
+- Removed dependency on both Foundry's pause markup and injected child
+  elements.
 
 ### 0.3.1
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.3
+
+- Moved the custom pause presentation from the middle of the viewport to the
+  lower third.
+- Made the dark pause strip substantially more transparent.
+
+## 0.3.2
+
+- Fixed the custom dial and caption not appearing in Foundry despite the pause
+  strip being themed.
+- Moved the dial and **SYSTEM HALTED** caption to CSS-rendered layers that do
+  not depend on Foundry accepting replacement child elements.
+
 ## 0.3.1
 
 - Fixed the original Foundry pause dial and **GAME PAUSED** caption remaining

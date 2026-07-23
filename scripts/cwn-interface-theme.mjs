@@ -114,28 +114,7 @@ function refreshPauseOverlay() {
 
   pause.classList.add("cwnit-system-halted");
   pause.classList.toggle("cwnit-reduced-motion", prefersReducedMotion());
-
-  let stage = pause.querySelector(":scope > .cwnit-pause-stage");
-  if (stage) return;
-
-  const text = game.i18n.localize(PAUSE_TEXT_KEY);
-  stage = document.createElement("div");
-  stage.className = "cwnit-pause-stage";
-
-  const image = document.createElement("img");
-  image.src = `modules/${MODULE_ID}/assets/system-halted-dial.svg`;
-  image.alt = "";
-  image.className = "cwnit-pause-dial";
-  image.setAttribute("aria-hidden", "true");
-
-  const caption = document.createElement("div");
-  caption.className = "cwnit-pause-caption";
-  caption.textContent = text;
-  caption.dataset.text = text;
-  caption.setAttribute("role", "status");
-
-  stage.append(image, caption);
-  pause.append(stage);
+  pause.dataset.cwnitPauseText = game.i18n.localize(PAUSE_TEXT_KEY);
 }
 
 function prefersReducedMotion() {
