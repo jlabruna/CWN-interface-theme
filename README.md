@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.4.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.5.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,15 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.5
+
+- Fixed the missing **SYSTEM HALTED** caption by claiming Foundry's persistent
+  native pause caption, with a CSS-only fallback during rerenders.
+- Versioned the JavaScript filename so Forge and browsers cannot retain the
+  older caption implementation after this update.
+- Improved Photosensitive Mode detection and live updating. Enabling it stops
+  the dial rotation and caption flicker without removing either graphic.
 
 ### 0.3.4
 

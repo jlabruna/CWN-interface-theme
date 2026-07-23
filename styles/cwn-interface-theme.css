@@ -207,6 +207,37 @@
   z-index: 2;
 }
 
+/*
+ * Defensive fallback for a cached or temporarily unavailable module script.
+ * The real caption covers this layer once Foundry's persistent figcaption has
+ * been claimed by refreshPauseOverlay().
+ */
+#pause.cwnit-system-halted:not(:has(> .cwnit-pause-caption))::after {
+  background: none;
+  color: #f2fbff;
+  content: "SYSTEM HALTED" !important;
+  display: block !important;
+  filter: drop-shadow(0 0 5px rgb(84 215 232 / 80%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  left: 50%;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  padding-left: 0.16em;
+  position: absolute;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue);
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: visible !important;
+  white-space: nowrap;
+  z-index: 2;
+}
+
 @keyframes cwnit-dial-spin {
   to {
     transform: rotate(360deg);
@@ -250,7 +281,7 @@
 
 #pause.cwnit-system-halted.cwnit-reduced-motion::before,
 #pause.cwnit-system-halted.cwnit-reduced-motion > .cwnit-pause-caption {
-  animation: none;
+  animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

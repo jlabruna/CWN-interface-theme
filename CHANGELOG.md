@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.5
+
+- Fixed the missing **SYSTEM HALTED** caption by reusing Foundry's persistent
+  native pause caption instead of relying only on an injected child.
+- Added a CSS-only caption fallback so the title remains visible if Foundry
+  rebuilds the pause markup or a browser retains a cached script.
+- Versioned the module script filename to prevent Forge/browser caching from
+  retaining an older pause implementation.
+- Made Photosensitive Mode detection resilient to Foundry setting-name and
+  client-setting update differences.
+
 ## 0.3.4
 
 - Fixed the missing **SYSTEM HALTED** caption by rendering it as a dedicated
