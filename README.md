@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.4.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,14 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.4
+
+- Fixed the missing **SYSTEM HALTED** caption by replacing the unreliable
+  CSS-generated caption with a dedicated module-owned text element.
+- Increased the pause strip height from 132px to 220px so the entire rotating
+  dial and its glow fit inside the overlay.
+- Preserved the lower-third centre point and translucent strip appearance.
 
 ### 0.3.3
 

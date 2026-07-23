@@ -114,7 +114,15 @@ function refreshPauseOverlay() {
 
   pause.classList.add("cwnit-system-halted");
   pause.classList.toggle("cwnit-reduced-motion", prefersReducedMotion());
-  pause.dataset.cwnitPauseText = game.i18n.localize(PAUSE_TEXT_KEY);
+
+  let caption = pause.querySelector(":scope > .cwnit-pause-caption");
+  if (!caption) {
+    caption = document.createElement("span");
+    caption.className = "cwnit-pause-caption";
+    pause.append(caption);
+  }
+
+  caption.textContent = game.i18n.localize(PAUSE_TEXT_KEY);
 }
 
 function prefersReducedMotion() {

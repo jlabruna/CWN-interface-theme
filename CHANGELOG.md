@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.4
+
+- Fixed the missing **SYSTEM HALTED** caption by rendering it as a dedicated
+  module-owned element instead of CSS-generated text.
+- Increased the pause strip height so the complete rotating dial and its glow
+  remain visible.
+- Kept the pause presentation centred in the lower third with the v0.3.3
+  transparency.
+
 ## 0.3.3
 
 - Moved the custom pause presentation from the middle of the viewport to the
