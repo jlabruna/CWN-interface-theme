@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="">
+  <g fill="none" stroke-linecap="square" stroke-linejoin="miter">
+    <path
+      d="M100 34 157 67 157 133 100 166 43 133 43 67Z"
+      stroke="#2a7583"
+      stroke-width="2"
+      opacity=".75"
+    />
+    <path
+      d="M100 42 150 71M150 129l-50 29M50 129l50 29M50 71l50-29"
+      stroke="#54d7e8"
+      stroke-width="2"
+      opacity=".72"
+    />
+  </g>
+  <g fill="#102a35" stroke="#b7f6ff" stroke-linejoin="miter" stroke-width="2">
+    <path d="M85 28h30l7 10-7 12H85l-7-12Z"/>
+    <path d="m151 51 15 26-5 11-14-1-15-26 5-11Z"/>
+    <path d="m166 123-15 26-14 1-5-11 15-26 14-1Z"/>
+    <path d="M115 172H85l-7-10 7-12h30l7 12Z"/>
+    <path d="m49 149-15-26 5-11 14 1 15 26-5 11Z"/>
+    <path d="m34 77 15-26 14-1 5 11-15 26-14 1Z"/>
+  </g>
+  <g fill="#54d7e8">
+    <rect x="89" y="33" width="22" height="11"/>
+    <path d="m151 58 11 19-7 4-11-19Z"/>
+    <path d="m162 123-11 19-7-4 11-19Z"/>
+    <rect x="89" y="156" width="22" height="11"/>
+    <path d="m49 142-11-19 7-4 11 19Z"/>
+    <path d="m38 77 11-19 7 4-11 19Z"/>
+  </g>
+  <g fill="#f5fdff">
+    <rect x="94" y="35" width="12" height="2"/>
+    <rect x="153" y="65" width="2" height="12" transform="rotate(-30 154 71)"/>
+    <rect x="153" y="123" width="2" height="12" transform="rotate(30 154 129)"/>
+    <rect x="94" y="163" width="12" height="2"/>
+    <rect x="45" y="123" width="2" height="12" transform="rotate(-30 46 129)"/>
+    <rect x="45" y="65" width="2" height="12" transform="rotate(30 46 71)"/>
+  </g>
+</svg>

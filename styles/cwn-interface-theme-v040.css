@@ -1,0 +1,662 @@
+/* Theme only SWNR-generated chat cards marked by this module. */
+.chat-message.cwnit-chat-message {
+  --cwnit-accent: #176f80;
+  --cwnit-background: #e8e5dc;
+  --cwnit-background-raised: #f5f3ed;
+  --cwnit-border: #918b7d;
+  --cwnit-muted: #5c625f;
+  --cwnit-text: #1d2528;
+  background: var(--cwnit-background) !important;
+  background-image: none !important;
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.chat-message.cwnit-theme-dark {
+  --cwnit-accent: #54d7e8;
+  --cwnit-background: #141b22;
+  --cwnit-background-raised: #202a33;
+  --cwnit-border: #41616d;
+  --cwnit-muted: #a5b7be;
+  --cwnit-text: #e0ebef;
+  box-shadow: inset 3px 0 0 rgb(84 215 232 / 45%);
+}
+
+.cwnit-chat-message .message-header,
+.cwnit-chat-message .message-content,
+.cwnit-chat-message .chat-card,
+.cwnit-chat-message .chat-card h1,
+.cwnit-chat-message .chat-card h2,
+.cwnit-chat-message .chat-card h3,
+.cwnit-chat-message .chat-card h4,
+.cwnit-chat-message .chat-card h5 {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .refresh-summary,
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary li,
+.cwnit-chat-message .refresh-summary strong {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .refresh-summary h3 {
+  border-bottom: 1px solid var(--cwnit-border);
+  color: var(--cwnit-accent);
+  margin: 0 0 0.35rem;
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary ul {
+  margin: 0.25rem 0;
+}
+
+.cwnit-chat-message .message-metadata,
+.cwnit-chat-message .message-timestamp,
+.cwnit-chat-message .cwnce-damage-hint,
+.cwnit-chat-message .cwnce-weapon-ranges,
+.cwnit-chat-message .cwnce-notice {
+  color: var(--cwnit-muted);
+}
+
+.cwnit-chat-message .chat-card h4 {
+  border-bottom: 1px solid var(--cwnit-border);
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .dice-formula,
+.cwnit-chat-message .dice-total,
+.cwnit-chat-message .roll .dice-formula,
+.cwnit-chat-message .roll .dice-total {
+  background: var(--cwnit-background-raised);
+  border-color: var(--cwnit-border);
+  color: var(--cwnit-text);
+  text-shadow: none;
+}
+
+.cwnit-chat-message button,
+.cwnit-chat-message .cwnce-apply-damage {
+  background: var(--cwnit-background-raised);
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message button:hover,
+.cwnit-chat-message button:focus {
+  border-color: var(--cwnit-accent);
+  box-shadow: 0 0 0 1px var(--cwnit-accent);
+}
+
+.cwnit-chat-message .cwnce-results,
+.cwnit-chat-message .cwnce-damage-action {
+  border-color: var(--cwnit-border);
+}
+
+.cwnit-chat-message .cwnce-target {
+  background: rgb(0 0 0 / 7%);
+}
+
+.cwnit-theme-dark .cwnce-target {
+  background: rgb(255 255 255 / 6%);
+}
+
+/* Combat Enhancements compatibility: use colours suited to the card itself. */
+.cwnit-theme-light .cwnce-hit .cwnce-outcome,
+.cwnit-theme-light .cwnce-damage-applied {
+  color: #116b32;
+}
+
+.cwnit-theme-light .cwnce-miss .cwnce-outcome,
+.cwnit-theme-light .cwnce-out .cwnce-outcome {
+  color: #8d2020;
+}
+
+.cwnit-theme-light .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-light .cwnce-trauma .cwnce-damage-preview {
+  color: #1769aa;
+}
+
+.cwnit-theme-dark .cwnce-hit .cwnce-outcome,
+.cwnit-theme-dark .cwnce-damage-applied {
+  color: #58d486;
+}
+
+.cwnit-theme-dark .cwnce-miss .cwnce-outcome,
+.cwnit-theme-dark .cwnce-out .cwnce-outcome {
+  color: #ff7d87;
+}
+
+.cwnit-theme-dark .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-dark .cwnce-trauma .cwnce-damage-preview {
+  color: #60caff;
+}
+
+/* Original cyberpunk pause presentation for Foundry v13. */
+#pause.cwnit-system-halted {
+  --cwnit-pause-blue: #54d7e8;
+  --cwnit-pause-blue-soft: #b7f6ff;
+  --cwnit-pause-yellow: #f2b632;
+  --cwnit-pause-magenta: #f04f9c;
+  --cwnit-pause-purple: #8752e7;
+  align-items: center;
+  animation: none;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(2 5 10 / 40%) 22%,
+      rgb(2 5 10 / 56%) 50%,
+      rgb(2 5 10 / 40%) 78%,
+      transparent 100%
+    );
+  height: 220px;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  top: calc(66.667% - 110px);
+}
+
+#pause.cwnit-system-halted.paused {
+  display: flex;
+}
+
+#pause.cwnit-system-halted
+  > :not(.cwnit-pause-caption):not(.cwnit-dial-stage) {
+  display: none !important;
+}
+
+#pause.cwnit-system-halted > .cwnit-dial-stage {
+  display: block !important;
+  filter:
+    drop-shadow(0 0 5px rgb(135 82 231 / 72%))
+    drop-shadow(0 0 15px rgb(84 215 232 / 28%));
+  height: 198px;
+  left: 50%;
+  margin: -99px 0 0 -99px;
+  opacity: 0.96;
+  position: absolute;
+  top: 50%;
+  width: 198px;
+  z-index: 1;
+}
+
+#pause.cwnit-system-halted .cwnit-dial-layer {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block !important;
+  inset: 0;
+  position: absolute;
+  transform-origin: 50% 50%;
+}
+
+#pause.cwnit-system-halted .cwnit-dial-purple {
+  animation: cwnit-purple-rotate 28s linear infinite;
+  background-image: url("../assets/system-halted-b-purple-v040.svg");
+}
+
+#pause.cwnit-system-halted .cwnit-dial-yellow {
+  animation: cwnit-yellow-counter 17s linear infinite;
+  background-image: url("../assets/system-halted-b-yellow-v040.svg");
+  filter: drop-shadow(0 0 4px rgb(242 182 50 / 65%));
+}
+
+#pause.cwnit-system-halted .cwnit-dial-cyan {
+  animation: cwnit-cyan-index 18s linear infinite;
+  background-image: url("../assets/system-halted-b-cyan-v040.svg");
+  filter: drop-shadow(0 0 4px rgb(84 215 232 / 72%));
+}
+
+#pause.cwnit-system-halted .cwnit-dial-data-a,
+#pause.cwnit-system-halted .cwnit-dial-data-b {
+  background-image: url("../assets/system-halted-b-data-v040.svg");
+  filter: drop-shadow(0 0 3px rgb(240 79 156 / 65%));
+  opacity: 0;
+}
+
+#pause.cwnit-system-halted .cwnit-dial-data-a {
+  --cwnit-data-angle: 0deg;
+  animation: cwnit-data-print 9s steps(1, end) infinite;
+}
+
+#pause.cwnit-system-halted .cwnit-dial-data-b {
+  --cwnit-data-angle: 90deg;
+  animation: cwnit-data-print 11s 3.7s steps(1, end) infinite;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption {
+  animation:
+    cwnit-halt-flicker 6.4s steps(1, end) infinite,
+    cwnit-halt-jitter 8.8s steps(1, end) infinite;
+  background: none;
+  color: #fbf8ff;
+  display: block !important;
+  filter:
+    drop-shadow(0 0 5px rgb(135 82 231 / 85%))
+    drop-shadow(0 2px 0 rgb(242 182 50 / 32%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  margin: 0;
+  padding: 0 0 0 0.13em;
+  position: relative;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue),
+    0 0 12px var(--cwnit-pause-purple);
+  text-transform: uppercase;
+  visibility: visible !important;
+  width: auto;
+  z-index: 2;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::before,
+#pause.cwnit-system-halted > .cwnit-pause-caption::after {
+  content: attr(data-cwnit-text);
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  white-space: nowrap;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::before {
+  animation: cwnit-glitch-slice-magenta 5.4s steps(1, end) infinite;
+  color: #fff5fb;
+  text-shadow:
+    -5px 0 var(--cwnit-pause-magenta),
+    1px 0 var(--cwnit-pause-blue);
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::after {
+  animation: cwnit-glitch-slice-cyan 6.2s steps(1, end) infinite;
+  color: #f1fdff;
+  text-shadow:
+    -1px 0 var(--cwnit-pause-magenta),
+    5px 0 var(--cwnit-pause-blue);
+}
+
+/*
+ * Defensive fallback for a cached or temporarily unavailable module script.
+ * The real caption covers this layer once Foundry's persistent figcaption has
+ * been claimed by refreshPauseOverlay().
+ */
+#pause.cwnit-system-halted:not(:has(> .cwnit-pause-caption))::after {
+  background: none;
+  color: #f2fbff;
+  content: "SYSTEM HALTED" !important;
+  display: block !important;
+  filter: drop-shadow(0 0 5px rgb(84 215 232 / 80%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  left: 50%;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  padding-left: 0.16em;
+  position: absolute;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue);
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: visible !important;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+@keyframes cwnit-purple-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cwnit-yellow-counter {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes cwnit-cyan-index {
+  0%,
+  13% {
+    transform: rotate(0deg);
+  }
+
+  16%,
+  30% {
+    transform: rotate(60deg);
+  }
+
+  33%,
+  47% {
+    transform: rotate(120deg);
+  }
+
+  50%,
+  64% {
+    transform: rotate(180deg);
+  }
+
+  67%,
+  81% {
+    transform: rotate(240deg);
+  }
+
+  84%,
+  97% {
+    transform: rotate(300deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cwnit-data-print {
+  0%,
+  12%,
+  43%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: rotate(var(--cwnit-data-angle)) translate(0);
+  }
+
+  15% {
+    clip-path: inset(0 72% 0 0);
+    opacity: 0.42;
+    transform: rotate(var(--cwnit-data-angle)) translate(-1px);
+  }
+
+  19% {
+    clip-path: inset(0 44% 0 0);
+    opacity: 0.7;
+    transform: rotate(var(--cwnit-data-angle)) translate(1px);
+  }
+
+  24%,
+  36% {
+    clip-path: inset(0);
+    opacity: 0.82;
+    transform: rotate(var(--cwnit-data-angle)) translate(0);
+  }
+
+  39% {
+    clip-path: inset(0 0 0 72%);
+    opacity: 0.38;
+    transform: rotate(var(--cwnit-data-angle)) translate(2px);
+  }
+}
+
+@keyframes cwnit-halt-flicker {
+  0%,
+  12%,
+  13.5%,
+  38%,
+  39.5%,
+  70%,
+  71.5%,
+  92%,
+  93.5%,
+  100% {
+    opacity: 1;
+  }
+
+  12.5%,
+  38.5%,
+  70.5%,
+  92.5% {
+    opacity: 0.48;
+  }
+
+  13%,
+  39%,
+  71%,
+  93% {
+    opacity: 0.82;
+  }
+}
+
+@keyframes cwnit-halt-jitter {
+  0%,
+  19%,
+  21.5%,
+  49%,
+  51.5%,
+  79%,
+  81.5%,
+  100% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(5px, -1px) skewX(-3deg);
+  }
+
+  20.5% {
+    transform: translate(-4px, 1px) skewX(2deg);
+  }
+
+  21% {
+    transform: translate(2px);
+  }
+
+  49.5% {
+    transform: translate(-6px, 1px) skewX(4deg);
+  }
+
+  50% {
+    transform: translate(4px, -1px);
+  }
+
+  50.5% {
+    transform: translate(-2px);
+  }
+
+  79.5% {
+    transform: translate(7px) skewX(-4deg);
+  }
+
+  80% {
+    transform: translate(-5px, -1px);
+  }
+
+  80.5% {
+    transform: translate(3px, 1px);
+  }
+
+  81% {
+    transform: translate(0);
+  }
+}
+
+@keyframes cwnit-glitch-slice-magenta {
+  0%,
+  25%,
+  29%,
+  61%,
+  65%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+    transform: translate(0);
+  }
+
+  26% {
+    clip-path: inset(8% 0 63% 0);
+    opacity: 0.92;
+    transform: translate(-9px, -1px);
+  }
+
+  26.6% {
+    clip-path: inset(54% 0 18% 0);
+    opacity: 0.8;
+    transform: translate(7px, 1px);
+  }
+
+  27.2% {
+    clip-path: inset(29% 0 42% 0);
+    opacity: 0.95;
+    transform: translate(-5px);
+  }
+
+  27.8% {
+    clip-path: inset(72% 0 5% 0);
+    opacity: 0.68;
+    transform: translate(10px);
+  }
+
+  28.4% {
+    opacity: 0;
+  }
+
+  62% {
+    clip-path: inset(12% 0 58% 0);
+    opacity: 0.88;
+    transform: translate(8px);
+  }
+
+  62.6% {
+    clip-path: inset(44% 0 30% 0);
+    opacity: 0.82;
+    transform: translate(-10px);
+  }
+
+  63.2% {
+    clip-path: inset(68% 0 8% 0);
+    opacity: 0.9;
+    transform: translate(6px, 1px);
+  }
+
+  63.8% {
+    clip-path: inset(20% 0 48% 0);
+    opacity: 0.7;
+    transform: translate(-4px);
+  }
+
+  64.4% {
+    opacity: 0;
+  }
+}
+
+@keyframes cwnit-glitch-slice-cyan {
+  0%,
+  14%,
+  18%,
+  45%,
+  49%,
+  83%,
+  87%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+    transform: translate(0);
+  }
+
+  15% {
+    clip-path: inset(61% 0 10% 0);
+    opacity: 0.9;
+    transform: translate(10px);
+  }
+
+  15.6% {
+    clip-path: inset(18% 0 55% 0);
+    opacity: 0.82;
+    transform: translate(-7px);
+  }
+
+  16.2% {
+    clip-path: inset(43% 0 26% 0);
+    opacity: 0.95;
+    transform: translate(8px, -1px);
+  }
+
+  16.8% {
+    clip-path: inset(76% 0 3% 0);
+    opacity: 0.72;
+    transform: translate(-9px);
+  }
+
+  17.4% {
+    opacity: 0;
+  }
+
+  46%,
+  84% {
+    clip-path: inset(6% 0 66% 0);
+    opacity: 0.9;
+    transform: translate(-8px);
+  }
+
+  46.6%,
+  84.6% {
+    clip-path: inset(36% 0 38% 0);
+    opacity: 0.78;
+    transform: translate(11px);
+  }
+
+  47.2%,
+  85.2% {
+    clip-path: inset(70% 0 7% 0);
+    opacity: 0.9;
+    transform: translate(-6px, 1px);
+  }
+
+  47.8%,
+  85.8% {
+    clip-path: inset(24% 0 47% 0);
+    opacity: 0.68;
+    transform: translate(5px);
+  }
+
+  48.4%,
+  86.4% {
+    opacity: 0;
+  }
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-dial-layer,
+#pause.cwnit-system-halted.cwnit-reduced-motion > .cwnit-pause-caption,
+#pause.cwnit-system-halted.cwnit-reduced-motion
+  > .cwnit-pause-caption::before,
+#pause.cwnit-system-halted.cwnit-reduced-motion
+  > .cwnit-pause-caption::after {
+  animation: none !important;
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-dial-data-a {
+  clip-path: inset(0);
+  opacity: 0.62;
+  transform: rotate(0deg);
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-dial-data-b {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #pause.cwnit-system-halted .cwnit-dial-layer,
+  #pause.cwnit-system-halted > .cwnit-pause-caption,
+  #pause.cwnit-system-halted > .cwnit-pause-caption::before,
+  #pause.cwnit-system-halted > .cwnit-pause-caption::after {
+    animation: none;
+  }
+
+  #pause.cwnit-system-halted .cwnit-dial-data-a {
+    clip-path: inset(0);
+    opacity: 0.62;
+    transform: rotate(0deg);
+  }
+
+  #pause.cwnit-system-halted .cwnit-dial-data-b {
+    opacity: 0;
+  }
+}

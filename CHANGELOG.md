@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.0
+
+- Replaced the single rotating dial with the selected **Split-Reel Data Gate**
+  concept built from four independently animated SVG layers.
+- Added a slow clockwise violet chassis, counter-rotating yellow inner rotor,
+  and six cyan read heads that pause before rapidly indexing to the next
+  station like an old computer tape drive.
+- Added two transient magenta diagnostic layers that print into view, fade,
+  and reappear at different orientations.
+- Retuned the **SYSTEM HALTED** caption with a violet-white glow, cyan and
+  magenta glitch separation, and a restrained amber accent.
+- Extended Photosensitive Mode and operating-system reduced-motion support to
+  freeze every dial, diagnostic, and text animation.
+
 ## 0.3.8
 
 - Halved the frequency of the **SYSTEM HALTED** text glitches by doubling the

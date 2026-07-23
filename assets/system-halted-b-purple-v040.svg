@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="">
+  <g fill="none" stroke-linecap="square" stroke-linejoin="miter">
+    <path
+      d="M82 15A88 88 0 0 0 82 185"
+      stroke="#6f3bd1"
+      stroke-width="18"
+    />
+    <path
+      d="M118 15A88 88 0 0 1 118 185"
+      stroke="#6f3bd1"
+      stroke-width="18"
+    />
+    <path
+      d="M78 30A73 73 0 0 0 78 170M122 30A73 73 0 0 1 122 170"
+      stroke="#9a65f2"
+      stroke-width="4"
+    />
+    <path
+      d="M70 19 82 9l14 15M130 19 118 9l-14 15M70 181l12 10 14-15M130 181l-12 10-14-15"
+      stroke="#d8c8ff"
+      stroke-width="3"
+    />
+    <path
+      d="M21 78h22l8-16M21 122h22l8 16M179 78h-22l-8-16M179 122h-22l-8 16"
+      stroke="#8752e7"
+      stroke-width="6"
+    />
+    <path
+      d="M100 19v17M100 164v17M19 100h17M164 100h17"
+      stroke="#fbf8ff"
+      stroke-width="2.5"
+    />
+    <path
+      d="M55 39l10 13M145 39l-10 13M55 161l10-13M145 161l-10-13"
+      stroke="#c9b5ff"
+      stroke-width="2"
+    />
+    <path
+      d="M87 13h26M87 187h26M13 87v26M187 87v26"
+      stroke="#f04f9c"
+      stroke-width="2"
+    />
+  </g>
+  <g fill="#f8f5ff">
+    <path d="m97 6 3-5 3 5-3 7Z"/>
+    <path d="m194 97 5 3-5 3-7-3Z"/>
+    <path d="m103 194-3 5-3-5 3-7Z"/>
+    <path d="m6 103-5-3 5-3 7 3Z"/>
+  </g>
+</svg>

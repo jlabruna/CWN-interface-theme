@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.8.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.4.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,15 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.4.0
+
+- Replaced the pause dial with the selected **Split-Reel Data Gate** design.
+- Separately animates its violet slow rotor, yellow counter-rotor, cyan
+  pause-and-index read heads, and transient magenta diagnostic printing.
+- Adjusted the **SYSTEM HALTED** typography and glow to match the new violet,
+  cyan, magenta, and amber interface.
+- Photosensitive Mode freezes the complete dial and text presentation.
 
 ### 0.3.8
 

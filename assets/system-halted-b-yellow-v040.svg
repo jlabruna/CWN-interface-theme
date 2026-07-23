@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="">
+  <g fill="none" stroke="#f2b632" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M61 58A58 58 0 0 1 139 58" stroke-width="5"/>
+    <path d="M142 61A58 58 0 0 1 142 139" stroke-width="5"/>
+    <path d="M139 142A58 58 0 0 1 61 142" stroke-width="5"/>
+    <path d="M58 139A58 58 0 0 1 58 61" stroke-width="5"/>
+    <path
+      d="M67 66A48 48 0 0 1 98 52M148 98A48 48 0 0 1 134 133M102 148A48 48 0 0 1 67 134M52 102A48 48 0 0 1 66 67"
+      stroke="#ffd866"
+      stroke-width="2"
+    />
+  </g>
+  <g fill="#f2b632">
+    <path d="m137 50 13 5-10 10Z"/>
+    <path d="m150 137-5 13-10-10Z"/>
+    <path d="m63 150-13-5 10-10Z"/>
+    <path d="m50 63 5-13 10 10Z"/>
+  </g>
+  <g fill="#fff0b0">
+    <rect x="96" y="48" width="8" height="3"/>
+    <rect x="149" y="96" width="3" height="8"/>
+    <rect x="96" y="149" width="8" height="3"/>
+    <rect x="48" y="96" width="3" height="8"/>
+  </g>
+</svg>
