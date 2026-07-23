@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1
+
+- Fixed the original Foundry pause dial and **GAME PAUSED** caption remaining
+  visible instead of the new theme.
+- Added a self-contained pause stage that does not depend on Foundry's internal
+  pause markup.
+- Improved handling of pause-overlay rerenders.
+
 ## 0.3.0
 
 - Replaced Foundry's default pause presentation with an original animated

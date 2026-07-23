@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,14 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.1
+
+- Fixed Foundry v13 retaining its original **GAME PAUSED** artwork and caption
+  inside the themed pause strip.
+- The theme now renders a self-contained pause stage instead of relying on
+  Foundry's internal pause markup.
+- Improved reapplication when Foundry recreates or updates the pause overlay.
 
 ### 0.3.0
 

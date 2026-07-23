@@ -115,20 +115,27 @@ function refreshPauseOverlay() {
   pause.classList.add("cwnit-system-halted");
   pause.classList.toggle("cwnit-reduced-motion", prefersReducedMotion());
 
-  const caption = pause.querySelector("figcaption, .pause-caption, h3");
-  if (caption) {
-    const text = game.i18n.localize(PAUSE_TEXT_KEY);
-    caption.textContent = text;
-    caption.dataset.text = text;
-    caption.classList.add("cwnit-pause-caption");
-  }
+  let stage = pause.querySelector(":scope > .cwnit-pause-stage");
+  if (stage) return;
 
-  const image = pause.querySelector("img");
-  if (image) {
-    image.src = `modules/${MODULE_ID}/assets/system-halted-dial.svg`;
-    image.alt = "";
-    image.classList.add("cwnit-pause-dial");
-  }
+  const text = game.i18n.localize(PAUSE_TEXT_KEY);
+  stage = document.createElement("div");
+  stage.className = "cwnit-pause-stage";
+
+  const image = document.createElement("img");
+  image.src = `modules/${MODULE_ID}/assets/system-halted-dial.svg`;
+  image.alt = "";
+  image.className = "cwnit-pause-dial";
+  image.setAttribute("aria-hidden", "true");
+
+  const caption = document.createElement("div");
+  caption.className = "cwnit-pause-caption";
+  caption.textContent = text;
+  caption.dataset.text = text;
+  caption.setAttribute("role", "status");
+
+  stage.append(image, caption);
+  pause.append(stage);
 }
 
 function prefersReducedMotion() {
@@ -145,12 +152,16 @@ function prefersReducedMotion() {
  */
 function observePauseOverlay() {
   const observer = new MutationObserver((mutations) => {
-    const pauseChanged = mutations.some((mutation) =>
-      [...mutation.addedNodes].some(
-        (node) =>
-          node instanceof Element &&
-          (node.id === "pause" || node.querySelector?.("#pause")),
-      ),
+    const pauseChanged = mutations.some(
+      (mutation) =>
+        mutation.target instanceof Element &&
+        (mutation.target.id === "pause" ||
+          mutation.target.closest?.("#pause") ||
+          [...mutation.addedNodes].some(
+            (node) =>
+              node instanceof Element &&
+              (node.id === "pause" || node.querySelector?.("#pause")),
+          )),
     );
 
     if (pauseChanged) requestAnimationFrame(refreshPauseOverlay);
