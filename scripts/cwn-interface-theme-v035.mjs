@@ -135,6 +135,7 @@ function refreshPauseOverlay() {
 
   const pauseText = game.i18n.localize(PAUSE_TEXT_KEY);
   caption.classList.add("cwnit-pause-caption");
+  caption.dataset.cwnitText = pauseText;
   caption.textContent = pauseText;
   pause.setAttribute("aria-label", pauseText);
   lastReducedMotion = reducedMotion;

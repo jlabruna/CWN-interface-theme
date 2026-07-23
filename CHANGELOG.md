@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.6
+
+- Increased the intensity and frequency of the **SYSTEM HALTED** text glitch.
+- Added short cyan and magenta split-image bursts with displaced horizontal
+  text slices.
+- Increased the main caption's flicker and lateral jitter while keeping the
+  title readable between glitch bursts.
+- Ensured Photosensitive Mode and operating-system reduced-motion preferences
+  disable all new glitch layers.
+
 ## 0.3.5
 
 - Fixed the missing **SYSTEM HALTED** caption by reusing Foundry's persistent

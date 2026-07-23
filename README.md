@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.3.5.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.3.6.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +48,14 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.3.6
+
+- Made the **SYSTEM HALTED** glitch substantially more visible with stronger
+  flicker, larger horizontal displacement, and brief cyan/magenta sliced-text
+  echoes.
+- Kept the title stable and readable between short glitch bursts.
+- Photosensitive Mode continues to stop the dial and every text animation.
 
 ### 0.3.5
 

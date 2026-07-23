@@ -1,0 +1,517 @@
+/* Theme only SWNR-generated chat cards marked by this module. */
+.chat-message.cwnit-chat-message {
+  --cwnit-accent: #176f80;
+  --cwnit-background: #e8e5dc;
+  --cwnit-background-raised: #f5f3ed;
+  --cwnit-border: #918b7d;
+  --cwnit-muted: #5c625f;
+  --cwnit-text: #1d2528;
+  background: var(--cwnit-background) !important;
+  background-image: none !important;
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.chat-message.cwnit-theme-dark {
+  --cwnit-accent: #54d7e8;
+  --cwnit-background: #141b22;
+  --cwnit-background-raised: #202a33;
+  --cwnit-border: #41616d;
+  --cwnit-muted: #a5b7be;
+  --cwnit-text: #e0ebef;
+  box-shadow: inset 3px 0 0 rgb(84 215 232 / 45%);
+}
+
+.cwnit-chat-message .message-header,
+.cwnit-chat-message .message-content,
+.cwnit-chat-message .chat-card,
+.cwnit-chat-message .chat-card h1,
+.cwnit-chat-message .chat-card h2,
+.cwnit-chat-message .chat-card h3,
+.cwnit-chat-message .chat-card h4,
+.cwnit-chat-message .chat-card h5 {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .refresh-summary,
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary li,
+.cwnit-chat-message .refresh-summary strong {
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message .refresh-summary h3 {
+  border-bottom: 1px solid var(--cwnit-border);
+  color: var(--cwnit-accent);
+  margin: 0 0 0.35rem;
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .refresh-summary p,
+.cwnit-chat-message .refresh-summary ul {
+  margin: 0.25rem 0;
+}
+
+.cwnit-chat-message .message-metadata,
+.cwnit-chat-message .message-timestamp,
+.cwnit-chat-message .cwnce-damage-hint,
+.cwnit-chat-message .cwnce-weapon-ranges,
+.cwnit-chat-message .cwnce-notice {
+  color: var(--cwnit-muted);
+}
+
+.cwnit-chat-message .chat-card h4 {
+  border-bottom: 1px solid var(--cwnit-border);
+  padding-bottom: 0.25rem;
+}
+
+.cwnit-chat-message .dice-formula,
+.cwnit-chat-message .dice-total,
+.cwnit-chat-message .roll .dice-formula,
+.cwnit-chat-message .roll .dice-total {
+  background: var(--cwnit-background-raised);
+  border-color: var(--cwnit-border);
+  color: var(--cwnit-text);
+  text-shadow: none;
+}
+
+.cwnit-chat-message button,
+.cwnit-chat-message .cwnce-apply-damage {
+  background: var(--cwnit-background-raised);
+  border: 1px solid var(--cwnit-border);
+  color: var(--cwnit-text);
+}
+
+.cwnit-chat-message button:hover,
+.cwnit-chat-message button:focus {
+  border-color: var(--cwnit-accent);
+  box-shadow: 0 0 0 1px var(--cwnit-accent);
+}
+
+.cwnit-chat-message .cwnce-results,
+.cwnit-chat-message .cwnce-damage-action {
+  border-color: var(--cwnit-border);
+}
+
+.cwnit-chat-message .cwnce-target {
+  background: rgb(0 0 0 / 7%);
+}
+
+.cwnit-theme-dark .cwnce-target {
+  background: rgb(255 255 255 / 6%);
+}
+
+/* Combat Enhancements compatibility: use colours suited to the card itself. */
+.cwnit-theme-light .cwnce-hit .cwnce-outcome,
+.cwnit-theme-light .cwnce-damage-applied {
+  color: #116b32;
+}
+
+.cwnit-theme-light .cwnce-miss .cwnce-outcome,
+.cwnit-theme-light .cwnce-out .cwnce-outcome {
+  color: #8d2020;
+}
+
+.cwnit-theme-light .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-light .cwnce-trauma .cwnce-damage-preview {
+  color: #1769aa;
+}
+
+.cwnit-theme-dark .cwnce-hit .cwnce-outcome,
+.cwnit-theme-dark .cwnce-damage-applied {
+  color: #58d486;
+}
+
+.cwnit-theme-dark .cwnce-miss .cwnce-outcome,
+.cwnit-theme-dark .cwnce-out .cwnce-outcome {
+  color: #ff7d87;
+}
+
+.cwnit-theme-dark .cwnce-trauma .cwnce-outcome,
+.cwnit-theme-dark .cwnce-trauma .cwnce-damage-preview {
+  color: #60caff;
+}
+
+/* Original cyberpunk pause presentation for Foundry v13. */
+#pause.cwnit-system-halted {
+  --cwnit-pause-blue: #54d7e8;
+  --cwnit-pause-blue-soft: #b7f6ff;
+  --cwnit-pause-magenta: #f04f9c;
+  align-items: center;
+  animation: none;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(2 5 10 / 40%) 22%,
+      rgb(2 5 10 / 56%) 50%,
+      rgb(2 5 10 / 40%) 78%,
+      transparent 100%
+    );
+  height: 220px;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  top: calc(66.667% - 110px);
+}
+
+#pause.cwnit-system-halted.paused {
+  display: flex;
+}
+
+#pause.cwnit-system-halted > :not(.cwnit-pause-caption) {
+  display: none !important;
+}
+
+#pause.cwnit-system-halted::before {
+  animation: cwnit-dial-spin 14s linear infinite;
+  background:
+    url("../assets/system-halted-dial.svg")
+    center / contain no-repeat;
+  content: "";
+  filter:
+    drop-shadow(0 0 5px rgb(84 215 232 / 80%))
+    drop-shadow(0 0 16px rgb(84 215 232 / 35%));
+  height: 178px;
+  left: 50%;
+  margin: -89px 0 0 -89px;
+  opacity: 0.72;
+  position: absolute;
+  top: 50%;
+  width: 178px;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption {
+  animation:
+    cwnit-halt-flicker 3.2s steps(1, end) infinite,
+    cwnit-halt-jitter 4.4s steps(1, end) infinite;
+  background: none;
+  color: #f2fbff;
+  display: block !important;
+  filter: drop-shadow(0 0 5px rgb(84 215 232 / 80%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  margin: 0;
+  padding: 0 0 0 0.16em;
+  position: relative;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue);
+  text-transform: uppercase;
+  visibility: visible !important;
+  width: auto;
+  z-index: 2;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::before,
+#pause.cwnit-system-halted > .cwnit-pause-caption::after {
+  content: attr(data-cwnit-text);
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  white-space: nowrap;
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::before {
+  animation: cwnit-glitch-slice-magenta 2.7s steps(1, end) infinite;
+  color: #fff5fb;
+  text-shadow:
+    -5px 0 var(--cwnit-pause-magenta),
+    1px 0 var(--cwnit-pause-blue);
+}
+
+#pause.cwnit-system-halted > .cwnit-pause-caption::after {
+  animation: cwnit-glitch-slice-cyan 3.1s steps(1, end) infinite;
+  color: #f1fdff;
+  text-shadow:
+    -1px 0 var(--cwnit-pause-magenta),
+    5px 0 var(--cwnit-pause-blue);
+}
+
+/*
+ * Defensive fallback for a cached or temporarily unavailable module script.
+ * The real caption covers this layer once Foundry's persistent figcaption has
+ * been claimed by refreshPauseOverlay().
+ */
+#pause.cwnit-system-halted:not(:has(> .cwnit-pause-caption))::after {
+  background: none;
+  color: #f2fbff;
+  content: "SYSTEM HALTED" !important;
+  display: block !important;
+  filter: drop-shadow(0 0 5px rgb(84 215 232 / 80%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  left: 50%;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  padding-left: 0.16em;
+  position: absolute;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue);
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: visible !important;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+@keyframes cwnit-dial-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cwnit-halt-flicker {
+  0%,
+  11%,
+  14%,
+  37%,
+  40%,
+  68%,
+  72%,
+  91%,
+  94%,
+  100% {
+    opacity: 1;
+  }
+
+  12%,
+  38%,
+  70%,
+  92% {
+    opacity: 0.48;
+  }
+
+  13%,
+  39%,
+  71%,
+  93% {
+    opacity: 0.82;
+  }
+}
+
+@keyframes cwnit-halt-jitter {
+  0%,
+  19%,
+  23%,
+  48%,
+  52%,
+  78%,
+  83%,
+  100% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(5px, -1px) skewX(-3deg);
+  }
+
+  21% {
+    transform: translate(-4px, 1px) skewX(2deg);
+  }
+
+  22% {
+    transform: translate(2px);
+  }
+
+  49% {
+    transform: translate(-6px, 1px) skewX(4deg);
+  }
+
+  50% {
+    transform: translate(4px, -1px);
+  }
+
+  51% {
+    transform: translate(-2px);
+  }
+
+  79% {
+    transform: translate(7px) skewX(-4deg);
+  }
+
+  80% {
+    transform: translate(-5px, -1px);
+  }
+
+  81% {
+    transform: translate(3px, 1px);
+  }
+
+  82% {
+    transform: translate(0);
+  }
+}
+
+@keyframes cwnit-glitch-slice-magenta {
+  0%,
+  25%,
+  31%,
+  61%,
+  67%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+    transform: translate(0);
+  }
+
+  26% {
+    clip-path: inset(8% 0 63% 0);
+    opacity: 0.92;
+    transform: translate(-9px, -1px);
+  }
+
+  27% {
+    clip-path: inset(54% 0 18% 0);
+    opacity: 0.8;
+    transform: translate(7px, 1px);
+  }
+
+  28% {
+    clip-path: inset(29% 0 42% 0);
+    opacity: 0.95;
+    transform: translate(-5px);
+  }
+
+  29% {
+    clip-path: inset(72% 0 5% 0);
+    opacity: 0.68;
+    transform: translate(10px);
+  }
+
+  30% {
+    opacity: 0;
+  }
+
+  62% {
+    clip-path: inset(12% 0 58% 0);
+    opacity: 0.88;
+    transform: translate(8px);
+  }
+
+  63% {
+    clip-path: inset(44% 0 30% 0);
+    opacity: 0.82;
+    transform: translate(-10px);
+  }
+
+  64% {
+    clip-path: inset(68% 0 8% 0);
+    opacity: 0.9;
+    transform: translate(6px, 1px);
+  }
+
+  65% {
+    clip-path: inset(20% 0 48% 0);
+    opacity: 0.7;
+    transform: translate(-4px);
+  }
+
+  66% {
+    opacity: 0;
+  }
+}
+
+@keyframes cwnit-glitch-slice-cyan {
+  0%,
+  14%,
+  20%,
+  45%,
+  51%,
+  83%,
+  89%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+    transform: translate(0);
+  }
+
+  15% {
+    clip-path: inset(61% 0 10% 0);
+    opacity: 0.9;
+    transform: translate(10px);
+  }
+
+  16% {
+    clip-path: inset(18% 0 55% 0);
+    opacity: 0.82;
+    transform: translate(-7px);
+  }
+
+  17% {
+    clip-path: inset(43% 0 26% 0);
+    opacity: 0.95;
+    transform: translate(8px, -1px);
+  }
+
+  18% {
+    clip-path: inset(76% 0 3% 0);
+    opacity: 0.72;
+    transform: translate(-9px);
+  }
+
+  19% {
+    opacity: 0;
+  }
+
+  46%,
+  84% {
+    clip-path: inset(6% 0 66% 0);
+    opacity: 0.9;
+    transform: translate(-8px);
+  }
+
+  47%,
+  85% {
+    clip-path: inset(36% 0 38% 0);
+    opacity: 0.78;
+    transform: translate(11px);
+  }
+
+  48%,
+  86% {
+    clip-path: inset(70% 0 7% 0);
+    opacity: 0.9;
+    transform: translate(-6px, 1px);
+  }
+
+  49%,
+  87% {
+    clip-path: inset(24% 0 47% 0);
+    opacity: 0.68;
+    transform: translate(5px);
+  }
+
+  50%,
+  88% {
+    opacity: 0;
+  }
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion::before,
+#pause.cwnit-system-halted.cwnit-reduced-motion > .cwnit-pause-caption,
+#pause.cwnit-system-halted.cwnit-reduced-motion
+  > .cwnit-pause-caption::before,
+#pause.cwnit-system-halted.cwnit-reduced-motion
+  > .cwnit-pause-caption::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #pause.cwnit-system-halted::before,
+  #pause.cwnit-system-halted > .cwnit-pause-caption,
+  #pause.cwnit-system-halted > .cwnit-pause-caption::before,
+  #pause.cwnit-system-halted > .cwnit-pause-caption::after {
+    animation: none;
+  }
+}
