@@ -1,6 +1,7 @@
 const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
 const SYSTEM_CARD_SELECTOR = ".chat-card, .refresh-summary";
+const PAUSE_TEXT_KEY = "CWNIT.Pause.SystemHalted";
 
 Hooks.on("renderChatMessage", (_message, html) => {
   if (game.system.id !== "swnr") return;
@@ -16,15 +17,34 @@ Hooks.on("renderChatLog", () => {
 });
 
 Hooks.on("updateSetting", (setting) => {
-  if (game.system.id !== "swnr" || setting.key !== "core.uiConfig") return;
-  requestAnimationFrame(refreshChatThemes);
+  if (game.system.id !== "swnr") return;
+
+  if (setting.key === "core.uiConfig") {
+    requestAnimationFrame(refreshChatThemes);
+  }
+
+  if (setting.key === "core.photosensitivityMode") {
+    requestAnimationFrame(refreshPauseOverlay);
+  }
+});
+
+Hooks.on("renderPause", () => {
+  if (game.system.id !== "swnr") return;
+  requestAnimationFrame(refreshPauseOverlay);
+});
+
+Hooks.on("pauseGame", () => {
+  if (game.system.id !== "swnr") return;
+  requestAnimationFrame(refreshPauseOverlay);
 });
 
 Hooks.once("ready", () => {
   if (game.system.id !== "swnr") return;
   refreshChatThemes();
+  refreshPauseOverlay();
   observeChatThemeAncestors();
-  console.info(`${MODULE_ID} | Adaptive SWNR chat-card theme ready`);
+  observePauseOverlay();
+  console.info(`${MODULE_ID} | Adaptive SWNR interface theme ready`);
 });
 
 /**
@@ -81,4 +101,60 @@ function observeChatThemeAncestors() {
   for (const ancestor of ancestors) {
     observer.observe(ancestor, { attributes: true, attributeFilter: ["class"] });
   }
+}
+
+/**
+ * Replace Foundry's default pause artwork and caption with an original
+ * cyberpunk presentation. The existing #pause application remains in charge
+ * of visibility, so this changes presentation only.
+ */
+function refreshPauseOverlay() {
+  const pause = document.querySelector("#pause");
+  if (!pause) return;
+
+  pause.classList.add("cwnit-system-halted");
+  pause.classList.toggle("cwnit-reduced-motion", prefersReducedMotion());
+
+  const caption = pause.querySelector("figcaption, .pause-caption, h3");
+  if (caption) {
+    const text = game.i18n.localize(PAUSE_TEXT_KEY);
+    caption.textContent = text;
+    caption.dataset.text = text;
+    caption.classList.add("cwnit-pause-caption");
+  }
+
+  const image = pause.querySelector("img");
+  if (image) {
+    image.src = `modules/${MODULE_ID}/assets/system-halted-dial.svg`;
+    image.alt = "";
+    image.classList.add("cwnit-pause-dial");
+  }
+}
+
+function prefersReducedMotion() {
+  const foundryPreference = game.settings.get("core", "photosensitivityMode");
+  const operatingSystemPreference =
+    globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  return Boolean(foundryPreference || operatingSystemPreference);
+}
+
+/**
+ * Foundry can recreate the pause application after the world has loaded.
+ * Observe only for the #pause element so the theme is reapplied immediately
+ * without repeatedly processing unrelated canvas changes.
+ */
+function observePauseOverlay() {
+  const observer = new MutationObserver((mutations) => {
+    const pauseChanged = mutations.some((mutation) =>
+      [...mutation.addedNodes].some(
+        (node) =>
+          node instanceof Element &&
+          (node.id === "pause" || node.querySelector?.("#pause")),
+      ),
+    );
+
+    if (pauseChanged) requestAnimationFrame(refreshPauseOverlay);
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 }

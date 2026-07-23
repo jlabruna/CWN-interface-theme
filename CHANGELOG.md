@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0
+
+- Replaced Foundry's default pause presentation with an original animated
+  **SYSTEM HALTED** overlay.
+- Added a rotating geometric cyberpunk dial and restrained text-glitch effect.
+- Disabled pause animations when Foundry Photosensitive Mode or the operating
+  system reduced-motion preference is active.
+
 ## 0.2.1
 
 - Changed the normal overnight-rest chat heading from **Day Refresh** to

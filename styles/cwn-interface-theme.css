@@ -131,3 +131,200 @@
 .cwnit-theme-dark .cwnce-trauma .cwnce-damage-preview {
   color: #60caff;
 }
+
+/* Original cyberpunk pause presentation for Foundry v13. */
+#pause.cwnit-system-halted {
+  --cwnit-pause-blue: #54d7e8;
+  --cwnit-pause-blue-soft: #b7f6ff;
+  --cwnit-pause-magenta: #f04f9c;
+  align-items: center;
+  animation: none;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(2 5 10 / 82%) 22%,
+      rgb(2 5 10 / 94%) 50%,
+      rgb(2 5 10 / 82%) 78%,
+      transparent 100%
+    );
+  height: 132px;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  top: calc(50% - 66px);
+}
+
+#pause.cwnit-system-halted.paused {
+  display: flex;
+}
+
+#pause.cwnit-system-halted .cwnit-pause-dial {
+  animation: cwnit-dial-spin 14s linear infinite;
+  filter:
+    drop-shadow(0 0 5px rgb(84 215 232 / 80%))
+    drop-shadow(0 0 16px rgb(84 215 232 / 35%));
+  height: 178px;
+  left: 50%;
+  margin: -89px 0 0 -89px;
+  opacity: 0.72;
+  position: absolute;
+  top: 50%;
+  width: 178px;
+}
+
+#pause.cwnit-system-halted .cwnit-pause-caption {
+  animation:
+    cwnit-halt-flicker 4.8s steps(1, end) infinite,
+    cwnit-halt-jitter 7s steps(1, end) infinite;
+  background: none;
+  color: #f2fbff;
+  filter: drop-shadow(0 0 5px rgb(84 215 232 / 80%));
+  font-family: "Teko", "Rajdhani", "Arial Narrow", sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  margin: 0;
+  padding: 0 0 0 0.16em;
+  position: relative;
+  text-align: center;
+  text-shadow:
+    -2px 0 var(--cwnit-pause-magenta),
+    2px 0 var(--cwnit-pause-blue);
+  text-transform: uppercase;
+  width: auto;
+  z-index: 2;
+}
+
+#pause.cwnit-system-halted .cwnit-pause-caption::before,
+#pause.cwnit-system-halted .cwnit-pause-caption::after {
+  content: attr(data-text);
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  white-space: nowrap;
+}
+
+#pause.cwnit-system-halted .cwnit-pause-caption::before {
+  animation: cwnit-halt-slice-a 3.7s steps(1, end) infinite;
+  color: var(--cwnit-pause-blue-soft);
+  transform: translateX(3px);
+}
+
+#pause.cwnit-system-halted .cwnit-pause-caption::after {
+  animation: cwnit-halt-slice-b 4.3s steps(1, end) infinite;
+  color: var(--cwnit-pause-magenta);
+  transform: translateX(-3px);
+}
+
+@keyframes cwnit-dial-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cwnit-halt-flicker {
+  0%,
+  17%,
+  19%,
+  63%,
+  65%,
+  100% {
+    opacity: 1;
+  }
+
+  18%,
+  64% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes cwnit-halt-jitter {
+  0%,
+  31%,
+  33%,
+  71%,
+  73%,
+  100% {
+    transform: translate(0);
+  }
+
+  32% {
+    transform: translate(2px, -1px);
+  }
+
+  72% {
+    transform: translate(-2px, 1px);
+  }
+}
+
+@keyframes cwnit-halt-slice-a {
+  0%,
+  22%,
+  24%,
+  55%,
+  57%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+  }
+
+  23% {
+    clip-path: inset(18% 0 58%);
+    opacity: 0.85;
+  }
+
+  56% {
+    clip-path: inset(62% 0 14%);
+    opacity: 0.7;
+  }
+}
+
+@keyframes cwnit-halt-slice-b {
+  0%,
+  37%,
+  39%,
+  81%,
+  83%,
+  100% {
+    clip-path: inset(0);
+    opacity: 0;
+  }
+
+  38% {
+    clip-path: inset(42% 0 36%);
+    opacity: 0.75;
+  }
+
+  82% {
+    clip-path: inset(74% 0 6%);
+    opacity: 0.65;
+  }
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-dial,
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-caption,
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-caption::before,
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-caption::after {
+  animation: none;
+}
+
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-caption::before,
+#pause.cwnit-system-halted.cwnit-reduced-motion .cwnit-pause-caption::after {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #pause.cwnit-system-halted .cwnit-pause-dial,
+  #pause.cwnit-system-halted .cwnit-pause-caption,
+  #pause.cwnit-system-halted .cwnit-pause-caption::before,
+  #pause.cwnit-system-halted .cwnit-pause-caption::after {
+    animation: none;
+  }
+
+  #pause.cwnit-system-halted .cwnit-pause-caption::before,
+  #pause.cwnit-system-halted .cwnit-pause-caption::after {
+    display: none;
+  }
+}
