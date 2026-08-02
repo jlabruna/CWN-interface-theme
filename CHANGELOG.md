@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1
+
+- Verified the theme against Foundry VTT 14.365 and SWNR 2.3.1.
+- Migrated chat-card enhancement to Foundry V14's `renderChatMessageHTML` hook.
+- Versioned the JavaScript filename so existing installations cannot retain the
+  pre-V14 hook implementation in browser cache.
+
 ## 0.4.0
 
 - Replaced the single rotating dial with the selected **Split-Reel Data Gate**

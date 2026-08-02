@@ -1,7 +1,7 @@
 # CWN Interface Theme for SWNR
 
 An adaptive light and dark interface theme for **Cities Without Number** games
-running on **Systems Without Number Redux (SWNR)** in Foundry VTT v13.
+running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
 ## Current scope
 
@@ -27,7 +27,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.4.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.4.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -36,7 +36,7 @@ This module may style elements produced by CWN Combat Enhancements when that
 module is installed, but neither module requires the other. Disabling this
 theme must never disable or change Combat Enhancements automation.
 
-Theme selection reads Foundry v13's explicit **Interface** colour-scheme
+Theme selection reads Foundry's explicit **Interface** colour-scheme
 preference. The separate **Applications** preference does not affect chat-card
 appearance.
 

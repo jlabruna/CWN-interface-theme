@@ -2,8 +2,9 @@ const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
 const SYSTEM_CARD_SELECTOR = ".chat-card, .refresh-summary";
 const PAUSE_TEXT_KEY = "CWNIT.Pause.SystemHalted";
+let lastReducedMotion;
 
-Hooks.on("renderChatMessage", (_message, html) => {
+Hooks.on("renderChatMessageHTML", (_message, html) => {
   if (game.system.id !== "swnr") return;
 
   const root = html instanceof HTMLElement ? html : html?.[0];
@@ -23,7 +24,7 @@ Hooks.on("updateSetting", (setting) => {
     requestAnimationFrame(refreshChatThemes);
   }
 
-  if (setting.key === "core.photosensitivityMode") {
+  if (/photo.*sens/i.test(setting.key)) {
     requestAnimationFrame(refreshPauseOverlay);
   }
 });
@@ -44,6 +45,7 @@ Hooks.once("ready", () => {
   refreshPauseOverlay();
   observeChatThemeAncestors();
   observePauseOverlay();
+  monitorReducedMotion();
   console.info(`${MODULE_ID} | Adaptive SWNR interface theme ready`);
 });
 
@@ -112,24 +114,116 @@ function refreshPauseOverlay() {
   const pause = document.querySelector("#pause");
   if (!pause) return;
 
+  const reducedMotion = prefersReducedMotion();
   pause.classList.add("cwnit-system-halted");
-  pause.classList.toggle("cwnit-reduced-motion", prefersReducedMotion());
+  pause.classList.toggle("cwnit-reduced-motion", reducedMotion);
+  ensurePauseDialStage(pause);
 
-  let caption = pause.querySelector(":scope > .cwnit-pause-caption");
+  /*
+   * Reuse Foundry's persistent native caption whenever possible. Foundry may
+   * discard arbitrary children while rerendering #pause, but its own caption
+   * survives. Fall back to a module-owned span only if the core caption is
+   * absent in a later Foundry build.
+   */
+  let caption =
+    pause.querySelector(":scope > figcaption") ??
+    pause.querySelector(":scope > .cwnit-pause-caption");
+
   if (!caption) {
     caption = document.createElement("span");
-    caption.className = "cwnit-pause-caption";
     pause.append(caption);
   }
 
-  caption.textContent = game.i18n.localize(PAUSE_TEXT_KEY);
+  const pauseText = game.i18n.localize(PAUSE_TEXT_KEY);
+  caption.classList.add("cwnit-pause-caption");
+  caption.dataset.cwnitText = pauseText;
+  caption.textContent = pauseText;
+  pause.setAttribute("aria-label", pauseText);
+  lastReducedMotion = reducedMotion;
+}
+
+/**
+ * Build the selected split-reel concept as independently animated layers.
+ * Recreate only missing layers so Foundry pause rerenders remain inexpensive.
+ */
+function ensurePauseDialStage(pause) {
+  let stage = pause.querySelector(":scope > .cwnit-dial-stage");
+
+  if (!stage) {
+    stage = document.createElement("div");
+    stage.className = "cwnit-dial-stage";
+    stage.setAttribute("aria-hidden", "true");
+    pause.prepend(stage);
+  }
+
+  const layers = [
+    "cwnit-dial-purple",
+    "cwnit-dial-yellow",
+    "cwnit-dial-cyan",
+    "cwnit-dial-data-a",
+    "cwnit-dial-data-b",
+  ];
+
+  for (const layerClass of layers) {
+    if (stage.querySelector(`:scope > .${layerClass}`)) continue;
+    const layer = document.createElement("span");
+    layer.className = `cwnit-dial-layer ${layerClass}`;
+    stage.append(layer);
+  }
 }
 
 function prefersReducedMotion() {
-  const foundryPreference = game.settings.get("core", "photosensitivityMode");
+  const foundryPreference = getPhotosensitivePreference();
   const operatingSystemPreference =
     globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
   return Boolean(foundryPreference || operatingSystemPreference);
+}
+
+/**
+ * Foundry has used more than one spelling for this preference across UI work.
+ * Resolve the registered setting instead of assuming one internal key.
+ */
+function getPhotosensitivePreference() {
+  const registeredSettings = game.settings?.settings;
+  const candidates = ["photosensitivityMode", "photosensitiveMode"];
+
+  if (registeredSettings) {
+    for (const registeredKey of registeredSettings.keys()) {
+      if (
+        registeredKey.startsWith("core.") &&
+        /photo.*sens/i.test(registeredKey)
+      ) {
+        candidates.unshift(registeredKey.slice("core.".length));
+      }
+    }
+  }
+
+  for (const key of new Set(candidates)) {
+    try {
+      const value = game.settings.get("core", key);
+      if (typeof value === "boolean") return value;
+    } catch {
+      // Try the next registered spelling.
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Core client preferences do not always create an updateSetting document
+ * event. Poll only this inexpensive boolean so changes take effect without a
+ * browser reload.
+ */
+function monitorReducedMotion() {
+  globalThis.setInterval(() => {
+    const reducedMotion = prefersReducedMotion();
+    if (reducedMotion !== lastReducedMotion) refreshPauseOverlay();
+  }, 500);
+
+  globalThis
+    .matchMedia?.("(prefers-reduced-motion: reduce)")
+    .addEventListener?.("change", refreshPauseOverlay);
 }
 
 /**
