@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.2
+
+- Themed ordinary Foundry chat messages in the active CWN light or dark palette.
+- Added chat-scoped styling for user messages, whispers, blind messages, emotes,
+  out-of-character messages, inline rolls, metadata, and hover controls.
+- Restored readable CWN Combat Enhancements modifier-breakdown labels, values,
+  muted details, and total rows in Foundry V14 dark mode.
+
 ## 0.4.1
 
 - Verified the theme against Foundry VTT 14.365 and SWNR 2.3.1.

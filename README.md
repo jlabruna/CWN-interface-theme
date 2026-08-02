@@ -5,7 +5,8 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
 ## Current scope
 
-- Styles SWNR system chat cards without changing ordinary player messages.
+- Styles SWNR system cards and ordinary player messages without changing chat
+  content or game rules.
 - Follows Foundry's **Interface** light/dark theme around the chat sidebar.
 - Provides a warm, readable light card and a charcoal cyberpunk dark card.
 - Themes roll totals, headings, buttons, metadata, and card borders.
@@ -27,7 +28,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.4.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.4.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -48,6 +49,12 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.4.2
+
+- Themed ordinary chat messages, including private messages, inline rolls,
+  emotes, and out-of-character messages, in both CWN light and dark palettes.
+- Fixed dark-mode readability for CWN Combat Enhancements modifier breakdowns.
 
 ### 0.4.0
 
