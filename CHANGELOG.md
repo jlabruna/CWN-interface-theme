@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.3
+
+- Restored readable Target Check target names and details in the Foundry V14
+  dark interface theme.
+
 ## 0.4.2
 
 - Themed ordinary Foundry chat messages in the active CWN light or dark palette.

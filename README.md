@@ -28,7 +28,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.4.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.4.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Compatibility design
@@ -49,6 +49,11 @@ appearance.
   are outside the v0.1 scope.
 
 ## Changes
+
+### 0.4.3
+
+Restores readable CWN Combat Enhancements Target Check rows in Foundry V14
+dark mode. This is a presentation-only correction.
 
 ### 0.4.2
 

@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import test from "node:test";
 
 const css = await fs.readFile(
-  new URL("../styles/cwn-interface-theme-v042.css", import.meta.url),
+  new URL("../styles/cwn-interface-theme-v043.css", import.meta.url),
   "utf8",
 );
 const source = await fs.readFile(
@@ -34,6 +34,16 @@ test("modifier breakdowns use readable theme variables", () => {
   }
   assert.match(css, /cwnce-modifier-breakdown[\s\S]*?color: var\(--cwnit-text\)/u);
   assert.match(css, /cwnce-breakdown-total[\s\S]*?color: var\(--cwnit-accent\)/u);
+});
+
+test("Target Check rows use readable theme variables", () => {
+  for (const selector of [
+    ".cwnit-chat-message .cwnce-target {",
+    ".cwnit-chat-message .cwnce-target :is(.cwnce-target-name, dt, dd) {",
+  ]) {
+    assert.ok(css.includes(selector), `missing ${selector}`);
+  }
+  assert.match(css, /cwnce-target[\s\S]*?color: var\(--cwnit-text\)/u);
 });
 
 test("ordinary chat and private-message selectors remain chat scoped", () => {
