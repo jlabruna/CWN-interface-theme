@@ -43,7 +43,13 @@ await fs.copyFile(
   path.join(moduleRoot, ".github", "workflows", "build-release.yml"),
   path.join(browserDotfilesRoot, ".github", "workflows", "build-release.yml"),
 );
-await fs.copyFile(path.join(moduleRoot, ".gitignore"), path.join(browserDotfilesRoot, ".gitignore"));
+// .gitignore is useful in a local checkout, but browser uploads can omit hidden
+// files. Do not make release staging depend on this developer-only file.
+try {
+  await fs.copyFile(path.join(moduleRoot, ".gitignore"), path.join(browserDotfilesRoot, ".gitignore"));
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error;
+}
 
 console.log(
   `Staged CWN Interface Theme ${manifest.version} at ${stageRoot}. `
