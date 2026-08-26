@@ -31,7 +31,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.5.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.5.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting the optional NPC sheet
@@ -68,6 +68,17 @@ appearance.
   limitation if it rejects an NPC.
 
 ## Changes
+
+### 0.5.2
+
+- Restored persistent edits across the optional NPC sheet by removing the
+  invalid portrait value from form submissions.
+- Restored native weapon attacks, reloads, item editing, and combat-tracker
+  initiative from the tactical Combat tab.
+- Simplified Combat by removing its redundant Add Weapon and broken Reaction
+  controls, visibly marks active armor, and labels movement in metres.
+- Added cache-busted runtime, stylesheet, and template assets plus regressions
+  for each corrected integration contract.
 
 ### 0.5.1
 

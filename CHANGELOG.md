@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.2
+
+- Fixed the optional NPC sheet submitting an empty portrait value with ordinary
+  form changes, which prevented names, HP, profile fields, item locations, and
+  biography edits from persisting.
+- Restored native SWNR weapon attacks, reloads, and item editing by using the
+  list-row document structure expected by SWNR's embedded-document handlers.
+- Made Initiative add the displayed NPC token to the active combat encounter
+  when necessary and roll through the combat tracker.
+- Removed the redundant Combat-tab Add Weapon control and the SWNR 2.3.1
+  Reaction quick roll that is incompatible with Foundry V14 RollTable result
+  validation.
+- Added a visible equipped/readied state to armor shields and labelled tactical
+  movement in metres.
+- Cache-busted the corrected entry script, sheet module, stylesheet, and
+  affected templates.
+
 ## 0.5.1
 
 - Fixed the optional CWN NPC Sheet failing to open after selection in Foundry

@@ -1,0 +1,74 @@
+<section class="tab cwnit-sheet--npc__body {{tab.cssClass}}" data-group="primary" data-tab="combat">
+  <div class="cwnit-sheet--npc__section-heading">
+    <div><p>{{localize 'CWNIT.Sheet.NPC.CombatOverline'}}</p><h2>{{localize 'CWNIT.Sheet.NPC.Attacks'}}</h2></div>
+  </div>
+  <ol class="cwnit-sheet--npc__attack-grid">
+    {{#each cwnit.weapons as |attack|}}
+      <li class="cwnit-sheet--npc__attack item" data-item-id="{{attack.item._id}}" data-document-class="Item" data-drag="true">
+        <div class="cwnit-sheet--npc__attack-title">
+          <button type="button" class="cwnit-sheet--npc__item-icon" data-action="roll" data-roll-type="item"><img src="{{attack.item.img}}" alt="" /></button>
+          <div><h3>{{attack.item.name}}</h3><span>{{attack.mode}}</span></div>
+          <button type="button" class="cwnit-sheet--npc__icon-button" data-action="viewDoc" title="{{localize 'DOCUMENT.Update' type='Item'}}"><i class="fa-solid fa-pen-to-square"></i></button>
+        </div>
+        <dl class="cwnit-sheet--npc__attack-stats">
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.Damage'}}</dt><dd>{{attack.damage}}</dd></div>
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.AttackBonus'}}</dt><dd>{{attack.actorAttackBonus}} + {{attack.weaponAttackBonus}}</dd></div>
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.Ammo'}}</dt><dd>{{attack.ammo}}</dd></div>
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.Range'}}</dt><dd>{{attack.range}}</dd></div>
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.Shock'}}</dt><dd>{{attack.shock}}</dd></div>
+          <div><dt>{{localize 'CWNIT.Sheet.NPC.Trauma'}}</dt><dd>{{attack.trauma}}</dd></div>
+        </dl>
+        <div class="cwnit-sheet--npc__attack-actions">
+          <button type="button" data-action="roll" data-roll-type="item"><i class="fa-solid fa-crosshairs"></i> {{localize 'CWNIT.Sheet.NPC.Attack'}}</button>
+          {{#if attack.canReload}}<button type="button" data-action="reload"><i class="fa-solid fa-arrows-rotate"></i> {{localize 'CWNIT.Sheet.NPC.Reload'}}</button>{{/if}}
+        </div>
+      </li>
+    {{else}}
+      <p class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoWeapons'}}</p>
+    {{/each}}
+  </ol>
+
+  <div class="cwnit-sheet--npc__combat-lower">
+    <section class="cwnit-sheet--npc__panel">
+      <h2>{{localize 'CWNIT.Sheet.NPC.QuickRolls'}}</h2>
+      <div class="cwnit-sheet--npc__quick-actions">
+        <button type="button" data-action="rollSave" data-save-type="npc" data-target="{{system.saves}}"><i class="fa-solid fa-shield-halved"></i><span>{{localize 'CWNIT.Sheet.NPC.Save'}} <b>{{system.saves}}+</b></span></button>
+        <button type="button" data-action="roll" data-roll="2d6 + {{system.skillBonus}}" data-label="{{localize 'swnr.npc.skill.trained' actor=actor.name}}"><i class="fa-solid fa-dice"></i><span>{{localize 'CWNIT.Sheet.NPC.TrainedSkill'}} <b>+{{system.skillBonus}}</b></span></button>
+        <button type="button" data-action="roll" data-roll="2d6 + 0" data-label="{{localize 'swnr.npc.skill.untrained' actor=actor.name}}"><i class="fa-solid fa-dice"></i><span>{{localize 'CWNIT.Sheet.NPC.UntrainedSkill'}} <b>+0</b></span></button>
+      </div>
+    </section>
+    <section class="cwnit-sheet--npc__panel">
+      <h2>{{localize 'CWNIT.Sheet.NPC.Armor'}}</h2>
+      <ol class="cwnit-sheet--npc__compact-list">
+        {{#each cwnit.armor as |armor|}}
+          <li class="item" data-item-id="{{armor.item._id}}" data-document-class="Item" data-drag="true">
+            <img src="{{armor.item.img}}" alt="" /><button type="button" data-action="viewDoc">{{armor.item.name}}</button><span>AC {{armor.item.system.ac}}</span>
+            <button type="button" class="cwnit-sheet--npc__icon-button cwnit-sheet--npc__armor-toggle {{#if armor.isActive}}is-active{{/if}}" data-action="toggleArmor" data-item-id="{{armor.item._id}}" title="{{localize 'CWNIT.Sheet.NPC.ToggleArmor'}}" aria-pressed="{{armor.isActive}}"><i class="fa-solid fa-shield"></i></button>
+          </li>
+        {{else}}<p class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoArmor'}}</p>{{/each}}
+      </ol>
+    </section>
+  </div>
+
+  <details class="cwnit-sheet--npc__advanced">
+    <summary>{{localize 'CWNIT.Sheet.NPC.AdvancedCombat'}}</summary>
+    <div class="cwnit-sheet--npc__field-grid">
+      <label><span>{{localize 'CWNIT.Sheet.NPC.HitDice'}}</span><input name="system.hitDice" type="text" value="{{system.hitDice}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.BaseAC'}}</span><input name="system.baseAc" type="number" value="{{system.baseAc}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.MeleeAC'}}</span><input name="system.meleeAc" type="number" value="{{system.meleeAc}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.ArmorType'}}</span><select name="system.armorType">{{selectOptions config.armorTypes selected=system.armorType localize=true}}</select></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.RangedAB'}}</span><input name="system.ab" type="number" value="{{system.ab}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.MeleeAB'}}</span><input name="system.meleeAb" type="number" value="{{system.meleeAb}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.DamageBonus'}}</span><input name="system.attacks.bonusDamage" type="number" value="{{system.attacks.bonusDamage}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.AttacksPerRound'}}</span><input name="system.attacks.number" type="number" value="{{system.attacks.number}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.SkillBonus'}}</span><input name="system.skillBonus" type="number" value="{{system.skillBonus}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.Save'}}</span><input name="system.saves" type="number" value="{{system.saves}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.Morale'}}</span><input name="system.moralScore" type="number" value="{{system.moralScore}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.Reaction'}}</span><select name="system.reaction">{{selectOptions config.reactionTypes selected=system.reaction localize=true}}</select></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.Movement'}}</span><input name="system.speed" type="number" value="{{system.speed}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.TraumaTarget'}}</span><input name="system.traumaTarget" type="number" value="{{system.traumaTarget}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.BaseSoakCurrent'}}</span><input name="system.baseSoakTotal.value" type="number" value="{{system.baseSoakTotal.value}}" /></label>
+      <label><span>{{localize 'CWNIT.Sheet.NPC.BaseSoakMaximum'}}</span><input name="system.baseSoakTotal.max" type="number" value="{{system.baseSoakTotal.max}}" /></label>
+    </div>
+  </details>
+</section>

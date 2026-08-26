@@ -7,7 +7,7 @@ const css = await fs.readFile(
   "utf8",
 );
 const source = await fs.readFile(
-  new URL("../scripts/cwn-interface-theme-v051.mjs", import.meta.url),
+  new URL("../scripts/cwn-interface-theme-v052.mjs", import.meta.url),
   "utf8",
 );
 

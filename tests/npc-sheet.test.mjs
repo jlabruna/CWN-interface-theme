@@ -8,13 +8,13 @@ import {
   prepareNpcSheetContext,
   registerCwnNpcSheet,
   resolveSwnrActorSheet,
-} from "../scripts/sheets/cwn-npc-sheet-v051.mjs";
+} from "../scripts/sheets/cwn-npc-sheet-v052.mjs";
 
-const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v051.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v050.css", import.meta.url), "utf8");
+const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v052.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v052.css", import.meta.url), "utf8");
 const templateFiles = {
-  header: "header-v051",
-  combat: "combat",
+  header: "header-v052",
+  combat: "combat-v052",
   inventory: "inventory",
   cyberware: "cyberware",
   features: "features",
@@ -78,6 +78,48 @@ test("missing SWNR sheet support queues one GM-facing warning and does not regis
   assert.equal(typeof readyCallback, "function");
 });
 
+test("initiative action creates a missing combatant and rolls through the active tracker", async () => {
+  class FakeSwnrSheet {}
+  const runtime = {
+    swnr: { applications: { SWNActorSheet: FakeSwnrSheet } },
+    foundry: { documents: { collections: { Actors: { registerSheet: () => {} } } } },
+  };
+  const SheetClass = registerCwnNpcSheet(runtime);
+  const tokenDocument = { id: "token-1", actor: {} };
+  const actor = { id: "npc-1", token: tokenDocument };
+  const created = [];
+  const rolled = [];
+  const combat = {
+    combatants: [],
+    async createEmbeddedDocuments(type, documents) {
+      created.push({ type, documents });
+      return [{ id: "combatant-1" }];
+    },
+    async rollInitiative(ids) { rolled.push(ids); },
+  };
+  const previousCanvas = globalThis.canvas;
+  const previousGame = globalThis.game;
+  const previousUi = globalThis.ui;
+  globalThis.canvas = { scene: { id: "scene-1" }, tokens: { controlled: [], placeables: [] } };
+  globalThis.game = { combat };
+  globalThis.ui = { notifications: { warn: () => {} } };
+  try {
+    await SheetClass.DEFAULT_OPTIONS.actions.rollInitiative.call(
+      { actor },
+      { preventDefault() {} },
+    );
+  } finally {
+    globalThis.canvas = previousCanvas;
+    globalThis.game = previousGame;
+    globalThis.ui = previousUi;
+  }
+  assert.deepEqual(created, [{
+    type: "Combatant",
+    documents: [{ tokenId: "token-1", actorId: "npc-1", sceneId: "scene-1" }],
+  }]);
+  assert.deepEqual(rolled, [["combatant-1"]]);
+});
+
 test("display context groups known and unknown documents without mutating actor data", () => {
   const weapon = item("weapon", "weapon", {
     isMelee: true,
@@ -99,6 +141,8 @@ test("display context groups known and unknown documents without mutating actor 
   const context = prepareNpcSheetContext(actor, { resolveActor: (id) => ({ id, name: "Deck" }) });
   assert.equal(context.weapons[0].actorAttackBonus, 6);
   assert.equal(context.weapons[0].shock, "2 / AC 15");
+  assert.equal(context.armor[0].item, armor);
+  assert.equal(context.armor[0].isActive, false);
   assert.equal(context.otherItems[0], unknown);
   assert.equal(context.linkedCyberdecks[0].id, "deck");
   assert.equal(JSON.stringify(actor), before);
@@ -112,6 +156,9 @@ test("templates preserve native SWNR roll, reload, item management, and drag con
   assert.match(templates.inventory, /consumable-list\.hbs/u);
   assert.match(templates.cyberware, /cyberware-list\.hbs/u);
   assert.match(templates.features, /data-document-class="ActiveEffect"/u);
+  assert.match(templates.combat, /<li class="cwnit-sheet--npc__attack item"/u);
+  assert.doesNotMatch(templates.combat, /data-action="reactionRoll"/u);
+  assert.doesNotMatch(templates.combat, /data-action="createDoc"[^>]*data-type="weapon"/u);
 });
 
 test("every ApplicationV2 template part renders exactly one top-level HTML element", () => {
@@ -119,7 +166,10 @@ test("every ApplicationV2 template part renders exactly one top-level HTML eleme
     assert.equal(countTopLevelElements(template), 1, `${name} must have exactly one root element`);
   }
   assert.match(templates.header, /^\s*<div class="cwnit-sheet--npc__masthead">/u);
-  assert.match(sheetSource, /header-v051\.hbs/u);
+  assert.match(sheetSource, /header-v052\.hbs/u);
+  assert.match(sheetSource, /combat-v052\.hbs/u);
+  assert.doesNotMatch(templates.header, /<button[^>]*data-edit="img"/u);
+  assert.match(templates.header, /<img[^>]*data-action="onEditImage"[^>]*data-edit="img"/u);
 });
 
 test("sheet implementation has no internal SWNR import, migration, schema, or direct item update path", () => {
@@ -127,6 +177,8 @@ test("sheet implementation has no internal SWNR import, migration, schema, or di
   assert.doesNotMatch(sheetSource, /migrat|registerSchema|updateEmbeddedDocuments|\.update\(/iu);
   assert.doesNotMatch(sheetSource, /unregisterSheet/u);
   assert.match(sheetSource, /game\?\.cwnCombatEnhancements\?\.actions\?\.open/u);
+  assert.match(sheetSource, /createEmbeddedDocuments\("Combatant"/u);
+  assert.match(sheetSource, /combat\.rollInitiative\(\[combatant\.id\]\)/u);
 });
 
 test("NPC styling is isolated and uses centralized tactical color tokens", () => {
@@ -136,6 +188,7 @@ test("NPC styling is isolated and uses centralized tactical color tokens", () =>
   assert.match(css, /\.cwnit-npc-sheet-window nav\.tabs/u);
   assert.match(css, /color-mix\(in srgb, var\(--cwnit-sheet-(?:primary|secondary)\)/u);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.cwnit-npc-sheet-window/u);
+  assert.match(css, /\.cwnit-sheet--npc__armor-toggle\.is-active/u);
 });
 
 test("sheet provides all five requested local tabs with Combat first", () => {
