@@ -8,15 +8,43 @@ import {
   prepareNpcSheetContext,
   registerCwnNpcSheet,
   resolveSwnrActorSheet,
-} from "../scripts/sheets/cwn-npc-sheet.mjs";
+} from "../scripts/sheets/cwn-npc-sheet-v051.mjs";
 
-const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet.mjs", import.meta.url), "utf8");
+const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v051.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v050.css", import.meta.url), "utf8");
-const templateNames = ["header", "combat", "inventory", "cyberware", "features", "biography"];
-const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
+const templateFiles = {
+  header: "header-v051",
+  combat: "combat",
+  inventory: "inventory",
+  cyberware: "cyberware",
+  features: "features",
+  biography: "biography",
+};
+const templates = Object.fromEntries(await Promise.all(Object.keys(templateFiles).map(async (name) => [
   name,
-  await fs.readFile(new URL(`../templates/sheets/npc/${name}.hbs`, import.meta.url), "utf8"),
+  await fs.readFile(new URL(`../templates/sheets/npc/${templateFiles[name]}.hbs`, import.meta.url), "utf8"),
 ])));
+
+function countTopLevelElements(template) {
+  const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+  const tags = template.matchAll(/<\/?([a-z][\w-]*)(?:\s[^<>]*?)?\s*\/?>/giu);
+  let depth = 0;
+  let roots = 0;
+  for (const match of tags) {
+    const tag = match[1].toLowerCase();
+    const closing = match[0].startsWith("</");
+    const selfClosing = match[0].endsWith("/>") || voidElements.has(tag);
+    if (closing) {
+      depth -= 1;
+      assert.ok(depth >= 0, `unexpected closing ${tag} tag`);
+      continue;
+    }
+    if (depth === 0) roots += 1;
+    if (!selfClosing) depth += 1;
+  }
+  assert.equal(depth, 0, "template has unclosed HTML elements");
+  return roots;
+}
 
 function item(id, type, system = {}) {
   return { id, _id: id, name: id, img: `${id}.webp`, sort: 0, type, system };
@@ -84,6 +112,14 @@ test("templates preserve native SWNR roll, reload, item management, and drag con
   assert.match(templates.inventory, /consumable-list\.hbs/u);
   assert.match(templates.cyberware, /cyberware-list\.hbs/u);
   assert.match(templates.features, /data-document-class="ActiveEffect"/u);
+});
+
+test("every ApplicationV2 template part renders exactly one top-level HTML element", () => {
+  for (const [name, template] of Object.entries(templates)) {
+    assert.equal(countTopLevelElements(template), 1, `${name} must have exactly one root element`);
+  }
+  assert.match(templates.header, /^\s*<div class="cwnit-sheet--npc__masthead">/u);
+  assert.match(sheetSource, /header-v051\.hbs/u);
 });
 
 test("sheet implementation has no internal SWNR import, migration, schema, or direct item update path", () => {

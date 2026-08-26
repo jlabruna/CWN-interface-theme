@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.1
+
+- Fixed the optional CWN NPC Sheet failing to open after selection in Foundry
+  V14 because its header template returned two top-level HTML elements.
+- Wrapped the identity header and vitals strip in the single root element
+  required by Foundry's ApplicationV2 template renderer.
+- Added a regression test enforcing exactly one root HTML element for every NPC
+  sheet template part.
+- Cache-busted the release entry script and corrected header template so an
+  updated Forge installation cannot reuse the broken v0.5.0 files.
+
 ## 0.5.0
 
 - Added the optional **CWN NPC Sheet** for SWNR `npc` actors.

@@ -31,7 +31,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.5.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.5.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting the optional NPC sheet
@@ -68,6 +68,14 @@ appearance.
   limitation if it rejects an NPC.
 
 ## Changes
+
+### 0.5.1
+
+- Fixed the CWN NPC Sheet render failure caused by the header template having
+  two top-level HTML elements instead of the single root required by Foundry
+  ApplicationV2.
+- Added template-root regression coverage and cache-busted the corrected sheet
+  loader and header template.
 
 ### 0.5.0
 
