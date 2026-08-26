@@ -31,10 +31,11 @@ jobs:
           cp module.json ../module.json
           unzip -t ../cwn-interface-theme-${GITHUB_REF_NAME}.zip
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "module.json"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v050.mjs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-npc-sheet.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v051.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-npc-sheet-v051.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "styles/cwn-interface-theme-v050.css"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/npc/combat.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/npc/header-v051.hbs"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
