@@ -15,6 +15,10 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Includes optional styling for CWN Combat Enhancements Target Check results.
 - Replaces Foundry's default pause overlay with an original animated
   **SYSTEM HALTED** display and rotating cyberpunk dial.
+- Adds an optional **CWN Character Sheet** for SWNR player characters, with a
+  combat dashboard, full skills and inventory handling, cyberware, features,
+  actions, biography, native saves and initiative, and safe Combat Enhancements
+  Action Centre access.
 - Adds an optional **CWN NPC Sheet** for SWNR NPC actors. It is a compact,
   dark tactical workspace with native attacks, reloads, inventory, cyberware,
   features, powers, effects, biography, notes, drag/drop, and item management.
@@ -31,14 +35,15 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.5.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.6.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
-## Selecting the optional NPC sheet
+## Selecting an optional sheet
 
-Open an SWNR NPC, choose **Sheet Configuration** from the sheet header, and
-select **CWN NPC Sheet**. The native SWNR NPC sheet remains registered and
-remains the default unless a user explicitly changes that actor's sheet.
+Open an SWNR character or NPC, choose **Sheet Configuration** from the sheet
+header, and select **CWN Character Sheet** or **CWN NPC Sheet**. Native SWNR
+sheets remain registered and remain the defaults unless a user explicitly
+changes an individual actor's sheet.
 
 The alternative sheet subclasses SWNR's supported runtime sheet export and
 uses SWNR's own item-roll, reload, form-update, drag/drop, and document actions.
@@ -57,6 +62,15 @@ Theme selection reads Foundry's explicit **Interface** colour-scheme
 preference. The separate **Applications** preference does not affect chat-card
 appearance.
 
+## Character-sheet action design
+
+Combat Enhancements remains the authority for tracked Focus and Edge actions.
+When its public Action Centre API is available, the character sheet opens the
+canonical Action Centre rather than copying private action state. Core combat
+options such as Total Defense, Fighting Withdrawal, Hold an Action, and
+Execution Attack create clear chat declarations only; they do not alter rules
+state automatically.
+
 ## Known limitations
 
 - Initial styling is focused on system-generated chat cards.
@@ -66,8 +80,24 @@ appearance.
 - Combat Enhancements currently limits its public Action Centre API to owned
   player characters. The NPC sheet detects that API safely and reports the
   limitation if it rejects an NPC.
+- The first character-sheet release intentionally does not embed individual
+  tracked Focus/Edge controls because Combat Enhancements does not expose a
+  combined public descriptor-and-dispatch API for them.
 
 ## Changes
+
+### 0.6.0
+
+- Added an optional, non-default **CWN Character Sheet** with seven bottom tabs
+  and native SWNR rolls, item management, drag/drop, saves, initiative, reloads,
+  skills, inventory, cyberware, features, effects, and biography editing.
+- Added a dedicated Actions tab with a safe Combat Enhancements Action Centre
+  bridge and concise declaration-only references for common CWN combat actions.
+- Shared the tactical sheet color tokens across both optional sheets, fixed
+  rich-text toolbar spacing, and added detailed weapon classifications to the
+  NPC and character combat dashboards.
+- Added registration, safety, template-root, native-action, classification,
+  and release-package regressions.
 
 ### 0.5.2
 

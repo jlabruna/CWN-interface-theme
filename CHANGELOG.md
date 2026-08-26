@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.0
+
+- Added an optional **CWN Character Sheet** for SWNR `character` actors without
+  changing the native default or migrating existing actors.
+- Added Combat, Skills, Inventory, Cyberware, Features, Actions, and Bio & Notes
+  tabs with a compact tactical layout built on SWNR's supported actor sheet.
+- Preserved native SWNR weapon rolls, reloads, saves, initiative, skills,
+  inventory, containers, consumables, item management, effects, and drag/drop.
+- Integrated Combat Enhancements only through its public combined Action Centre
+  opener; disabling Combat Enhancements leaves the sheet functional.
+- Added declaration-only chat references for Total Defense, Fighting
+  Withdrawal, Hold an Action, and Execution Attack without changing mechanical
+  state.
+- Added base-weapon and weapon-family classification labels to character and
+  NPC weapon cards, with melee/ranged fallbacks.
+- Centralized the optional sheets' tactical color tokens and corrected rich-text
+  editor toolbar spacing on character and NPC biographies.
+- Added cache-busted v0.6.0 source, stylesheet, templates, staging paths, and
+  automated compatibility and safety coverage.
+
 ## 0.5.2
 
 - Fixed the optional NPC sheet submitting an empty portrait value with ordinary
