@@ -1,0 +1,44 @@
+<section class="tab cwnit-sheet__body {{tab.cssClass}}" data-group="primary" data-tab="skills">
+  <div class="cwnit-sheet__section-heading">
+    <div>
+      <p>{{localize "CWNIT.Sheet.Character.TrainingOverline"}}</p>
+      <h2>{{localize "CWNIT.Sheet.Character.Skills"}}</h2>
+    </div>
+    <div class="cwnit-sheet__heading-actions">
+      {{#if cwnit.skillsUnlocked}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="skill"><i class="fa-solid fa-plus"></i> New Skill</button>{{/if}}
+      <button type="button" class="cwnit-sheet__lock-toggle {{#if cwnit.skillsUnlocked}}is-unlocked{{/if}}" data-action="toggleSkillControls">
+        <i class="fa-solid {{#if cwnit.skillsUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+        {{#if cwnit.skillsUnlocked}}Lock Skills{{else}}Unlock Skills{{/if}}
+      </button>
+    </div>
+  </div>
+
+  <section class="cwnit-sheet__training-summary">
+    <div class="cwnit-sheet__stats cwnit-sheet__stats--compact">
+      {{#each cwnit.stats as |stat|}}
+        <div><span>{{stat.key}}</span><strong>{{stat.total}}</strong><em>{{stat.mod}}</em>{{#if @root.cwnit.skillsUnlocked}}<input name="system.stats.{{stat.key}}.boost" type="number" value="{{stat.boost}}" title="Attribute boost" />{{/if}}</div>
+      {{/each}}
+    </div>
+    <div class="cwnit-sheet__points cwnit-sheet__points--compact">
+      <label>Skill Points {{#if cwnit.skillsUnlocked}}<input name="system.unspentSkillPoints" type="number" value="{{system.unspentSkillPoints}}" />{{else}}<strong>{{system.unspentSkillPoints}}</strong>{{/if}}</label>
+      <label>Psychic Points {{#if cwnit.skillsUnlocked}}<input name="system.unspentPsySkillPoints" type="number" value="{{system.unspentPsySkillPoints}}" />{{else}}<strong>{{system.unspentPsySkillPoints}}</strong>{{/if}}</label>
+    </div>
+  </section>
+
+  <ol class="cwnit-sheet__skill-list">
+    {{#each cwnit.skills as |skill|}}
+      <li class="item" data-item-id="{{skill._id}}" data-document-class="Item" data-drag="true">
+        <button type="button" class="cwnit-sheet__skill-roll" data-action="rollSkill" data-item-id="{{skill._id}}"><i class="fa-solid fa-dice-d20"></i><span>{{skill.name}}</span><b>{{numberFormat skill.system.rank decimals=0 sign=true}}</b></button>
+        {{#if @root.cwnit.skillsUnlocked}}
+          <div class="cwnit-sheet__skill-controls">
+            <button type="button" data-action="skillUp" data-item-id="{{skill._id}}" title="Upgrade skill"><i class="fa-solid fa-arrow-up"></i></button>
+            <button type="button" data-action="viewDoc" title="Edit skill"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" data-action="deleteDoc" title="Delete skill"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        {{/if}}
+      </li>
+    {{else}}
+      <li class="cwnit-sheet__empty"><button type="button" data-action="loadSkills">Load SWNR skills</button></li>
+    {{/each}}
+  </ol>
+</section>

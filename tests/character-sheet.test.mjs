@@ -6,15 +6,15 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v060.mjs";
-import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v060.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v061.mjs";
+import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v061.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v060.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v060.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v061.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v061.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
-  await fs.readFile(new URL(`../templates/sheets/character/${name}-v060.hbs`, import.meta.url), "utf8"),
+  await fs.readFile(new URL(`../templates/sheets/character/${name}-v061.hbs`, import.meta.url), "utf8"),
 ])));
 
 function countTopLevelElements(template) {
@@ -76,12 +76,60 @@ test("native SWNR contracts remain the only mechanical item and roll executors",
   assert.match(templates.combat, /data-action="reload"/u);
   assert.match(templates.combat, /data-action="rollSave"/u);
   assert.match(templates.skills, /data-action="rollSkill"/u);
+  assert.ok(templates.skills.includes('data-action="rollSkill" data-item-id="{{skill._id}}"'));
   assert.match(templates.skills, /data-action="skillUp"/u);
   assert.match(templates.inventory, /items-list\.hbs/u);
   assert.match(templates.cyberware, /cyberware-list\.hbs/u);
   for (const template of Object.values(templates)) {
     assert.doesNotMatch(template, /<article[^>]*data-item-id/u, "draggable item rows must not use article");
   }
+});
+
+test("character initiative joins the active combat and rolls the combatant", async () => {
+  class FakeSwnrSheet {}
+  const registered = [];
+  const runtime = {
+    swnr: { applications: { SWNActorSheet: FakeSwnrSheet } },
+    foundry: { documents: { collections: { Actors: { registerSheet: (_scope, sheet) => registered.push(sheet) } } } },
+  };
+  const SheetClass = registerCwnCharacterSheet(runtime);
+  const rolled = [];
+  const actor = { id: "actor-1" };
+  const token = { actor, document: { id: "token-1" } };
+  const combatant = { id: "combatant-1", tokenId: "token-1" };
+  globalThis.canvas = { scene: { id: "scene-1" }, tokens: { controlled: [token], placeables: [token] } };
+  globalThis.game = {
+    combat: {
+      combatants: { find: () => combatant },
+      async rollInitiative(ids) { rolled.push(ids); },
+    },
+  };
+  await SheetClass.DEFAULT_OPTIONS.actions.rollInitiative.call(
+    { actor },
+    { preventDefault() {} },
+  );
+  assert.deepEqual(rolled, [["combatant-1"]]);
+  delete globalThis.canvas;
+  delete globalThis.game;
+  assert.equal(registered[0], SheetClass);
+});
+
+test("skills are compact, lockable, and upgrades produce a chat confirmation", () => {
+  assert.match(templates.skills, /data-action="toggleSkillControls"/u);
+  assert.match(templates.skills, /cwnit\.skillsUnlocked/u);
+  assert.match(css, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/u);
+  assert.match(source, /cwnit-skill-upgrade/u);
+  assert.match(source, /nativeSkillUp\.call\(this, event, target\)/u);
+});
+
+test("combat keeps one initiative launcher and removes duplicate Action Centre and attributes", () => {
+  assert.match(templates.header, /data-action="rollInitiative"/u);
+  assert.doesNotMatch(templates.combat, /data-action="rollInitiative"/u);
+  assert.doesNotMatch(templates.actions, /data-action="rollInitiative"/u);
+  assert.doesNotMatch(templates.combat, /data-action="openActionCentre"/u);
+  assert.doesNotMatch(templates.combat, /cwnit-sheet__stats/u);
+  assert.match(templates.combat, /data-action="openActionsTab"/u);
+  assert.match(source, /changeTab\("actions", "primary"/u);
 });
 
 test("Combat Enhancements integration uses only the public combined Action Centre opener", () => {
@@ -106,4 +154,6 @@ test("sheet design tokens are shared and rich text toolbar is placed in its own 
   assert.match(css, /:is\(\.cwnit-npc-sheet-window, \.cwnit-character-sheet-window\) \{/u);
   assert.match(css, /prose-mirror > :is\(menu, \.editor-menu, \.prosemirror-menu\)/u);
   assert.match(css, /position: static !important/u);
+  assert.match(css, /prose-mirror :is\(menu, \.editor-menu, \.prosemirror-menu\)/u);
+  assert.match(css, /\.chat-message \.cwnit-action-reference :is\(h2, h3\)/u);
 });

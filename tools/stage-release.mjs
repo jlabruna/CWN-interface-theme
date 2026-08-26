@@ -5,18 +5,25 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.6.0");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.6.0");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.6.1");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.6.1");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.6.0") {
-  throw new Error(`Expected module version 0.6.0 but found ${manifest.version}.`);
+if (manifest.version !== "0.6.1") {
+  throw new Error(`Expected module version 0.6.1 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
 }
 
-await fs.rm(stageRoot, { recursive: true, force: true });
+const removeTree = (target) => fs.rm(target, {
+  recursive: true,
+  force: true,
+  maxRetries: 10,
+  retryDelay: 250,
+});
+
+await removeTree(stageRoot);
 await fs.mkdir(stageRoot, { recursive: true });
 for (const directory of ["assets", "lang", "scripts", "styles", "templates"]) {
   await fs.cp(path.join(moduleRoot, directory), path.join(stageRoot, directory), { recursive: true });
@@ -28,7 +35,7 @@ for (const script of manifest.esmodules ?? []) await fs.access(path.join(stageRo
 for (const stylesheet of manifest.styles ?? []) await fs.access(path.join(stageRoot, stylesheet));
 await fs.copyFile(path.join(stageRoot, "module.json"), path.join(releaseRoot, "module.json"));
 
-await fs.rm(browserUploadRoot, { recursive: true, force: true });
+await removeTree(browserUploadRoot);
 await fs.mkdir(browserUploadRoot, { recursive: true });
 for (const directory of ["assets", "lang", "scripts", "styles", "templates", "tests", "tools"]) {
   await fs.cp(path.join(moduleRoot, directory), path.join(browserUploadRoot, directory), { recursive: true });
@@ -37,7 +44,7 @@ for (const filename of ["CHANGELOG.md", "README.md", "module.json", "package.jso
   await fs.copyFile(path.join(moduleRoot, filename), path.join(browserUploadRoot, filename));
 }
 
-await fs.rm(browserDotfilesRoot, { recursive: true, force: true });
+await removeTree(browserDotfilesRoot);
 await fs.mkdir(path.join(browserDotfilesRoot, ".github", "workflows"), { recursive: true });
 await fs.copyFile(
   path.join(moduleRoot, ".github", "workflows", "build-release.yml"),

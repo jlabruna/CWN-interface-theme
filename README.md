@@ -35,7 +35,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.6.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.6.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -85,6 +85,16 @@ state automatically.
   combined public descriptor-and-dispatch API for them.
 
 ## Changes
+
+### 0.6.1
+
+- Fixed character initiative and skill-roll dispatch through their native
+  Foundry/SWNR contracts.
+- Reworked Skills into a compact, locked-by-default list with contextual
+  upgrade and editing controls plus themed upgrade confirmations in chat.
+- Removed duplicate action controls, moved attributes to Skills, corrected
+  More Actions navigation, and tightened the overall character-sheet layout.
+- Improved biography editor spacing and declaration-card title contrast.
 
 ### 0.6.0
 

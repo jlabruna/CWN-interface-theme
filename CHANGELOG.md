@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.6.1
+
+- Fixed character initiative so the sheet locates or creates the actor's active
+  combatant and rolls it through Foundry's combat tracker.
+- Fixed skill rolls by supplying the embedded skill ID required by SWNR's
+  native skill handler.
+- Rebuilt Skills as a compact two-column list with a locked-by-default editing
+  mode; unlock reveals upgrade, edit, delete, new-skill, attribute-boost, and
+  skill-point controls.
+- Added a themed chat confirmation after a native SWNR skill upgrade succeeds.
+- Removed duplicate Initiative and Action Centre controls from the Combat and
+  Actions layouts, moved attributes into the Skills training summary, and fixed
+  More Actions navigation.
+- Improved character-sheet typography, spacing, action-card title contrast,
+  and biography editor toolbar clearance.
+- Added cache-busted v0.6.1 runtime, stylesheet, templates, release staging,
+  and regression coverage.
+
 ## 0.6.0
 
 - Added an optional **CWN Character Sheet** for SWNR `character` actors without

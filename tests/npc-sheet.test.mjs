@@ -8,17 +8,17 @@ import {
   prepareNpcSheetContext,
   registerCwnNpcSheet,
   resolveSwnrActorSheet,
-} from "../scripts/sheets/cwn-npc-sheet-v060.mjs";
+} from "../scripts/sheets/cwn-npc-sheet-v061.mjs";
 
-const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v060.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v060.css", import.meta.url), "utf8");
+const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v061.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v061.css", import.meta.url), "utf8");
 const templateFiles = {
-  header: "header-v060",
-  combat: "combat-v060",
+  header: "header-v061",
+  combat: "combat-v061",
   inventory: "inventory",
   cyberware: "cyberware",
   features: "features",
-  biography: "biography-v060",
+  biography: "biography-v061",
 };
 const templates = Object.fromEntries(await Promise.all(Object.keys(templateFiles).map(async (name) => [
   name,
@@ -166,8 +166,8 @@ test("every ApplicationV2 template part renders exactly one top-level HTML eleme
     assert.equal(countTopLevelElements(template), 1, `${name} must have exactly one root element`);
   }
   assert.match(templates.header, /^\s*<div class="cwnit-sheet--npc__masthead">/u);
-  assert.match(sheetSource, /header-v060\.hbs/u);
-  assert.match(sheetSource, /combat-v060\.hbs/u);
+  assert.match(sheetSource, /header-v061\.hbs/u);
+  assert.match(sheetSource, /combat-v061\.hbs/u);
   assert.doesNotMatch(templates.header, /<button[^>]*data-edit="img"/u);
   assert.match(templates.header, /<img[^>]*data-action="onEditImage"[^>]*data-edit="img"/u);
 });
