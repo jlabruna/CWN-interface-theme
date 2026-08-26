@@ -1,0 +1,16 @@
+<section class="tab cwnit-sheet--npc__body {{tab.cssClass}}" data-group="primary" data-tab="inventory">
+  <div class="cwnit-sheet--npc__section-heading"><div><p>{{localize 'CWNIT.Sheet.NPC.LogisticsOverline'}}</p><h2>{{localize 'CWNIT.Sheet.NPC.Inventory'}}</h2></div></div>
+  <div class="cwnit-sheet--npc__native-lists">
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.weapon type='weapon' name='Weapons'}}
+    {{> "systems/swnr/templates/actor/fragments/consumable-list.hbs" itemList=actor.system.consumables type='item' name='Consumables/Ammo'}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.armor type='armor' name='Armor'}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.system.gear type='item' name='Items'}}
+  </div>
+  {{#if cwnit.otherItems.length}}
+    <section class="cwnit-sheet--npc__panel"><h2>{{localize 'CWNIT.Sheet.NPC.OtherItems'}}</h2>
+      <ol class="cwnit-sheet--npc__document-list">
+        {{#each cwnit.otherItems as |item|}}<li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true"><img src="{{item.img}}" alt="" /><button type="button" data-action="viewDoc">{{item.name}}</button><small>{{item.type}}</small></li>{{/each}}
+      </ol>
+    </section>
+  {{/if}}
+</section>

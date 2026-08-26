@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5.0
+
+- Added the optional **CWN NPC Sheet** for SWNR `npc` actors.
+- Registered the sheet with `makeDefault: false`; the native SWNR sheet remains
+  available and no existing actor is migrated or reassigned.
+- Built the sheet as a runtime subclass of SWNR's public `SWNActorSheet` export
+  with a one-time GM warning if the supported API is unavailable.
+- Added native item attacks and reloads, NPC quick rolls, armor, effects, full
+  inventory management, cyberware, linked cyberdecks, features, powers,
+  biography, and notes across five bottom tabs.
+- Preserved SWNR form updates, item drag/drop, item sorting, containers,
+  consumable uses, locations, and document actions.
+- Added isolated dark tactical sheet styling with centralized red, cyan, amber,
+  text, state, and accessibility tokens.
+- Added automated registration, view-data, native-action-contract, data-safety,
+  tab-order, and CSS tests.
+- Updated cache-busted assets and release staging for templates and artwork.
+
 ## 0.4.3
 
 - Restored readable Target Check target names and details in the Foundry V14

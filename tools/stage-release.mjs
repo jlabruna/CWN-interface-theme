@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.4.3");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.4.3");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.5.0");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.5.0");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.4.3") {
-  throw new Error(`Expected module version 0.4.3 but found ${manifest.version}.`);
+if (manifest.version !== "0.5.0") {
+  throw new Error(`Expected module version 0.5.0 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -18,7 +18,7 @@ if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${ma
 
 await fs.rm(stageRoot, { recursive: true, force: true });
 await fs.mkdir(stageRoot, { recursive: true });
-for (const directory of ["lang", "scripts", "styles"]) {
+for (const directory of ["assets", "lang", "scripts", "styles", "templates"]) {
   await fs.cp(path.join(moduleRoot, directory), path.join(stageRoot, directory), { recursive: true });
 }
 for (const filename of ["CHANGELOG.md", "LICENSE", "README.md", "module.json"]) {
@@ -30,7 +30,7 @@ await fs.copyFile(path.join(stageRoot, "module.json"), path.join(releaseRoot, "m
 
 await fs.rm(browserUploadRoot, { recursive: true, force: true });
 await fs.mkdir(browserUploadRoot, { recursive: true });
-for (const directory of ["lang", "scripts", "styles", "tests", "tools"]) {
+for (const directory of ["assets", "lang", "scripts", "styles", "templates", "tests", "tools"]) {
   await fs.cp(path.join(moduleRoot, directory), path.join(browserUploadRoot, directory), { recursive: true });
 }
 for (const filename of ["CHANGELOG.md", "README.md", "module.json", "package.json"]) {

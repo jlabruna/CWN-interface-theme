@@ -15,6 +15,9 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Includes optional styling for CWN Combat Enhancements Target Check results.
 - Replaces Foundry's default pause overlay with an original animated
   **SYSTEM HALTED** display and rotating cyberpunk dial.
+- Adds an optional **CWN NPC Sheet** for SWNR NPC actors. It is a compact,
+  dark tactical workspace with native attacks, reloads, inventory, cyberware,
+  features, powers, effects, biography, notes, drag/drop, and item management.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -28,8 +31,21 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.4.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.5.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
+
+## Selecting the optional NPC sheet
+
+Open an SWNR NPC, choose **Sheet Configuration** from the sheet header, and
+select **CWN NPC Sheet**. The native SWNR NPC sheet remains registered and
+remains the default unless a user explicitly changes that actor's sheet.
+
+The alternative sheet subclasses SWNR's supported runtime sheet export and
+uses SWNR's own item-roll, reload, form-update, drag/drop, and document actions.
+It adds no actor fields, migration, or game-rule automation. Linked cyberdecks
+are read from SWNR's existing direct actor links. Linked drones are deferred
+because SWNR stores that relationship on the drone and a sheet-wide reverse
+world scan would be unsafe and unnecessarily expensive.
 
 ## Compatibility design
 
@@ -45,10 +61,26 @@ appearance.
 
 - Initial styling is focused on system-generated chat cards.
 - Some cards produced by third-party modules may retain their own colours.
-- Actor sheets, item sheets, dialogs, and the remainder of the SWNR interface
-  are outside the v0.1 scope.
+- The CWN NPC Sheet intentionally uses a dark tactical palette in both Foundry
+  application colour schemes; all colours are centralized as sheet tokens.
+- Combat Enhancements currently limits its public Action Centre API to owned
+  player characters. The NPC sheet detects that API safely and reports the
+  limitation if it rejects an NPC.
 
 ## Changes
+
+### 0.5.0
+
+- Added the optional NPC-only **CWN NPC Sheet** without changing SWNR's default.
+- Added compact native weapon attacks and reloads, quick NPC rolls, armor and
+  status visibility, complete native inventory controls, cyberware, linked
+  cyberdecks, features, powers, effects, biography, and GM notes.
+- Added five bottom tabs: Combat, Inventory, Cyberware, Features, and Bio &
+  Notes, with a responsive and reduced-motion-aware tactical presentation.
+- Added feature detection for SWNR and the optional Combat Enhancements public
+  API, plus automated registration, data-safety, template-contract, and styling
+  tests.
+- Updated release staging to include assets and templates.
 
 ### 0.4.3
 

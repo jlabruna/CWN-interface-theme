@@ -1,0 +1,14 @@
+<section class="tab cwnit-sheet--npc__body {{tab.cssClass}}" data-group="primary" data-tab="biography">
+  <div class="cwnit-sheet--npc__section-heading"><div><p>{{localize 'CWNIT.Sheet.NPC.IntelOverline'}}</p><h2>{{localize 'CWNIT.Sheet.NPC.BiographyAndNotes'}}</h2></div></div>
+  <section class="cwnit-sheet--npc__panel cwnit-sheet--npc__biography">
+    <h2>{{localize 'SWN.Actor.Tabs.Biography'}}</h2>
+    {{#if editable}}
+      <prose-mirror name="system.biography" data-document-u-u-i-d="{{actor.uuid}}" value="{{system.biography}}" collaborate="true" toggled="true">{{{enrichedBiography}}}</prose-mirror>
+    {{else}}<div class="editor-content">{{{enrichedBiography}}}</div>{{/if}}
+  </section>
+  <div class="cwnit-sheet--npc__notes-grid">
+    <label><span>{{localize 'CWNIT.Sheet.NPC.PublicNotes'}}</span><input name="system.notes.public.label" type="text" value="{{system.notes.public.label}}" placeholder="{{localize 'CWNIT.Sheet.NPC.NoteLabel'}}" /><textarea name="system.notes.public.contents">{{system.notes.public.contents}}</textarea></label>
+    <label><span>{{localize 'CWNIT.Sheet.NPC.LeftNotes'}}</span><input name="system.notes.left.label" type="text" value="{{system.notes.left.label}}" placeholder="{{localize 'CWNIT.Sheet.NPC.NoteLabel'}}" /><textarea name="system.notes.left.contents">{{system.notes.left.contents}}</textarea></label>
+    <label><span>{{localize 'CWNIT.Sheet.NPC.RightNotes'}}</span><input name="system.notes.right.label" type="text" value="{{system.notes.right.label}}" placeholder="{{localize 'CWNIT.Sheet.NPC.NoteLabel'}}" /><textarea name="system.notes.right.contents">{{system.notes.right.contents}}</textarea></label>
+  </div>
+</section>

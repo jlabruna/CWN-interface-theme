@@ -1,0 +1,15 @@
+<section class="tab cwnit-sheet--npc__body {{tab.cssClass}}" data-group="primary" data-tab="cyberware">
+  <div class="cwnit-sheet--npc__section-heading"><div><p>{{localize 'CWNIT.Sheet.NPC.SystemsOverline'}}</p><h2>{{localize 'CWNIT.Sheet.NPC.Cyberware'}}</h2></div></div>
+  <div class="cwnit-sheet--npc__native-lists">
+    {{> "systems/swnr/templates/actor/fragments/cyberware-list.hbs" itemList=cwnit.cyberware type='cyberware' name='Cyberware'}}
+  </div>
+  <section class="cwnit-sheet--npc__panel">
+    <h2>{{localize 'CWNIT.Sheet.NPC.LinkedCyberdecks'}}</h2>
+    <div class="cwnit-sheet--npc__linked-grid">
+      {{#each cwnit.linkedCyberdecks as |linked|}}
+        <button type="button" data-action="openLinkedActor" data-actor-id="{{linked.id}}"><img src="{{linked.img}}" alt="" /><span>{{linked.name}}</span><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+      {{else}}<p class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoLinkedCyberdecks'}}</p>{{/each}}
+    </div>
+    <p class="cwnit-sheet--npc__hint">{{localize 'CWNIT.Sheet.NPC.LinkedAssetsHint'}}</p>
+  </section>
+</section>

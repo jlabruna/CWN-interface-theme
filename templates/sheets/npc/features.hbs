@@ -1,0 +1,23 @@
+<section class="tab cwnit-sheet--npc__body {{tab.cssClass}}" data-group="primary" data-tab="features">
+  <div class="cwnit-sheet--npc__section-heading"><div><p>{{localize 'CWNIT.Sheet.NPC.CapabilitiesOverline'}}</p><h2>{{localize 'CWNIT.Sheet.NPC.FeaturesAndPowers'}}</h2></div></div>
+  <div class="cwnit-sheet--npc__feature-columns">
+    <section class="cwnit-sheet--npc__panel"><h2>{{localize 'CWNIT.Sheet.NPC.Features'}}</h2>
+      <ol class="cwnit-sheet--npc__document-list">
+        {{#each cwnit.features as |item|}}<li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true"><img src="{{item.img}}" alt="" /><button type="button" data-action="viewDoc">{{item.name}}</button><small>{{item.system.type}} {{item.system.level}}</small><button type="button" class="cwnit-sheet--npc__icon-button" data-action="roll" data-roll-type="item"><i class="fa-solid fa-dice"></i></button></li>{{else}}<li class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoFeatures'}}</li>{{/each}}
+      </ol>
+      {{#if editable}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="feature"><i class="fa-solid fa-plus"></i> {{localize 'CWNIT.Sheet.NPC.AddFeature'}}</button>{{/if}}
+    </section>
+    <section class="cwnit-sheet--npc__panel"><h2>{{localize 'CWNIT.Sheet.NPC.Powers'}}</h2>
+      <ol class="cwnit-sheet--npc__document-list">
+        {{#each cwnit.powers as |power|}}<li class="item" data-item-id="{{power.item._id}}" data-document-class="Item" data-drag="true"><img src="{{power.item.img}}" alt="" /><button type="button" data-action="viewDoc">{{power.item.name}}</button><small>{{power.subType}} {{power.level}}</small><button type="button" class="cwnit-sheet--npc__icon-button" data-action="roll" data-roll-type="item"><i class="fa-solid fa-dice"></i></button></li>{{else}}<li class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoPowers'}}</li>{{/each}}
+      </ol>
+      {{#if editable}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="power"><i class="fa-solid fa-plus"></i> {{localize 'CWNIT.Sheet.NPC.AddPower'}}</button>{{/if}}
+    </section>
+  </div>
+  <section class="cwnit-sheet--npc__panel"><h2>{{localize 'CWNIT.Sheet.NPC.StatusEffects'}}</h2>
+    <ol class="cwnit-sheet--npc__document-list cwnit-sheet--npc__effects">
+      {{#each cwnit.effects as |effect|}}<li data-effect-id="{{effect.id}}" data-parent-id="{{effect.parent.id}}" data-document-class="ActiveEffect" data-drag="true"><img src="{{effect.img}}" alt="" /><button type="button" data-action="viewDoc">{{effect.name}}</button><small>{{effect.duration.label}}</small><button type="button" class="cwnit-sheet--npc__icon-button" data-action="toggleEffect"><i class="fa-solid {{#if effect.disabled}}fa-eye-slash{{else}}fa-eye{{/if}}"></i></button>{{#if @root.editable}}<button type="button" class="cwnit-sheet--npc__icon-button cwnit-sheet--npc__danger" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</li>{{else}}<li class="cwnit-sheet--npc__empty">{{localize 'CWNIT.Sheet.NPC.NoEffects'}}</li>{{/each}}
+    </ol>
+    {{#if editable}}<button type="button" data-action="createDoc" data-document-class="ActiveEffect" data-origin="{{actor.uuid}}" data-img="icons/svg/aura.svg"><i class="fa-solid fa-plus"></i> {{localize 'CWNIT.Sheet.NPC.AddEffect'}}</button>{{/if}}
+  </section>
+</section>
