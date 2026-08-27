@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.3
+
+- Added an NPC-style Armor panel to the alternative character Combat tab.
+  Owned armor now shows its icon, name, AC, and native active state, and its
+  shield button delegates to SWNR's native armor toggle.
+- Preserved the responsive three-column Readied weapon grid and placed Quick
+  Saves and Armor together beneath the weapon loadout.
+- Removed duplicate Quick Saves from the Actions tab; tactical declarations
+  remain in that dedicated workspace.
+- Deferred direct System Strain management to a future release without
+  changing the existing display or native Rest & Recover behaviour.
+- Added cache-busted v0.6.3 runtime, character sheet, stylesheet, templates,
+  release staging, workflow verification, and regression coverage.
+
 ## 0.6.2
 
 - Added explicit light/dark styling for every visible descendant of the

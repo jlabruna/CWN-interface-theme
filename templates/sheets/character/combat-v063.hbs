@@ -1,0 +1,61 @@
+<section class="tab cwnit-sheet__body {{tab.cssClass}}" data-group="primary" data-tab="combat">
+  <div class="cwnit-sheet__section-heading">
+    <div>
+      <p>{{localize "CWNIT.Sheet.Character.CombatOverline"}}</p>
+      <h2>{{localize "CWNIT.Sheet.Character.Weapons"}}</h2>
+    </div>
+  </div>
+
+  <ol class="cwnit-sheet__attack-grid">
+    {{#each cwnit.combatWeapons as |attack|}}
+      <li class="cwnit-sheet__attack item" data-item-id="{{attack.item._id}}" data-document-class="Item" data-drag="true">
+        <div class="cwnit-sheet__attack-title">
+          <button type="button" class="cwnit-sheet__item-icon" data-action="viewDoc"><img src="{{attack.item.img}}" alt="" /></button>
+          <div><h3>{{attack.item.name}}</h3><span>{{attack.classification}} · {{attack.mode}}</span></div>
+          <button type="button" class="cwnit-sheet__icon-button" data-action="viewDoc"><i class="fa-solid fa-pen-to-square"></i></button>
+        </div>
+        <dl class="cwnit-sheet__attack-stats">
+          <div><dt>{{localize "CWNIT.Sheet.NPC.Damage"}}</dt><dd>{{attack.damage}}</dd></div>
+          <div><dt>{{localize "CWNIT.Sheet.NPC.AttackBonus"}}</dt><dd>{{attack.actorAttackBonus}} + {{attack.weaponAttackBonus}}</dd></div>
+          <div><dt>{{localize "CWNIT.Sheet.NPC.Ammo"}}</dt><dd>{{attack.ammo}}</dd></div>
+          <div><dt>{{localize "CWNIT.Sheet.NPC.Range"}}</dt><dd>{{attack.range}}</dd></div>
+          <div><dt>{{localize "CWNIT.Sheet.NPC.Shock"}}</dt><dd>{{attack.shock}}</dd></div>
+          <div><dt>{{localize "CWNIT.Sheet.NPC.Trauma"}}</dt><dd>{{attack.trauma}}</dd></div>
+        </dl>
+        <div class="cwnit-sheet__attack-actions">
+          <button type="button" data-action="roll" data-roll-type="item"><i class="fa-solid fa-crosshairs"></i> {{localize "CWNIT.Sheet.NPC.Attack"}}</button>
+          {{#if attack.canReload}}<button type="button" data-action="reload"><i class="fa-solid fa-arrows-rotate"></i> {{localize "CWNIT.Sheet.NPC.Reload"}}</button>{{/if}}
+        </div>
+      </li>
+    {{else}}
+      <li class="cwnit-sheet__empty">No weapons are currently Readied. Ready a weapon from Inventory to show it here.</li>
+    {{/each}}
+  </ol>
+
+  <div class="cwnit-sheet__combat-columns cwnit-sheet__combat-columns--loadout">
+    <section class="cwnit-sheet__panel">
+      <h2>Quick Saves</h2>
+      <div class="cwnit-sheet__quick-actions">
+        <button type="button" data-action="rollSave" data-save-type="physical"><i class="fa-solid fa-shield"></i> Physical {{system.save.physical}}+</button>
+        <button type="button" data-action="rollSave" data-save-type="evasion"><i class="fa-solid fa-person-running"></i> Evasion {{system.save.evasion}}+</button>
+        <button type="button" data-action="rollSave" data-save-type="mental"><i class="fa-solid fa-brain"></i> Mental {{system.save.mental}}+</button>
+        <button type="button" data-action="rollSave" data-save-type="luck"><i class="fa-solid fa-clover"></i> Luck {{system.save.luck}}+</button>
+      </div>
+    </section>
+    <section class="cwnit-sheet__panel cwnit-sheet__armor-panel">
+      <h2>{{localize "CWNIT.Sheet.Character.Armor"}}</h2>
+      <ol class="cwnit-sheet__compact-list cwnit-sheet__armor-list">
+        {{#each cwnit.armor as |armor|}}
+          <li class="item" data-item-id="{{armor.item._id}}" data-document-class="Item" data-drag="true">
+            <img src="{{armor.item.img}}" alt="" />
+            <button type="button" class="cwnit-sheet__armor-name" data-action="viewDoc">{{armor.item.name}}</button>
+            <span>AC {{armor.item.system.ac}}</span>
+            <button type="button" class="cwnit-sheet__icon-button cwnit-sheet__armor-toggle {{#if armor.isActive}}is-active{{/if}}" data-action="toggleArmor" data-item-id="{{armor.item._id}}" title="{{localize 'CWNIT.Sheet.Character.ToggleArmor'}}" aria-pressed="{{armor.isActive}}"><i class="fa-solid fa-shield"></i></button>
+          </li>
+        {{else}}
+          <li class="cwnit-sheet__empty">{{localize "CWNIT.Sheet.Character.NoArmor"}}</li>
+        {{/each}}
+      </ol>
+    </section>
+  </div>
+</section>

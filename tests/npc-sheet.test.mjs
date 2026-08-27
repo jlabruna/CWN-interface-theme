@@ -11,7 +11,7 @@ import {
 } from "../scripts/sheets/cwn-npc-sheet-v062.mjs";
 
 const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v062.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v062.css", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v063.css", import.meta.url), "utf8");
 const templateFiles = {
   header: "header-v062",
   combat: "combat-v062",

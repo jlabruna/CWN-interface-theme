@@ -6,16 +6,17 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v062.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v063.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v062.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v062.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v062.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v063.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v063.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v063.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
+const templateVersions = { combat: "v063", actions: "v063" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
-  await fs.readFile(new URL(`../templates/sheets/character/${name}-v062.hbs`, import.meta.url), "utf8"),
+  await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
 ])));
 
 function countTopLevelElements(template) {
@@ -76,6 +77,7 @@ test("native SWNR contracts remain the mechanical item executors", () => {
   assert.match(templates.combat, /data-action="roll" data-roll-type="item"/u);
   assert.match(templates.combat, /data-action="reload"/u);
   assert.match(templates.combat, /data-action="rollSave"/u);
+  assert.match(templates.combat, /data-action="toggleArmor"/u);
   assert.match(templates.skills, /data-action="rollSkill"/u);
   assert.ok(templates.skills.includes('data-action="rollSkill" data-item-id="{{skill._id}}"'));
   assert.match(templates.skills, /data-action="skillUp"/u);
@@ -150,14 +152,20 @@ test("monthly expenses integration and native Readied combat loadout are exposed
   assert.doesNotMatch(templates.combat, /hideFromCombat|toggleWeaponCombatVisibility|toggleHiddenWeapons/u);
 });
 
-test("combat keeps one initiative launcher and removes duplicate Action Centre and attributes", () => {
+test("combat keeps one initiative launcher and uses the NPC-style armor lower panel", () => {
   assert.match(templates.header, /data-action="rollInitiative"/u);
   assert.doesNotMatch(templates.combat, /data-action="rollInitiative"/u);
   assert.doesNotMatch(templates.actions, /data-action="rollInitiative"/u);
   assert.doesNotMatch(templates.combat, /data-action="openActionCentre"/u);
   assert.doesNotMatch(templates.combat, /cwnit-sheet__stats/u);
-  assert.match(templates.combat, /data-action="openActionsTab"/u);
-  assert.match(source, /changeTab\("actions", "primary"/u);
+  assert.doesNotMatch(templates.combat, /data-action="openActionsTab"|data-action="declareAction"/u);
+  assert.doesNotMatch(source, /openActionsTab|_onOpenActionsTab/u);
+  assert.match(templates.combat, /cwnit-sheet__combat-columns--loadout/u);
+  assert.match(templates.combat, /#each cwnit\.armor as \|armor\|/u);
+  assert.match(templates.combat, /cwnit-sheet__armor-toggle \{\{#if armor\.isActive\}\}is-active/u);
+  assert.match(templates.actions, /data-action="declareAction"/u);
+  assert.doesNotMatch(templates.actions, /data-action="rollSave"/u);
+  assert.match(css, /\.cwnit-sheet__armor-toggle\.is-active/u);
 });
 
 test("Combat Enhancements integration uses only the public combined Action Centre opener", () => {

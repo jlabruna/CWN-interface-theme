@@ -16,9 +16,9 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Replaces Foundry's default pause overlay with an original animated
   **SYSTEM HALTED** display and rotating cyberpunk dial.
 - Adds an optional **CWN Character Sheet** for SWNR player characters, with a
-  combat dashboard, full skills and inventory handling, cyberware, features,
-  actions, biography, native saves and initiative, and safe Combat Enhancements
-  Action Centre access.
+  combat dashboard, native Readied weapon and armor controls, full skills and
+  inventory handling, cyberware, features, actions, biography, native saves
+  and initiative, and safe Combat Enhancements Action Centre access.
 - Adds an optional **CWN NPC Sheet** for SWNR NPC actors. It is a compact,
   dark tactical workspace with native attacks, reloads, inventory, cyberware,
   features, powers, effects, biography, notes, drag/drop, and item management.
@@ -35,7 +35,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.6.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.6.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -83,8 +83,23 @@ state automatically.
 - The first character-sheet release intentionally does not embed individual
   tracked Focus/Edge controls because Combat Enhancements does not expose a
   combined public descriptor-and-dispatch API for them.
+- Direct System Strain management is deferred to a later character-sheet
+  release. The current header remains display-only and native Rest & Recover
+  remains available.
 
 ## Changes
+
+### 0.6.3
+
+- Added an NPC-style Armor panel to the alternative character Combat tab,
+  listing owned armor with its icon, name, AC, native active state, and native
+  armor toggle.
+- Kept Readied weapon cards in the responsive three-column combat grid and
+  placed Quick Saves and Armor together below the loadout.
+- Removed duplicate Quick Saves from the Actions tab and kept tactical
+  declarations in their dedicated Actions workspace.
+- Added cache-busted v0.6.3 runtime, character sheet, stylesheet, templates,
+  release staging, workflow checks, and regression coverage.
 
 ### 0.6.2
 
