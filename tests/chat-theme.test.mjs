@@ -3,11 +3,11 @@ import fs from "node:fs/promises";
 import test from "node:test";
 
 const css = await fs.readFile(
-  new URL("../styles/cwn-interface-theme-v063.css", import.meta.url),
+  new URL("../styles/cwn-interface-theme-v064.css", import.meta.url),
   "utf8",
 );
 const source = await fs.readFile(
-  new URL("../scripts/cwn-interface-theme-v063.mjs", import.meta.url),
+  new URL("../scripts/cwn-interface-theme-v064.mjs", import.meta.url),
   "utf8",
 );
 

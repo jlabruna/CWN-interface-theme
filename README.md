@@ -35,7 +35,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.6.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.6.4.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -88,6 +88,16 @@ state automatically.
   remains available.
 
 ## Changes
+
+### 0.6.4
+
+- Replaced the ambiguous character header AC value with explicit Ranged AC and
+  Melee AC values sourced from SWNR's native character fields.
+- Added native current/maximum Soak to the character header, matching the NPC
+  sheet's presentation without changing defenses.
+- Tidied the empty Armor panel so its message remains centered and readable.
+- Added cache-busted v0.6.4 runtime, character sheet, stylesheet, header and
+  combat templates, workflow checks, release staging, and regression coverage.
 
 ### 0.6.3
 

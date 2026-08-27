@@ -6,14 +6,14 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v063.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v064.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v063.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v063.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v063.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v064.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v064.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v064.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
-const templateVersions = { combat: "v063", actions: "v063" };
+const templateVersions = { header: "v064", combat: "v064", actions: "v063" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
   await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
@@ -166,6 +166,17 @@ test("combat keeps one initiative launcher and uses the NPC-style armor lower pa
   assert.match(templates.actions, /data-action="declareAction"/u);
   assert.doesNotMatch(templates.actions, /data-action="rollSave"/u);
   assert.match(css, /\.cwnit-sheet__armor-toggle\.is-active/u);
+  assert.match(templates.combat, /cwnit-sheet__armor-empty/u);
+});
+
+test("character vitals distinguish ranged and melee AC and expose native Soak", () => {
+  assert.match(source, /rangedAc: system\.ac \?\? system\.baseAc/u);
+  assert.match(source, /meleeAc: system\.meleeAc \?\? system\.ac/u);
+  assert.match(source, /soakValue: system\.soakTotal\?\.value/u);
+  assert.match(source, /soakMax: system\.soakTotal\?\.max/u);
+  assert.match(templates.header, /CWNIT\.Sheet\.Character\.RangedAC/u);
+  assert.match(templates.header, /CWNIT\.Sheet\.Character\.MeleeAC/u);
+  assert.match(templates.header, /CWNIT\.Sheet\.Character\.Soak/u);
 });
 
 test("Combat Enhancements integration uses only the public combined Action Centre opener", () => {

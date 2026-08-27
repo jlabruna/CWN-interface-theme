@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.4
+
+- Replaced the character sheet's generic AC header cell with explicit Ranged
+  AC and Melee AC values from SWNR's native actor data.
+- Added current/maximum Soak to the character header, matching the NPC header
+  while leaving SWNR responsible for derived defenses.
+- Tidied the no-armor empty state so the message is centered on one readable
+  line instead of inheriting the populated armor-row grid.
+- Added cache-busted v0.6.4 runtime, character sheet, stylesheet, header and
+  combat templates, workflow validation, release staging, and regression tests.
+
 ## 0.6.3
 
 - Added an NPC-style Armor panel to the alternative character Combat tab.
