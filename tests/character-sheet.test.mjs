@@ -6,15 +6,16 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v061.mjs";
-import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v061.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v062.mjs";
+import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v061.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v061.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v062.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v062.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v062.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
-  await fs.readFile(new URL(`../templates/sheets/character/${name}-v061.hbs`, import.meta.url), "utf8"),
+  await fs.readFile(new URL(`../templates/sheets/character/${name}-v062.hbs`, import.meta.url), "utf8"),
 ])));
 
 function countTopLevelElements(template) {
@@ -71,7 +72,7 @@ test("every character ApplicationV2 template part has exactly one root", () => {
   assert.match(templates.header, /<img[^>]*data-action="onEditImage"[^>]*data-edit="img"/u);
 });
 
-test("native SWNR contracts remain the only mechanical item and roll executors", () => {
+test("native SWNR contracts remain the mechanical item executors", () => {
   assert.match(templates.combat, /data-action="roll" data-roll-type="item"/u);
   assert.match(templates.combat, /data-action="reload"/u);
   assert.match(templates.combat, /data-action="rollSave"/u);
@@ -120,6 +121,33 @@ test("skills are compact, lockable, and upgrades produce a chat confirmation", (
   assert.match(css, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/u);
   assert.match(source, /cwnit-skill-upgrade/u);
   assert.match(source, /nativeSkillUp\.call\(this, event, target\)/u);
+  assert.match(source, /generation >= 14 \? \{ messageMode: mode \} : \{ rollMode: mode \}/u);
+  assert.match(source, /settings\.get\("core", "rollMode"\)/u);
+});
+
+test("identity fields are CWN-specific and submit Background only once", () => {
+  const all = Object.values(templates).join("\n");
+  assert.equal((all.match(/name="system\.background"/gu) ?? []).length, 1);
+  for (const removed of ["system.class", "system.species", "system.employer", "system.homeworld"]) {
+    assert.doesNotMatch(all, new RegExp(`name=["']${removed.replace(".", "\\.")}`, "u"));
+  }
+  assert.match(templates.header, /data-action="rest"/u);
+  assert.match(templates.header, /Rest &amp; Recover/u);
+});
+
+test("level-up HP remains native and is surfaced through Action Centre setup", () => {
+  assert.match(moduleSource, /renderApplicationV2/u);
+  assert.match(moduleSource, /cwnce-action-center/u);
+  assert.match(moduleSource, /actor\.system\?\.rollHitDice\?\.\(true\)/u);
+  assert.match(moduleSource, /Set Up Later/u);
+});
+
+test("monthly expenses integration and native Readied combat loadout are exposed", () => {
+  assert.match(templates.inventory, /cwnit-sheet__currency grid grid-5col/u);
+  assert.match(source, /attack\.item\?\.system\?\.location === "readied"/u);
+  assert.match(templates.combat, /No weapons are currently Readied/u);
+  assert.doesNotMatch(source, /hideFromCombat|toggleWeaponCombatVisibility|toggleHiddenWeapons/u);
+  assert.doesNotMatch(templates.combat, /hideFromCombat|toggleWeaponCombatVisibility|toggleHiddenWeapons/u);
 });
 
 test("combat keeps one initiative launcher and removes duplicate Action Centre and attributes", () => {
@@ -155,5 +183,6 @@ test("sheet design tokens are shared and rich text toolbar is placed in its own 
   assert.match(css, /prose-mirror > :is\(menu, \.editor-menu, \.prosemirror-menu\)/u);
   assert.match(css, /position: static !important/u);
   assert.match(css, /prose-mirror :is\(menu, \.editor-menu, \.prosemirror-menu\)/u);
-  assert.match(css, /\.chat-message \.cwnit-action-reference :is\(h2, h3\)/u);
+  assert.match(css, /\.cwnit-chat-message :is\(\.cwnit-action-reference, \.cwnit-skill-upgrade\)/u);
+  assert.match(css, /dt, dd/u);
 });

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.2
+
+- Added explicit light/dark styling for every visible descendant of the
+  module's action-reference and skill-upgrade chat cards.
+- Added a narrow Foundry v14 `messageMode` bridge for native SWNR skill rolls,
+  retaining the v13 `rollMode` fallback and native SWNR roll behaviour.
+- Removed duplicate character identity form paths and reduced the alternative
+  sheet to Level, XP, and a single Background input.
+- Restored native Rest & Recover from the character header.
+- Added a pending level-up Hit Point setup card to Combat Enhancements' public
+  Action Centre; rolling delegates to native `rollHitDice(true)`, while Set Up
+  Later leaves the task untouched.
+- Restored the existing Combat Enhancements Monthly Expenses injection point on
+  the alternative Inventory tab.
+- Limited Combat dashboard weapon cards to Items whose native SWNR Location is
+  `readied`; Stowed, Other, and Ship weapons remain available in Inventory and
+  require no module-owned visibility flags.
+- Added cache-busted v0.6.2 runtime, stylesheet, templates, release staging,
+  workflow verification, and regression coverage.
+
 ## 0.6.1
 
 - Fixed character initiative so the sheet locates or creates the actor's active

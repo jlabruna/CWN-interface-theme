@@ -35,7 +35,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.6.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.6.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -85,6 +85,22 @@ state automatically.
   combined public descriptor-and-dispatch API for them.
 
 ## Changes
+
+### 0.6.2
+
+- Made module-produced action-reference and skill-upgrade chat cards readable
+  in both Foundry interface themes, including all headings and detail rows.
+- Removed the Foundry v14 skill-roll deprecation warning while retaining the
+  native SWNR skill prompt, formula, remembered choices, and unskilled rules.
+- Simplified the CWN character identity header to Level, XP, and one Background
+  field; removed duplicate Class, Species, Employer, and Homeworld inputs.
+- Added Rest & Recover beside Initiative and surfaced pending native SWNR
+  level-up Hit Point rolls as an Action Centre setup task.
+- Restored Combat Enhancements' Monthly Expenses panel on the alternative
+  Inventory tab.
+- Limited the Combat dashboard to weapons whose native SWNR Location is
+  Readied. Stowed, Other, and Ship weapons remain available in Inventory and
+  appear automatically when changed to Readied.
 
 ### 0.6.1
 
