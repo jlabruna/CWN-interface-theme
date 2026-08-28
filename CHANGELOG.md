@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.1
+
+- Preserved the open/closed state of Advanced Configuration and the new compact
+  Accounts drawer across Character-sheet rerenders.
+- Made SWNR's native power-category toggles control the alternative Features
+  presentation and made Show Cyberware control the Cyberware tab; clarified
+  that these native toggles do not remove owned Skill Items.
+- Rendered native SWNR resource pools in the Header, Features, and Combat
+  locations selected by the existing pool-placement fields.
+- Added native Character attribute base, boost, and modifier-adjustment fields
+  to the GM-only Advanced Configuration section.
+- Extended End Scene through SWNR's native refresh orchestrator, reset native
+  Soak, recover used Combat Enhancements scene abilities through its public API,
+  and post one themed summary of the resulting refresh.
+- Collapsed Accounts and Monthly Expenses behind a compact Inventory summary so
+  weapon and item lists remain near the top of the workspace.
+
 ## 0.8.0
 
 - Restored the native SWNR End Scene action to the Character header and moved

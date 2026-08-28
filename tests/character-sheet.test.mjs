@@ -6,14 +6,14 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v080.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v081.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v080.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v080.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v080.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v081.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v081.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v081.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
-const templateVersions = { header: "v080", combat: "v064", inventory: "v080", features: "v080", actions: "v080" };
+const templateVersions = { header: "v081", combat: "v081", inventory: "v081", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
   await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
@@ -149,6 +149,9 @@ test("level-up HP remains native and is surfaced through Action Centre setup", (
 
 test("monthly expenses integration and native Readied combat loadout are exposed", () => {
   assert.match(templates.inventory, /cwnit-sheet__currency[^"\n]*grid grid-5col/u);
+  assert.match(templates.inventory, /cwnit-sheet__accounts-drawer/u);
+  assert.match(templates.inventory, /Accounts &amp; Monthly Expenses/u);
+  assert.match(templates.inventory, /cwnit\.accountsOpen/u);
   assert.match(source, /attack\.item\?\.system\?\.location === "readied"/u);
   assert.match(templates.combat, /No weapons are currently Readied/u);
   assert.doesNotMatch(source, /hideFromCombat|toggleWeaponCombatVisibility|toggleHiddenWeapons/u);
@@ -182,10 +185,12 @@ test("character vitals distinguish ranged and melee AC and expose native Soak", 
   assert.match(templates.header, /CWNIT\.Sheet\.Character\.Soak/u);
 });
 
-test("Combat Enhancements integration uses only the public combined Action Centre opener", () => {
+test("Combat Enhancements integration uses only public Action Centre and usage APIs", () => {
   assert.match(source, /cwnCombatEnhancements\?\.actions\?\.open/u);
-  assert.doesNotMatch(source, /cwnCombatEnhancements\?\.(?:focus|edge)/u);
-  assert.doesNotMatch(source, /resetUsage|manageUsage|useAction/u);
+  assert.match(source, /cwnCombatEnhancements\?\.actions\?\.resetUsage/u);
+  assert.match(source, /api\?\.focus\?\.availableActions/u);
+  assert.match(source, /api\?\.edge\?\.availableActions/u);
+  assert.doesNotMatch(source, /markFocusActionUsed|setFlag|unsetFlag/u);
 });
 
 test("common combat actions are declaration-only references", () => {
@@ -199,10 +204,14 @@ test("common combat actions are declaration-only references", () => {
   assert.doesNotMatch(source, /actor\.update|updateEmbeddedDocuments|registerSchema|migrat/iu);
 });
 
-test("scene reset and recovery use inherited native SWNR actions", () => {
+test("scene reset uses native SWNR refresh and recovery keeps the inherited rest action", () => {
   assert.match(templates.header, /data-action="scene"/u);
   assert.match(templates.actions, /data-action="rest"/u);
-  assert.doesNotMatch(source, /_onEndScene|_onScene|_onRest|resetSoak|refreshActor/u);
+  assert.match(source, /refreshActor\(\{ actor: this\.actor, cadence: "scene", createChat: false \}\)/u);
+  assert.match(source, /await this\._resetSoak\(\)/u);
+  assert.match(source, /resetCombatEnhancementSceneUsage/u);
+  assert.match(source, /cwnit-scene-refresh/u);
+  assert.doesNotMatch(source, /actor\.update\(\{[^}]*system\.(?:soak|pools)/su);
 });
 
 test("GM advanced configuration exposes native Character fields only to GMs", () => {
@@ -215,7 +224,72 @@ test("GM advanced configuration exposes native Character fields only to GMs", ()
     "system.tweak.showPoolsInPowers", "system.tweak.showPoolsInCombat",
     "system.tweak.otherLabel", "system.tweak.extraLabel", "system.tweak.modifiers.unskilledPenalty",
   ]) assert.match(templates.features, new RegExp(`name="${path.replaceAll(".", "\\.")}"`, "u"));
+  for (const field of ["base", "boost", "modModifier"]) {
+    assert.ok(templates.features.includes(`name="system.stats.{{stat.key}}.${field}"`));
+  }
+  assert.match(templates.features, /cwnit\.advancedConfigOpen/u);
+  assert.match(source, /_cwnitAdvancedConfigOpen/u);
   assert.doesNotMatch(templates.features, /system\.credits\.(?:debt|balance|owed)/u);
+});
+
+test("native capability and pool placement fields affect the alternative layout", () => {
+  assert.match(source, /POWER_VISIBILITY_FIELDS/u);
+  assert.match(source, /visiblePowers/u);
+  assert.match(source, /showCyberware\) options\.parts\.push\("cyberware"\)/u);
+  assert.match(templates.features, /#each cwnit\.visiblePowers/u);
+  assert.match(templates.header, /showPoolsInHeader/u);
+  assert.match(templates.features, /showPoolsInPowers/u);
+  assert.match(templates.combat, /showPoolsInCombat/u);
+  for (const template of [templates.header, templates.features, templates.combat]) {
+    assert.match(template, /pools-display\.hbs/u);
+  }
+  assert.match(templates.features, /do not remove owned Skill Items such as Psychic/u);
+});
+
+test("End Scene reports native and CE recovery through one themed summary", async () => {
+  class FakeSwnrSheet {
+    async _resetSoak() {
+      this.actor.system.soakTotal.value = this.actor.system.soakTotal.max;
+    }
+  }
+  const registered = [];
+  const runtime = {
+    swnr: { applications: { SWNActorSheet: FakeSwnrSheet } },
+    foundry: { documents: { collections: { Actors: { registerSheet: (_scope, sheet) => registered.push(sheet) } } } },
+  };
+  const SheetClass = registerCwnCharacterSheet(runtime);
+  const actor = { id: "actor-1", system: { soakTotal: { value: 2, max: 5 } } };
+  const resets = [];
+  const messages = [];
+  globalThis.canvas = { scene: { id: "scene-1" } };
+  globalThis.swnr = { utils: { refreshActor: async (options) => {
+    assert.equal(options.createChat, false);
+    return { poolsRefreshed: 1, effortReleased: ["Effort"] };
+  } } };
+  globalThis.game = {
+    cwnCombatEnhancements: {
+      actions: { resetUsage: async (_actor, predicate) => resets.push(predicate("scene:scene-1")) },
+      focus: { availableActions: () => [{ key: "ghost-reroll", label: "Ghost: reroll failed Sneak check", cadence: "scene", available: false }] },
+      edge: { availableActions: () => [] },
+    },
+  };
+  globalThis.ChatMessage = class {
+    static getSpeaker() { return { actor: "actor-1" }; }
+    static async create(data) { messages.push(data); }
+  };
+  const sheet = new SheetClass();
+  sheet.actor = actor;
+  await SheetClass.DEFAULT_OPTIONS.actions.scene.call(sheet, { preventDefault() {} }, {});
+  assert.deepEqual(resets, [true]);
+  assert.equal(messages.length, 1);
+  assert.match(messages[0].content, /Soak:<\/strong> 2\/5 → 5\/5/u);
+  assert.match(messages[0].content, /1 refreshed — Ghost/u);
+  assert.match(messages[0].content, /1 refreshed/u);
+  delete globalThis.canvas;
+  delete globalThis.swnr;
+  delete globalThis.game;
+  delete globalThis.ChatMessage;
+  assert.equal(registered[0], SheetClass);
 });
 
 test("System Strain display identifies SWNR usable capacity without rounding or mutation", () => {

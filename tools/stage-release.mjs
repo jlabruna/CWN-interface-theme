@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.8.0");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.8.0");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.8.1");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.8.1");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.8.0") {
-  throw new Error(`Expected module version 0.8.0 but found ${manifest.version}.`);
+if (manifest.version !== "0.8.1") {
+  throw new Error(`Expected module version 0.8.1 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -42,13 +42,13 @@ const browserReleaseFiles = [
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v080.mjs",
-  "scripts/sheets/cwn-character-sheet-v080.mjs",
-  "styles/cwn-interface-theme-v080.css",
-  "templates/sheets/character/actions-v080.hbs",
-  "templates/sheets/character/features-v080.hbs",
-  "templates/sheets/character/header-v080.hbs",
-  "templates/sheets/character/inventory-v080.hbs",
+  "scripts/cwn-interface-theme-v081.mjs",
+  "scripts/sheets/cwn-character-sheet-v081.mjs",
+  "styles/cwn-interface-theme-v081.css",
+  "templates/sheets/character/combat-v081.hbs",
+  "templates/sheets/character/features-v081.hbs",
+  "templates/sheets/character/header-v081.hbs",
+  "templates/sheets/character/inventory-v081.hbs",
   "tests/character-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tools/stage-release.mjs",

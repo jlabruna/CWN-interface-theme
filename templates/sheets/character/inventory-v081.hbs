@@ -1,0 +1,39 @@
+<section class="tab cwnit-sheet__body {{tab.cssClass}}" data-group="primary" data-tab="inventory">
+  <div class="cwnit-sheet__section-heading">
+    <div><p>{{localize "CWNIT.Sheet.Character.LogisticsOverline"}}</p><h2>{{localize "CWNIT.Sheet.Character.Inventory"}}</h2></div>
+  </div>
+
+  <details class="cwnit-sheet__currency cwnit-sheet__accounts cwnit-sheet__accounts-drawer grid grid-5col" {{#if cwnit.accountsOpen}}open{{/if}}>
+    <summary><span><i class="fa-solid fa-building-columns"></i> Accounts &amp; Monthly Expenses</span><strong>{{gameSettings.currency.baseCurrencyName}} {{system.credits.carriedBase}}</strong></summary>
+    <header>
+      <div><p>Finance</p><h2>Accounts</h2></div>
+      <button type="button" data-action="addCurrency"><i class="fa-solid fa-plus"></i> Account</button>
+    </header>
+    <ol>
+      <li class="cwnit-sheet__account cwnit-sheet__account--primary">
+        <div class="cwnit-sheet__account-name"><i class="fa-solid fa-wallet"></i><span><strong>{{gameSettings.currency.baseCurrencyName}}</strong><small>Primary · Stowed</small></span></div>
+        <input name="system.credits.carriedBase" type="number" value="{{system.credits.carriedBase}}" aria-label="{{gameSettings.currency.baseCurrencyName}} balance" />
+        <button type="button" data-action="creditChange" data-credit-type="{{gameSettings.currency.baseCurrencyName}}" data-currency-type="base" title="Adjust {{gameSettings.currency.baseCurrencyName}}"><i class="fa-solid fa-coins"></i> Change</button>
+      </li>
+      {{#each system.credits.extraCurrencies as |currency idx|}}
+        <li class="cwnit-sheet__account">
+          <div class="cwnit-sheet__account-name"><i class="fa-solid fa-building-columns"></i><span><strong>{{#if currency.name}}{{currency.name}}{{else}}{{currency.typeName}}{{/if}}</strong><small>{{currency.typeName}} · {{#if currency.carried}}Carried{{else}}Not carried{{/if}}</small></span></div>
+          <output>{{currency.value}}</output>
+          <div class="cwnit-sheet__account-actions">
+            <button type="button" data-action="creditChange" data-credit-type="{{currency.typeName}}" data-currency-type="custom" data-currency-idx="{{idx}}" title="Adjust account"><i class="fa-solid fa-plus-minus"></i></button>
+            <button type="button" data-action="editCurrency" data-currency-idx="{{idx}}" title="Edit, convert, or delete account"><i class="fa-solid fa-pen-to-square"></i></button>
+          </div>
+        </li>
+      {{/each}}
+    </ol>
+  </details>
+
+  <div class="cwnit-sheet__encumbrance"><div><span style="width:{{system.encumbrance.ready.percentage}}%"></span><b>Readied {{system.encumbrance.ready.value}} / {{system.encumbrance.ready.max}}</b></div><div><span style="width:{{system.encumbrance.stowed.percentage}}%"></span><b>Stowed {{system.encumbrance.stowed.value}} / {{system.encumbrance.stowed.max}}</b></div></div>
+  <div class="cwnit-sheet__native-lists">
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.weapon type="weapon" name="Weapons"}}
+    {{> "systems/swnr/templates/actor/fragments/consumable-list.hbs" itemList=actor.system.consumables type="item" name="Consumables/Ammo"}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.armor type="armor" name="Armor"}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.system.gear type="item" name="Items"}}
+  </div>
+  {{#if cwnit.otherItems.length}}<section class="cwnit-sheet__panel"><h2>Other Documents</h2><ol class="cwnit-sheet__compact-list">{{#each cwnit.otherItems as |item|}}<li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true"><img src="{{item.img}}" alt="" /><button type="button" data-action="viewDoc">{{item.name}}</button><small>{{item.type}}</small></li>{{/each}}</ol></section>{{/if}}
+</section>

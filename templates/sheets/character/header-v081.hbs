@@ -1,0 +1,34 @@
+<div class="cwnit-sheet cwnit-sheet--character__masthead">
+  <header class="cwnit-sheet__header">
+    <div class="cwnit-sheet__portrait"><img src="{{actor.img}}" alt="{{actor.name}}" data-action="onEditImage" data-edit="img" /></div>
+    <div class="cwnit-sheet__identity">
+      <p class="cwnit-sheet__eyebrow">{{localize "CWNIT.Sheet.Character.Eyebrow"}}</p>
+      <input class="cwnit-sheet__name" name="name" type="text" value="{{actor.name}}" />
+      <div class="cwnit-sheet__identity-grid cwnit-sheet__identity-grid--cwn">
+        <label><span>{{localize "CWNIT.Sheet.Character.Level"}}</span><input name="system.level.value" type="number" value="{{system.level.value}}" /></label>
+        <label><span>{{localize "CWNIT.Sheet.Character.XP"}}</span><input name="system.level.exp" type="number" value="{{system.level.exp}}" /></label>
+        <label><span>{{localize "CWNIT.Sheet.Character.Background"}}</span><input name="system.background" type="text" value="{{system.background}}" /></label>
+      </div>
+    </div>
+    <div class="cwnit-sheet__header-actions">
+      {{#if cwnit.hasActionCentre}}<button type="button" data-action="openActionCentre"><i class="fa-solid fa-bolt"></i> {{localize "CWNIT.Sheet.Character.ActionCentre"}}</button>{{/if}}
+      <button type="button" data-action="rollInitiative"><i class="fa-solid fa-forward-fast"></i> {{localize "CWNIT.Sheet.Character.Initiative"}}</button>
+      <button type="button" data-action="scene"><i class="fa-solid fa-hourglass-end"></i> End Scene</button>
+    </div>
+  </header>
+  <section class="cwnit-sheet__vitals">
+    <label><span>HP</span><input name="system.health.value" type="number" value="{{system.health.value}}" /><b>/</b><input name="system.health.max" type="number" value="{{system.health.max}}" /></label>
+    <div><span>{{localize "CWNIT.Sheet.Character.RangedAC"}}</span><strong>{{cwnit.vitals.rangedAc}}</strong></div>
+    <div><span>{{localize "CWNIT.Sheet.Character.MeleeAC"}}</span><strong>{{cwnit.vitals.meleeAc}}</strong></div>
+    <div><span>{{localize "CWNIT.Sheet.Character.Soak"}}</span><strong>{{cwnit.vitals.soakValue}} / {{cwnit.vitals.soakMax}}</strong></div>
+    <div><span>{{localize "CWNIT.Sheet.Character.TraumaTarget"}}</span><strong>{{cwnit.vitals.traumaTarget}}</strong></div>
+    <div title="Usable capacity equals Constitution minus cyberware strain minus permanent strain."><span>Strain Used</span><strong>{{cwnit.vitals.strainValue}} / {{cwnit.vitals.strainMax}}</strong></div>
+    <div><span>{{localize "CWNIT.Sheet.Character.Movement"}}</span><strong>{{cwnit.vitals.movement}} m</strong></div>
+    <div><span>{{localize "CWNIT.Sheet.Character.AttackBonus"}}</span><strong>+{{cwnit.vitals.attackBonus}}</strong></div>
+  </section>
+  {{#if (and hasAnyPools system.tweak.showPoolsInHeader)}}
+    <section class="cwnit-sheet__header-pools">
+      {{> "systems/swnr/templates/actor/fragments/pools-display.hbs" submitInputs=true}}
+    </section>
+  {{/if}}
+</div>

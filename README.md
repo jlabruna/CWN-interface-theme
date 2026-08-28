@@ -39,7 +39,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.8.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.8.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -115,6 +115,18 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   out of scope.
 
 ## Changes
+
+### 0.8.1
+
+- Keeps Advanced Configuration open while native field changes rerender the
+  Character sheet.
+- Makes power visibility, Cyberware visibility, and native pool-placement
+  controls affect the alternative Character layout.
+- Adds native base, boost, and modifier-adjustment controls for all attributes.
+- Extends End Scene with Combat Enhancements scene-use recovery through its
+  public API and posts a detailed themed refresh summary.
+- Moves Accounts and Monthly Expenses into a compact, persistent Inventory
+  drawer that is closed by default.
 
 ### 0.8.0
 
