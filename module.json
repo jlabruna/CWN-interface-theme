@@ -2,7 +2,7 @@
   "id": "cwn-interface-theme",
   "title": "CWN Interface Theme for SWNR",
   "description": "Adaptive SWNR interface styling with themed chat cards, a cyberpunk pause overlay, and optional CWN Character, NPC, and Drone sheets that preserve native SWNR mechanics.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "authors": [
     {
       "name": "jlabruna"
@@ -10,7 +10,7 @@
   ],
   "url": "https://github.com/jlabruna/CWN-interface-theme",
   "manifest": "https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.json",
-  "download": "https://github.com/jlabruna/CWN-interface-theme/releases/download/v0.7.0/cwn-interface-theme-v0.7.0.zip",
+  "download": "https://github.com/jlabruna/CWN-interface-theme/releases/download/v0.7.1/cwn-interface-theme-v0.7.1.zip",
   "bugs": "https://github.com/jlabruna/CWN-interface-theme/issues",
   "compatibility": {
     "minimum": "13.345",
@@ -29,7 +29,7 @@
     ]
   },
   "esmodules": [
-    "scripts/cwn-interface-theme-v070.mjs"
+    "scripts/cwn-interface-theme-v071.mjs"
   ],
   "styles": [
     "styles/cwn-interface-theme-v070.css"

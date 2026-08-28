@@ -11,9 +11,9 @@ import {
   prepareDroneSheetContext,
   registerCwnDroneSheet,
   resolveSwnrVehicleSheet,
-} from "../scripts/sheets/cwn-drone-sheet-v070.mjs";
+} from "../scripts/sheets/cwn-drone-sheet-v071.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v070.mjs", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v071.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
 const templateNames = ["header", "operations", "fittings", "cargo", "configuration", "notes"];
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -78,11 +78,7 @@ function actorFixture() {
 
 test("drone sheet resolves the registered native SWNR vehicle class and remains optional", () => {
   class SWNVehicleSheet {}
-  const registeredSheets = [{
-    id: "swnr.SWNVehicleSheet",
-    sheetClass: SWNVehicleSheet,
-    types: ["ship", "mech", "drone", "vehicle"],
-  }];
+  const registeredSheets = [SWNVehicleSheet];
   const calls = [];
   const runtime = {
     foundry: { documents: { collections: { Actors: {
@@ -94,6 +90,20 @@ test("drone sheet resolves the registered native SWNR vehicle class and remains 
   const SheetClass = registerCwnDroneSheet(runtime);
   assert.equal(Object.getPrototypeOf(SheetClass), SWNVehicleSheet);
   assert.deepEqual(calls[0][2], { types: ["drone"], makeDefault: false, label: DRONE_SHEET_LABEL });
+});
+
+test("drone resolver retains descriptor compatibility for registry adapters", () => {
+  class SWNVehicleSheet {}
+  const runtime = {
+    foundry: { documents: { collections: { Actors: {
+      registeredSheets: [{
+        id: "swnr.SWNVehicleSheet",
+        sheetClass: SWNVehicleSheet,
+        types: ["ship", "mech", "drone", "vehicle"],
+      }],
+    } } } },
+  };
+  assert.equal(resolveSwnrVehicleSheet(runtime), SWNVehicleSheet);
 });
 
 test("drone sheet safely declines registration if the native vehicle class is unavailable", () => {

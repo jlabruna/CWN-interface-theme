@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.1
+
+- Fixed the optional CWN Drone Operations Sheet registration on Foundry VTT
+  v14 by resolving SWNR's native vehicle sheet from the actual registered
+  sheet-class array.
+- Corrected the Drone registration regression fixture so it matches Foundry's
+  documented runtime registry shape while retaining descriptor compatibility.
+- Added cache-busted v0.7.1 runtime and Drone adapter files, release staging,
+  and workflow verification.
+
 ## 0.7.0
 
 - Added an optional, non-default **CWN Drone Operations Sheet** for SWNR

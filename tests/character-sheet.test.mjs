@@ -10,7 +10,7 @@ import {
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v064.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v070.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v071.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v064", combat: "v064", actions: "v063" };
