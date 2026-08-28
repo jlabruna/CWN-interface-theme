@@ -39,7 +39,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.7.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.7.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -114,6 +114,14 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   out of scope.
 
 ## Changes
+
+### 0.7.2
+
+- Deferred only the Drone adapter's registration to Foundry's `setup` phase,
+  ensuring SWNR's native vehicle sheet is available before it is subclassed.
+- Added regression coverage for the observed SWNR/Theme lifecycle ordering.
+- Added a minimal browser hotfix upload so v0.7.1 installations do not require
+  the complete repository to be uploaded again.
 
 ### 0.7.1
 

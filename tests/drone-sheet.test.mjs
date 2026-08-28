@@ -11,9 +11,10 @@ import {
   prepareDroneSheetContext,
   registerCwnDroneSheet,
   resolveSwnrVehicleSheet,
-} from "../scripts/sheets/cwn-drone-sheet-v071.mjs";
+} from "../scripts/sheets/cwn-drone-sheet-v072.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v071.mjs", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v072.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v072.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
 const templateNames = ["header", "operations", "fittings", "cargo", "configuration", "notes"];
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -104,6 +105,15 @@ test("drone resolver retains descriptor compatibility for registry adapters", ()
     } } } },
   };
   assert.equal(resolveSwnrVehicleSheet(runtime), SWNVehicleSheet);
+});
+
+test("drone registration waits for setup after SWNR completes its init registration", () => {
+  const initStart = moduleSource.indexOf('Hooks.once("init"');
+  const setupStart = moduleSource.indexOf('Hooks.once("setup"');
+  const nextHook = moduleSource.indexOf('Hooks.on("renderChatMessageHTML"');
+  assert.ok(initStart >= 0 && setupStart > initStart && nextHook > setupStart);
+  assert.doesNotMatch(moduleSource.slice(initStart, setupStart), /registerCwnDroneSheet\(\)/u);
+  assert.match(moduleSource.slice(setupStart, nextHook), /registerCwnDroneSheet\(\)/u);
 });
 
 test("drone sheet safely declines registration if the native vehicle class is unavailable", () => {

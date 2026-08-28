@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.7.1");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.7.1");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.7.2");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.7.2");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.7.1") {
-  throw new Error(`Expected module version 0.7.1 but found ${manifest.version}.`);
+if (manifest.version !== "0.7.2") {
+  throw new Error(`Expected module version 0.7.2 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -37,11 +37,22 @@ await fs.copyFile(path.join(stageRoot, "module.json"), path.join(releaseRoot, "m
 
 await removeTree(browserUploadRoot);
 await fs.mkdir(browserUploadRoot, { recursive: true });
-for (const directory of ["assets", "lang", "scripts", "styles", "templates", "tests", "tools"]) {
-  await fs.cp(path.join(moduleRoot, directory), path.join(browserUploadRoot, directory), { recursive: true });
-}
-for (const filename of ["CHANGELOG.md", "README.md", "module.json", "package.json"]) {
-  await fs.copyFile(path.join(moduleRoot, filename), path.join(browserUploadRoot, filename));
+const browserHotfixFiles = [
+  "CHANGELOG.md",
+  "README.md",
+  "module.json",
+  "package.json",
+  "scripts/cwn-interface-theme-v072.mjs",
+  "scripts/sheets/cwn-drone-sheet-v072.mjs",
+  "tests/character-sheet.test.mjs",
+  "tests/drone-sheet.test.mjs",
+  "tests/manifest.test.mjs",
+  "tools/stage-release.mjs",
+];
+for (const filename of browserHotfixFiles) {
+  const destination = path.join(browserUploadRoot, filename);
+  await fs.mkdir(path.dirname(destination), { recursive: true });
+  await fs.copyFile(path.join(moduleRoot, filename), destination);
 }
 
 await removeTree(browserDotfilesRoot);

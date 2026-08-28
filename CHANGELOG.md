@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.2
+
+- Fixed Drone-sheet registration ordering by waiting until Foundry's `setup`
+  phase, after SWNR has populated its native vehicle-sheet registry.
+- Kept Character and NPC registration in `init`; only the dependent Drone
+  adapter is deferred.
+- Added a lifecycle-order regression test and a minimal browser hotfix upload
+  containing only the v0.7.2 changes.
+
 ## 0.7.1
 
 - Fixed the optional CWN Drone Operations Sheet registration on Foundry VTT
