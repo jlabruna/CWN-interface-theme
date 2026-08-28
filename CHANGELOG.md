@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.8.0
+
+- Restored the native SWNR End Scene action to the Character header and moved
+  native Rest & Recover to the Actions workspace.
+- Added a GM-only Advanced Configuration section backed exclusively by native
+  SWNR Character fields, including initiative advantage, initiative and
+  encumbrance modifiers, capability visibility, pool-placement options,
+  location labels, and the unskilled-roll adjustment.
+- Replaced the single-currency strip with compact Accounts that show the base
+  balance and every native `extraCurrencies` entry while delegating adjustment,
+  creation, editing, conversion, and confirmed deletion to SWNR.
+- Removed the Character sheet's instance-level skill-roll replacement so Heal,
+  Specialist, and other Combat Enhancements dice changes once again pass
+  through SWNR's authoritative skill DataModel path.
+- Added concise declaration cards for Swarm Attack, Charge, Screen an Ally,
+  and Snap Attack; ordinary weapon attacks and other native controls remain
+  unduplicated.
+- Documented SWNR's System Strain calculation in-sheet and relabelled the
+  header value as Strain Used: usable capacity is Constitution total minus
+  cyberware strain minus permanent strain, so fractional capacity is valid.
+- Added cache-busted v0.8.0 runtime, Character templates and stylesheet,
+  focused regression coverage, release staging, and corrected workflow checks.
+
 ## 0.7.3
 
 - Moved Drone-sheet registration to Foundry's `ready` phase after a live

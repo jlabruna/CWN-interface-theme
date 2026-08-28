@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.7.3");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.7.3");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.8.0");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.8.0");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.7.3") {
-  throw new Error(`Expected module version 0.7.3 but found ${manifest.version}.`);
+if (manifest.version !== "0.8.0") {
+  throw new Error(`Expected module version 0.8.0 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -37,19 +37,23 @@ await fs.copyFile(path.join(stageRoot, "module.json"), path.join(releaseRoot, "m
 
 await removeTree(browserUploadRoot);
 await fs.mkdir(browserUploadRoot, { recursive: true });
-const browserHotfixFiles = [
+const browserReleaseFiles = [
   "CHANGELOG.md",
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v073.mjs",
-  "scripts/sheets/cwn-drone-sheet-v073.mjs",
+  "scripts/cwn-interface-theme-v080.mjs",
+  "scripts/sheets/cwn-character-sheet-v080.mjs",
+  "styles/cwn-interface-theme-v080.css",
+  "templates/sheets/character/actions-v080.hbs",
+  "templates/sheets/character/features-v080.hbs",
+  "templates/sheets/character/header-v080.hbs",
+  "templates/sheets/character/inventory-v080.hbs",
   "tests/character-sheet.test.mjs",
-  "tests/drone-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tools/stage-release.mjs",
 ];
-for (const filename of browserHotfixFiles) {
+for (const filename of browserReleaseFiles) {
   const destination = path.join(browserUploadRoot, filename);
   await fs.mkdir(path.dirname(destination), { recursive: true });
   await fs.copyFile(path.join(moduleRoot, filename), destination);

@@ -39,7 +39,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.7.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.8.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -104,8 +104,9 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   tracked Focus/Edge controls because Combat Enhancements does not expose a
   combined public descriptor-and-dispatch API for them.
 - Direct System Strain management is deferred to a later character-sheet
-  release. The current header remains display-only and native Rest & Recover
-  remains available.
+  release. The header labels current use against SWNR's derived usable capacity,
+  the GM section shows its Constitution/cyberware/permanent breakdown, and
+  native Rest & Recover remains authoritative.
 - SWNR's native drone-pilot unlink workflow does not remove the generic Drone
   Item it created on the old pilot; the native sheet already asks users to
   remove that Item manually, and the alternative sheet preserves that behavior.
@@ -114,6 +115,21 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   out of scope.
 
 ## Changes
+
+### 0.8.0
+
+- Restores native End Scene to the Character header and relocates native Rest &
+  Recover to the Actions tab.
+- Adds a collapsed GM-only Advanced Configuration section using SWNR's native
+  initiative, display, pool, location, encumbrance, and unskilled-roll fields.
+- Shows all native Character accounts in a compact Accounts panel while using
+  SWNR's existing account dialogs and `extraCurrencies` storage.
+- Returns Character skill clicks to the inherited SWNR action so Combat
+  Enhancements' Healer and Specialist dice wrappers remain authoritative.
+- Adds declaration/reference cards for Swarm Attack, Charge, Screen an Ally,
+  and Snap Attack.
+- Clarifies that the System Strain denominator is SWNR's usable capacity:
+  Constitution minus cyberware strain minus permanent strain.
 
 ### 0.7.3
 

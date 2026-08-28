@@ -1,0 +1,106 @@
+<section class="tab cwnit-sheet__body {{tab.cssClass}}" data-group="primary" data-tab="features">
+  <div class="cwnit-sheet__section-heading">
+    <div>
+      <p>{{localize "CWNIT.Sheet.Character.CapabilitiesOverline"}}</p>
+      <h2>{{localize "CWNIT.Sheet.NPC.FeaturesAndPowers"}}</h2>
+    </div>
+  </div>
+
+  <div class="cwnit-sheet__feature-columns">
+    <section class="cwnit-sheet__panel">
+      <h2>{{localize "CWNIT.Sheet.NPC.Features"}}</h2>
+      <ol class="cwnit-sheet__compact-list">
+        {{#each cwnit.features as |item|}}
+          <li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true">
+            <img src="{{item.img}}" alt="" />
+            <button type="button" data-action="viewDoc">{{item.name}}</button>
+            <small>{{item.system.type}} {{item.system.level}}</small>
+            {{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}
+          </li>
+        {{else}}
+          <li class="cwnit-sheet__empty">{{localize "CWNIT.Sheet.NPC.NoFeatures"}}</li>
+        {{/each}}
+      </ol>
+    </section>
+
+    <section class="cwnit-sheet__panel">
+      <h2>{{localize "CWNIT.Sheet.NPC.Powers"}}</h2>
+      <ol class="cwnit-sheet__compact-list">
+        {{#each cwnit.powers as |power|}}
+          <li class="item" data-item-id="{{power.item._id}}" data-document-class="Item" data-drag="true">
+            <img src="{{power.item.img}}" alt="" />
+            <button type="button" data-action="roll" data-roll-type="item">{{power.item.name}}</button>
+            <small>{{power.subType}} {{power.level}}</small>
+          </li>
+        {{else}}
+          <li class="cwnit-sheet__empty">{{localize "CWNIT.Sheet.NPC.NoPowers"}}</li>
+        {{/each}}
+      </ol>
+    </section>
+  </div>
+
+  <section class="cwnit-sheet__panel">
+    <h2>{{localize "CWNIT.Sheet.NPC.StatusEffects"}}</h2>
+    <ol class="cwnit-sheet__compact-list">
+      {{#each cwnit.effects as |effect|}}
+        <li data-effect-id="{{effect.id}}" data-document-class="ActiveEffect">
+          <img src="{{effect.img}}" alt="" />
+          <span>{{effect.name}}</span>
+          <button type="button" data-action="toggleEffect"><i class="fa-solid fa-eye"></i></button>
+          {{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}
+        </li>
+      {{else}}
+        <li class="cwnit-sheet__empty">{{localize "CWNIT.Sheet.NPC.NoEffects"}}</li>
+      {{/each}}
+    </ol>
+  </section>
+
+  {{#if cwnit.isGM}}
+    <details class="cwnit-sheet__advanced-config">
+      <summary><i class="fa-solid fa-sliders"></i> GM / Advanced Configuration</summary>
+      <p class="cwnit-sheet__advanced-intro">These controls edit SWNR's native Character fields. No duplicate Theme settings are stored.</p>
+
+      <div class="cwnit-sheet__advanced-grid">
+        <section>
+          <h3>Initiative &amp; Capacity</h3>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.advInit" type="checkbox" {{checked system.tweak.advInit}} /> Advantage on Initiative</label>
+          <label>Initiative modifier <input name="system.tweak.initiative.mod" type="number" value="{{system.tweak.initiative.mod}}" /></label>
+          <label>Readied capacity adjustment <input name="system.tweak.modifiers.readied" type="number" value="{{system.tweak.modifiers.readied}}" /></label>
+          <label>Stowed capacity adjustment <input name="system.tweak.modifiers.stowed" type="number" value="{{system.tweak.modifiers.stowed}}" /></label>
+          <label>Unskilled-roll adjustment <input name="system.tweak.modifiers.unskilledPenalty" type="number" min="0" value="{{system.tweak.modifiers.unskilledPenalty}}" /></label>
+        </section>
+
+        <section>
+          <h3>Capability Visibility</h3>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showCyberware" type="checkbox" {{checked system.tweak.showCyberware}} /> Show Cyberware</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showPsychic" type="checkbox" {{checked system.tweak.showPsychic}} /> Show Psychic</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showArts" type="checkbox" {{checked system.tweak.showArts}} /> Show Arts</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showSpells" type="checkbox" {{checked system.tweak.showSpells}} /> Show Spells</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showAdept" type="checkbox" {{checked system.tweak.showAdept}} /> Show Adept</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showMutation" type="checkbox" {{checked system.tweak.showMutation}} /> Show Mutation</label>
+        </section>
+
+        <section>
+          <h3>Native Pool Placement</h3>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showPoolsInHeader" type="checkbox" {{checked system.tweak.showPoolsInHeader}} /> Show Pools in Header</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showPoolsInPowers" type="checkbox" {{checked system.tweak.showPoolsInPowers}} /> Show Pools in Powers</label>
+          <label class="cwnit-sheet__config-check"><input name="system.tweak.showPoolsInCombat" type="checkbox" {{checked system.tweak.showPoolsInCombat}} /> Show Pools in Combat</label>
+          <label>Other location label <input name="system.tweak.otherLabel" type="text" value="{{system.tweak.otherLabel}}" /></label>
+          <label>Extra location label <input name="system.tweak.extraLabel" type="text" value="{{system.tweak.extraLabel}}" /></label>
+        </section>
+
+        <section class="cwnit-sheet__strain-breakdown">
+          <h3>System Strain Calculation</h3>
+          <dl>
+            <div><dt>Constitution total</dt><dd>{{cwnit.vitals.strainConstitution}}</dd></div>
+            <div><dt>Cyberware strain</dt><dd>− {{cwnit.vitals.strainCyberware}}</dd></div>
+            <div><dt>Permanent strain</dt><dd>− {{cwnit.vitals.strainPermanent}}</dd></div>
+            <div><dt>Usable capacity</dt><dd>{{cwnit.vitals.strainMax}}</dd></div>
+            <div><dt>Currently used</dt><dd>{{cwnit.vitals.strainValue}}</dd></div>
+          </dl>
+          <p>SWNR derives usable capacity as Constitution minus cyberware strain minus permanent strain. Fractional permanent strain can therefore produce a fractional capacity.</p>
+        </section>
+      </div>
+    </details>
+  {{/if}}
+</section>

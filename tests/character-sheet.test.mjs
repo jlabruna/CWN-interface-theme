@@ -6,14 +6,14 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v064.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v080.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v064.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v073.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v080.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v080.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v080.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
-const templateVersions = { header: "v064", combat: "v064", actions: "v063" };
+const templateVersions = { header: "v080", combat: "v064", inventory: "v080", features: "v080", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
   await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
@@ -123,8 +123,9 @@ test("skills are compact, lockable, and upgrades produce a chat confirmation", (
   assert.match(css, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/u);
   assert.match(source, /cwnit-skill-upgrade/u);
   assert.match(source, /nativeSkillUp\.call\(this, event, target\)/u);
-  assert.match(source, /generation >= 14 \? \{ messageMode: mode \} : \{ rollMode: mode \}/u);
-  assert.match(source, /settings\.get\("core", "rollMode"\)/u);
+  assert.doesNotMatch(source, /rollSkill:\s*this\._onRollSkill/u);
+  assert.doesNotMatch(source, /installSkillMessageModeCompat|Object\.defineProperty\(skill/u);
+  assert.match(templates.skills, /data-action="rollSkill" data-item-id="\{\{skill\._id\}\}"/u);
 });
 
 test("identity fields are CWN-specific and submit Background only once", () => {
@@ -133,8 +134,10 @@ test("identity fields are CWN-specific and submit Background only once", () => {
   for (const removed of ["system.class", "system.species", "system.employer", "system.homeworld"]) {
     assert.doesNotMatch(all, new RegExp(`name=["']${removed.replace(".", "\\.")}`, "u"));
   }
-  assert.match(templates.header, /data-action="rest"/u);
-  assert.match(templates.header, /Rest &amp; Recover/u);
+  assert.doesNotMatch(templates.header, /data-action="rest"/u);
+  assert.match(templates.header, /data-action="scene"/u);
+  assert.match(templates.actions, /data-action="rest"/u);
+  assert.match(templates.actions, /Rest &amp; Recover/u);
 });
 
 test("level-up HP remains native and is surfaced through Action Centre setup", () => {
@@ -145,7 +148,7 @@ test("level-up HP remains native and is surfaced through Action Centre setup", (
 });
 
 test("monthly expenses integration and native Readied combat loadout are exposed", () => {
-  assert.match(templates.inventory, /cwnit-sheet__currency grid grid-5col/u);
+  assert.match(templates.inventory, /cwnit-sheet__currency[^"\n]*grid grid-5col/u);
   assert.match(source, /attack\.item\?\.system\?\.location === "readied"/u);
   assert.match(templates.combat, /No weapons are currently Readied/u);
   assert.doesNotMatch(source, /hideFromCombat|toggleWeaponCombatVisibility|toggleHiddenWeapons/u);
@@ -186,9 +189,53 @@ test("Combat Enhancements integration uses only the public combined Action Centr
 });
 
 test("common combat actions are declaration-only references", () => {
-  assert.deepEqual(Object.keys(ACTION_REFERENCES), ["total-defense", "fighting-withdrawal", "hold-action", "execution-attack"]);
+  assert.deepEqual(Object.keys(ACTION_REFERENCES), [
+    "total-defense", "fighting-withdrawal", "hold-action", "swarm-attack",
+    "charge", "screen-an-ally", "snap-attack", "execution-attack",
+  ]);
+  assert.match(ACTION_REFERENCES["swarm-attack"].summary, /maximum of \+6\/\+3/u);
+  assert.match(ACTION_REFERENCES["swarm-attack"].summary, /does not add to Shock/u);
   assert.match(source, /Declaration\/reference only — no mechanical state was changed/u);
   assert.doesNotMatch(source, /actor\.update|updateEmbeddedDocuments|registerSchema|migrat/iu);
+});
+
+test("scene reset and recovery use inherited native SWNR actions", () => {
+  assert.match(templates.header, /data-action="scene"/u);
+  assert.match(templates.actions, /data-action="rest"/u);
+  assert.doesNotMatch(source, /_onEndScene|_onScene|_onRest|resetSoak|refreshActor/u);
+});
+
+test("GM advanced configuration exposes native Character fields only to GMs", () => {
+  assert.match(source, /isGM: Boolean\(globalThis\.game\?\.user\?\.isGM\)/u);
+  assert.match(templates.features, /\{\{#if cwnit\.isGM\}\}/u);
+  for (const path of [
+    "system.tweak.advInit", "system.tweak.initiative.mod", "system.tweak.showCyberware",
+    "system.tweak.showPsychic", "system.tweak.showArts", "system.tweak.showSpells",
+    "system.tweak.showAdept", "system.tweak.showMutation", "system.tweak.showPoolsInHeader",
+    "system.tweak.showPoolsInPowers", "system.tweak.showPoolsInCombat",
+    "system.tweak.otherLabel", "system.tweak.extraLabel", "system.tweak.modifiers.unskilledPenalty",
+  ]) assert.match(templates.features, new RegExp(`name="${path.replaceAll(".", "\\.")}"`, "u"));
+  assert.doesNotMatch(templates.features, /system\.credits\.(?:debt|balance|owed)/u);
+});
+
+test("System Strain display identifies SWNR usable capacity without rounding or mutation", () => {
+  assert.match(source, /strainMax: system\.systemStrain\?\.max/u);
+  assert.match(source, /strainConstitution: system\.stats\?\.con\?\.total/u);
+  assert.match(source, /strainCyberware: system\.systemStrain\?\.cyberware/u);
+  assert.match(source, /strainPermanent: system\.systemStrain\?\.permanent/u);
+  assert.match(templates.header, /Strain Used/u);
+  assert.match(templates.features, /Constitution minus cyberware strain minus permanent strain/u);
+  assert.doesNotMatch(source, /Math\.(?:round|floor|ceil).*strain/iu);
+});
+
+test("Inventory renders every native account and delegates account management to SWNR", () => {
+  assert.match(templates.inventory, /system\.credits\.carriedBase/u);
+  assert.match(templates.inventory, /#each system\.credits\.extraCurrencies as \|currency idx\|/u);
+  assert.match(templates.inventory, /data-action="creditChange"/u);
+  assert.match(templates.inventory, /data-action="addCurrency"/u);
+  assert.match(templates.inventory, /data-action="editCurrency" data-currency-idx="\{\{idx\}\}"/u);
+  assert.doesNotMatch(source, /extraCurrencies.*(?:update|splice|push)/u);
+  assert.doesNotMatch(templates.inventory, /transaction/iu);
 });
 
 test("weapon classification uses Content Pack base weapon then family then mode", () => {
