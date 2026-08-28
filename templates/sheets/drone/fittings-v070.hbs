@@ -1,0 +1,20 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="fittings">
+  <div class="cwnit-drone__section-heading"><div><p>Platform Capacity</p><h2>Fittings &amp; Modifications</h2></div><div class="cwnit-drone__capacity-badges"><span>Fittings {{cwnit.fittingUsage.used}} / {{cwnit.fittingUsage.maximum}}</span><span>Hardpoints {{cwnit.hardpointUsage.used}} / {{cwnit.hardpointUsage.maximum}}</span></div></div>
+  <p class="cwnit-drone__hint">Drag native SWNR fitting Items onto the sheet. Capacity is calculated by SWNR; this sheet does not enforce model-specific construction rules.</p>
+  <ol class="cwnit-drone__fitting-list">
+    {{#each cwnit.fittings as |fitting|}}
+      <li class="item" data-item-id="{{fitting.item._id}}" data-document-class="Item" data-drag="true">
+        <img src="{{fitting.item.img}}" alt="" /><div><header><h3>{{fitting.item.name}}</h3><span>{{fitting.capacity}} fitting · {{fitting.power}} power</span></header><p>{{fitting.summary}}</p></div><div class="cwnit-drone__item-controls"><button type="button" data-action="viewDoc" title="Open Item"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>{{#if @root.editable}}<button type="button" data-action="toggle" data-toggle="broken" title="Toggle broken"><i class="fa-solid fa-heart-crack {{#if fitting.item.system.broken}}is-active{{/if}}"></i></button><button type="button" data-action="deleteDoc" title="Delete Item"><i class="fa-solid fa-trash"></i></button>{{/if}}</div>
+      </li>
+    {{else}}<li class="cwnit-drone__empty">No fittings installed.</li>{{/each}}
+  </ol>
+  {{#if editable}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="shipFitting" data-system.type="drone"><i class="fa-solid fa-plus"></i> New Fitting</button>{{/if}}
+
+  <div class="cwnit-drone__section-heading cwnit-drone__subheading"><div><p>Vehicle-grade Items</p><h2>Defensive Systems</h2></div></div>
+  <ol class="cwnit-drone__fitting-list">
+    {{#each cwnit.defenses as |defense|}}
+      <li class="item" data-item-id="{{defense.item._id}}" data-document-class="Item" data-drag="true"><img src="{{defense.item.img}}" alt="" /><div><header><h3>{{defense.item.name}}</h3><span>{{defense.capacity}} fitting · {{defense.power}} power</span></header><p>{{defense.summary}}</p></div><div class="cwnit-drone__item-controls"><button type="button" data-action="viewDoc"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>{{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
+    {{else}}<li class="cwnit-drone__empty">No defensive systems installed.</li>{{/each}}
+  </ol>
+  {{#if editable}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="shipDefense" data-system.type="drone"><i class="fa-solid fa-plus"></i> New Defensive System</button>{{/if}}
+</section>

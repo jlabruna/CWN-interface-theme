@@ -22,6 +22,10 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Adds an optional **CWN NPC Sheet** for SWNR NPC actors. It is a compact,
   dark tactical workspace with native attacks, reloads, inventory, cyberware,
   features, powers, effects, biography, notes, drag/drop, and item management.
+- Adds an optional **CWN Drone Operations Sheet** for SWNR Drone actors. It
+  presents live control declarations, the native linked pilot, mounted
+  weapons, Command Deck actions, fittings, cargo, configuration, effects, and
+  notes without replacing SWNR or Combat Enhancements mechanics.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -35,22 +39,24 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.6.4.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.7.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
 
-Open an SWNR character or NPC, choose **Sheet Configuration** from the sheet
-header, and select **CWN Character Sheet** or **CWN NPC Sheet**. Native SWNR
-sheets remain registered and remain the defaults unless a user explicitly
-changes an individual actor's sheet.
+Open an SWNR character, NPC, or Drone, choose **Sheet Configuration** from the
+sheet header, and select **CWN Character Sheet**, **CWN NPC Sheet**, or **CWN
+Drone Operations Sheet**. Native SWNR sheets remain registered and remain the
+defaults unless a user explicitly changes an individual actor's sheet.
 
-The alternative sheet subclasses SWNR's supported runtime sheet export and
-uses SWNR's own item-roll, reload, form-update, drag/drop, and document actions.
-It adds no actor fields, migration, or game-rule automation. Linked cyberdecks
-are read from SWNR's existing direct actor links. Linked drones are deferred
-because SWNR stores that relationship on the drone and a sheet-wide reverse
-world scan would be unsafe and unnecessarily expensive.
+The Character and NPC alternatives subclass SWNR's supported actor-sheet
+export. The Drone alternative subclasses SWNR's registered native vehicle
+sheet class. All three use SWNR's own item-roll, reload, form-update,
+drag/drop, and document actions. They add no actor fields, migrations, or
+game-rule automation. Linked cyberdecks are read from SWNR's existing direct
+actor links. Linked drones are deferred on the Character sheet because SWNR
+stores that relationship on the drone and a sheet-wide reverse world scan
+would be unsafe and unnecessarily expensive.
 
 ## Compatibility design
 
@@ -71,6 +77,20 @@ options such as Total Defense, Fighting Withdrawal, Hold an Action, and
 Execution Attack create clear chat declarations only; they do not alter rules
 state automatically.
 
+## Drone-sheet action design
+
+The Drone Operations sheet subclasses SWNR's registered native vehicle sheet.
+Attack and Reload buttons call the native Item actions, preserving Combat
+Enhancements' current weapon-roll augmentation when that module is active.
+Pilot assignment uses SWNR's native Actor-drop relationship and side effects;
+the picker only filters the candidates shown to the current user.
+
+Deploy, direct-control, and autonomous Command Deck buttons are concise chat
+declarations. They do not place Tokens, consume actions, move drones, execute
+autonomous attacks, monitor scenes, or store a second control-state model.
+Follow, Kill, Patrol, and Watch appear only for exact canonical native fitting
+names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
+
 ## Known limitations
 
 - Initial styling is focused on system-generated chat cards.
@@ -86,8 +106,24 @@ state automatically.
 - Direct System Strain management is deferred to a later character-sheet
   release. The current header remains display-only and native Rest & Recover
   remains available.
+- SWNR's native drone-pilot unlink workflow does not remove the generic Drone
+  Item it created on the old pilot; the native sheet already asks users to
+  remove that Item manually, and the alternative sheet preserves that behavior.
+- Drone command buttons are declaration-only. Automated Token placement,
+  autonomous AI, Watch detection, and Patrol waypoints remain intentionally
+  out of scope.
 
 ## Changes
+
+### 0.7.0
+
+- Added a selectable, non-default CWN Drone Operations Sheet with five focused
+  tabs: Operations, Fittings, Cargo, Configuration, and Notes.
+- Preserved native SWNR pilot linking, weapon rolls, reloads, fitting and cargo
+  drag/drop, item management, form fields, Active Effects, and rich-text notes.
+- Added themed deployment/direct-control declarations and contextual Command
+  Deck actions without introducing a new rules or state engine.
+- Added v0.7.0 release staging, workflow checks, and Drone-sheet regressions.
 
 ### 0.6.4
 

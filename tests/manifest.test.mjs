@@ -7,14 +7,14 @@ const manifest = JSON.parse(
 );
 
 test("manifest targets Foundry V14 and SWNR 2.3.1", () => {
-  assert.equal(manifest.version, "0.6.4");
+  assert.equal(manifest.version, "0.7.0");
   assert.equal(manifest.compatibility.verified, "14.365");
   assert.equal(manifest.compatibility.maximum, undefined);
   const swnr = manifest.relationships.systems.find((entry) => entry.id === "swnr");
   assert.equal(swnr.compatibility.minimum, "2.3.1");
   assert.equal(swnr.compatibility.verified, "2.3.1");
-  assert.deepEqual(manifest.esmodules, ["scripts/cwn-interface-theme-v064.mjs"]);
-  assert.deepEqual(manifest.styles, ["styles/cwn-interface-theme-v064.css"]);
+  assert.deepEqual(manifest.esmodules, ["scripts/cwn-interface-theme-v070.mjs"]);
+  assert.deepEqual(manifest.styles, ["styles/cwn-interface-theme-v070.css"]);
 });
 
 test("download URL matches the manifest version", () => {

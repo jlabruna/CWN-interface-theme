@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.7.0
+
+- Added an optional, non-default **CWN Drone Operations Sheet** for SWNR
+  `drone` Actors, while keeping the native SWNR vehicle sheet available.
+- Built a dense operations console with pilot identity, native drone vitals,
+  SWNR-derived fitting/hardpoint capacity, mounted weapon cards, and native
+  Attack, Reload, item, effect, form, and drag/drop actions.
+- Added an OWNER-filtered pilot picker that delegates linking, changing, and
+  unlinking to SWNR's native pilot workflows; native Actor drag/drop remains
+  supported.
+- Added declaration-only Deploy, Assume Command, Drop Control, and Halt
+  Autonomous Mode chat cards without introducing Theme-owned control state.
+- Added contextual Follow, Kill, Patrol, and Watch controls only when their
+  exact native Command Deck fittings are installed. Commands record targets or
+  instructions in themed chat cards without automating AI, movement, attacks,
+  or scene monitoring.
+- Added Fittings, Cargo, Configuration, and Notes workspaces, including native
+  fitting/defense Items, full low-frequency Drone fields, Active Effects, and
+  SWNR rich-text descriptions and modification notes.
+- Added cache-busted v0.7.0 runtime and stylesheet, release staging, workflow
+  verification, and Drone-sheet compatibility and safety tests.
+
 ## 0.6.4
 
 - Replaced the character sheet's generic AC header cell with explicit Ranged

@@ -1,0 +1,9 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="cargo">
+  <div class="cwnit-drone__section-heading"><div><p>Onboard Logistics</p><h2>Cargo</h2></div>{{#if editable}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="item"><i class="fa-solid fa-plus"></i> New Item</button>{{/if}}</div>
+  <p class="cwnit-drone__hint">This is the drone's native carried gear. Drag Items here to add them; weapon and Item mechanics remain controlled by SWNR.</p>
+  <ol class="cwnit-drone__cargo-list">
+    {{#each cwnit.cargoItems as |item|}}
+      <li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true"><button type="button" data-action="roll" data-roll-type="item"><img src="{{item.img}}" alt="" /></button><strong>{{item.name}}</strong><span>{{item.type}}</span><span>Qty {{#if item.system.quantity}}{{item.system.quantity}}{{else}}1{{/if}}</span><span>Enc {{item.system.encumbrance}}</span><div><button type="button" data-action="viewDoc"><i class="fa-solid fa-pen-to-square"></i></button>{{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
+    {{else}}<li class="cwnit-drone__empty">No cargo carried.</li>{{/each}}
+  </ol>
+</section>

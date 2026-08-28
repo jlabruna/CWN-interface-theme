@@ -1,0 +1,30 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="operations">
+  <div class="cwnit-drone__section-heading"><div><p>{{localize "CWNIT.Sheet.Drone.OperationsOverline"}}</p><h2>{{localize "CWNIT.Sheet.Drone.DroneControl"}}</h2></div></div>
+  <section class="cwnit-drone__control-console">
+    <button type="button" class="cwnit-drone__deploy" data-action="declareDroneAction" data-action-key="deploy"><i class="fa-solid fa-power-off"></i><span>Deploy Drone<small>{{#if cwnit.quickLaunch}}On Turn · Quick Launch{{else}}Main Action{{/if}}</small></span></button>
+    <button type="button" data-action="declareDroneAction" data-action-key="assume"><i class="fa-solid fa-tower-broadcast"></i><span>Assume Command<small>Main + Move</small></span></button>
+    <button type="button" data-action="declareDroneAction" data-action-key="drop"><i class="fa-solid fa-link-slash"></i><span>Drop Control<small>On Turn</small></span></button>
+    <p>Operational declarations post to chat. The sheet does not invent or track a separate drone-control state.</p>
+  </section>
+
+  {{#if cwnit.hasAutonomousCommands}}
+    <div class="cwnit-drone__section-heading"><div><p>Installed Command Deck</p><h2>Autonomous Commands</h2></div><button type="button" data-action="declareDroneAction" data-action-key="halt"><i class="fa-solid fa-stop"></i> Halt Autonomous Mode · On Turn</button></div>
+    <div class="cwnit-drone__command-grid">
+      {{#if cwnit.commandDeck.kill}}<article class="cwnit-drone__command-card"><header><i class="fa-solid fa-crosshairs"></i><div><h3>Kill</h3><small>Main Action</small></div></header><p>Order the drone to attack the currently targeted visible Token.</p><button type="button" data-action="issueAutonomousCommand" data-command="kill">Issue Kill Order</button></article>{{/if}}
+      {{#if cwnit.commandDeck.follow}}<article class="cwnit-drone__command-card"><header><i class="fa-solid fa-person-walking-arrow-right"></i><div><h3>Follow</h3><small>Main Action</small></div></header><p>Follow the currently targeted visible Token.</p><div class="cwnit-drone__command-fields"><input type="text" data-cwnit-follow-distance placeholder="Distance" maxlength="40" /><select data-cwnit-follow-speed><option>Half speed</option><option>Full speed</option></select></div><button type="button" data-action="issueAutonomousCommand" data-command="follow">Issue Follow Order</button></article>{{/if}}
+      {{#if cwnit.commandDeck.watch}}<article class="cwnit-drone__command-card"><header><i class="fa-solid fa-eye"></i><div><h3>Watch</h3><small>Main Action</small></div></header><p>Give roughly one sentence of subjects or conditions to watch for.</p><textarea data-cwnit-command-instruction maxlength="220" placeholder="Alert me if anyone enters the warehouse."></textarea><button type="button" data-action="issueAutonomousCommand" data-command="watch">Issue Watch Order</button></article>{{/if}}
+      {{#if cwnit.commandDeck.patrol}}<article class="cwnit-drone__command-card"><header><i class="fa-solid fa-route"></i><div><h3>Patrol</h3><small>Main Action</small></div></header><p>Record the route, schedule, waypoints, or loiter instructions.</p><textarea data-cwnit-command-instruction maxlength="300" placeholder="Loading bay → stairwell → loading bay"></textarea><button type="button" data-action="issueAutonomousCommand" data-command="patrol">Issue Patrol Order</button></article>{{/if}}
+    </div>
+  {{/if}}
+
+  <div class="cwnit-drone__section-heading"><div><p>Mounted Systems</p><h2>Weapons</h2></div></div>
+  <ol class="cwnit-drone__weapon-grid">
+    {{#each cwnit.weapons as |weapon|}}
+      <li class="cwnit-drone__weapon item" data-item-id="{{weapon.item._id}}" data-document-class="Item" data-drag="true">
+        <header><button type="button" data-action="roll" data-roll-type="item"><img src="{{weapon.item.img}}" alt="" /></button><div><h3>{{weapon.item.name}}</h3><span>{{weapon.classification}} · {{weapon.mode}}</span></div><button type="button" data-action="viewDoc" title="Open Item"><i class="fa-solid fa-pen-to-square"></i></button></header>
+        <dl><div><dt>Damage</dt><dd>{{weapon.damage}}</dd></div><div><dt>Ammo</dt><dd>{{weapon.ammo}}</dd></div><div><dt>Range</dt><dd>{{weapon.range}}</dd></div><div><dt>Shock</dt><dd>{{weapon.shock}}</dd></div><div><dt>Trauma</dt><dd>{{weapon.trauma}}</dd></div><div><dt>Hardpoints</dt><dd>{{weapon.hardpoints}}</dd></div></dl>
+        <footer><button type="button" data-action="roll" data-roll-type="item"><i class="fa-solid fa-crosshairs"></i> Attack</button>{{#if weapon.canReload}}<button type="button" data-action="reload"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>{{/if}}</footer>
+      </li>
+    {{else}}<li class="cwnit-drone__empty">No mounted weapons. Drop a native SWNR Weapon or Ship Weapon Item onto the sheet.</li>{{/each}}
+  </ol>
+</section>

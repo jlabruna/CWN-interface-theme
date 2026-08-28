@@ -1,0 +1,7 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="notes">
+  <div class="cwnit-drone__section-heading"><div><p>Platform Record</p><h2>Notes &amp; Modifications</h2></div></div>
+  <div class="cwnit-drone__notes-grid">
+    <section><h3>Description &amp; Lore</h3>{{#if editable}}<prose-mirror name="system.description" data-document-u-u-i-d="{{actor.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">{{{enrichedDescription}}}</prose-mirror>{{else}}<div class="editor-content">{{{enrichedDescription}}}</div>{{/if}}</section>
+    <section><h3>Modifications &amp; Workshop Notes</h3>{{#if editable}}<prose-mirror name="system.mods" data-document-u-u-i-d="{{actor.uuid}}" value="{{system.mods}}" collaborate="true" toggled="true">{{{enrichedMods}}}</prose-mirror>{{else}}<div class="editor-content">{{{enrichedMods}}}</div>{{/if}}</section>
+  </div>
+</section>

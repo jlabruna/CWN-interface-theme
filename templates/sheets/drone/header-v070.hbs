@@ -1,0 +1,39 @@
+<div class="cwnit-drone__masthead">
+  <header class="cwnit-drone__header">
+    <div class="cwnit-drone__portrait">
+      <img src="{{actor.img}}" alt="{{actor.name}}" data-action="onEditImage" data-edit="img" />
+    </div>
+    <div class="cwnit-drone__identity">
+      <p class="cwnit-drone__eyebrow">{{localize "CWNIT.Sheet.Drone.Eyebrow"}}</p>
+      <input class="cwnit-drone__name" name="name" type="text" value="{{actor.name}}" />
+      <p class="cwnit-drone__model">{{cwnit.modelLabel}}</p>
+      <div class="cwnit-drone__capacity-summary">
+        <span>Fittings <b>{{cwnit.fittingUsage.used}} / {{cwnit.fittingUsage.maximum}}</b></span>
+        <span>Hardpoints <b>{{cwnit.hardpointUsage.used}} / {{cwnit.hardpointUsage.maximum}}</b></span>
+      </div>
+    </div>
+    <section class="cwnit-drone__pilot" aria-label="{{localize 'CWNIT.Sheet.Drone.Pilot'}}">
+      <small>{{localize "CWNIT.Sheet.Drone.Pilot"}}</small>
+      {{#if cwnit.pilot}}
+        <strong>{{cwnit.pilot.name}}</strong>
+        <div>
+          <button type="button" data-action="pilotShow"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</button>
+          {{#if editable}}<button type="button" data-action="assignPilot"><i class="fa-solid fa-repeat"></i> Change</button><button type="button" data-action="pilotDelete"><i class="fa-solid fa-link-slash"></i> Unlink</button>{{/if}}
+        </div>
+      {{else}}
+        <strong class="is-empty">{{localize "CWNIT.Sheet.Drone.NoPilot"}}</strong>
+        {{#if editable}}<button type="button" data-action="assignPilot"><i class="fa-solid fa-user-plus"></i> {{localize "CWNIT.Sheet.Drone.AssignPilot"}}</button>{{/if}}
+      {{/if}}
+      <em>Character and NPC Actors can also be dropped here.</em>
+    </section>
+  </header>
+  <section class="cwnit-drone__vitals">
+    <label><span>HP</span><input name="system.health.value" type="number" value="{{system.health.value}}" /><b>/</b><input name="system.health.max" type="number" value="{{system.health.max}}" /></label>
+    <div><span>AC</span><strong>{{system.ac}}</strong></div>
+    <div><span>Trauma Target</span><strong>{{system.traumaTarget}}</strong></div>
+    <div><span>Move</span><strong>{{system.speed}} m</strong></div>
+    <div><span>Move Type</span><strong>{{system.moveType}}</strong></div>
+    <div><span>Range</span><strong>{{system.range}}</strong></div>
+    <div><span>Armor</span><strong>{{system.armor.value}} / {{system.armor.max}}</strong></div>
+  </section>
+</div>

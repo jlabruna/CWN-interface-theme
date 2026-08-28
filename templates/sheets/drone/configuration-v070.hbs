@@ -1,0 +1,28 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="configuration">
+  <div class="cwnit-drone__section-heading"><div><p>Workshop Access</p><h2>Configuration</h2></div></div>
+  <p class="cwnit-drone__hint">These are SWNR's native Drone fields. Changing Model may trigger SWNR's native default-stat prompt.</p>
+  <div class="cwnit-drone__config-grid">
+    <label><span>Model</span>{{formInput systemFields.model value=system.model localize=true}}</label>
+    {{#if (eq system.model "custom")}}<label><span>Custom Model</span><input name="system.customModel" type="text" value="{{system.customModel}}" /></label>{{/if}}
+    <label><span>Tech Level</span><input name="system.tl" type="number" value="{{system.tl}}" /></label>
+    <label><span>Cost</span><input name="system.cost" type="number" value="{{system.cost}}" /></label>
+    <label><span>Encumbrance</span><input name="system.enc" type="number" value="{{system.enc}}" /></label>
+    <label><span>Armor Class</span><input name="system.ac" type="number" value="{{system.ac}}" /></label>
+    <label><span>Trauma Target</span><input name="system.traumaTarget" type="number" value="{{system.traumaTarget}}" /></label>
+    <label><span>Move</span><input name="system.speed" type="number" value="{{system.speed}}" /></label>
+    <label><span>Move Type</span><input name="system.moveType" type="text" value="{{system.moveType}}" /></label>
+    <label><span>Control Range</span><input name="system.range" type="text" value="{{system.range}}" /></label>
+    <label><span>Fitting Capacity</span><input name="system.fittings.max" type="number" value="{{system.fittings.max}}" /></label>
+    <label><span>Hardpoints</span><input name="system.hardpoints.max" type="number" value="{{system.hardpoints.max}}" /></label>
+    <label><span>Power Capacity</span><input name="system.power.max" type="number" value="{{system.power.max}}" /></label>
+    <label><span>Armor Current</span><input name="system.armor.value" type="number" value="{{system.armor.value}}" /></label>
+    <label><span>Armor Maximum</span><input name="system.armor.max" type="number" value="{{system.armor.max}}" /></label>
+  </div>
+
+  <div class="cwnit-drone__section-heading cwnit-drone__subheading"><div><p>Actor &amp; Item Effects</p><h2>Effects</h2></div>{{#if editable}}<button type="button" data-action="createDoc" data-document-class="ActiveEffect" data-origin="{{actor.uuid}}" data-img="icons/svg/aura.svg"><i class="fa-solid fa-plus"></i> Add Effect</button>{{/if}}</div>
+  <ol class="cwnit-drone__effect-list">
+    {{#each cwnit.effects as |entry|}}
+      <li class="effect" data-effect-id="{{entry.effect.id}}" data-parent-id="{{entry.parentId}}" data-document-class="ActiveEffect" data-drag="true"><img src="{{entry.effect.img}}" alt="" /><strong>{{entry.effect.name}}</strong><span>{{entry.source}}</span><span>{{entry.duration}}</span><div>{{#if @root.editable}}<button type="button" data-action="toggleEffect" title="Toggle Effect"><i class="fa-solid {{#if entry.effect.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></button>{{/if}}<button type="button" data-action="viewDoc"><i class="fa-solid fa-pen-to-square"></i></button>{{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
+    {{else}}<li class="cwnit-drone__empty">No effects are currently present.</li>{{/each}}
+  </ol>
+</section>
