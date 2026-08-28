@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.3
+
+- Moved Drone-sheet registration to Foundry's `ready` phase after a live
+  console registration proved the native SWNR vehicle class and adapter work
+  once the registered-sheet list is populated.
+- Replaced the setup-phase regression with coverage requiring Drone
+  registration only during `ready`.
+- Kept the v0.7.3 browser upload to ten visible hotfix files.
+
 ## 0.7.2
 
 - Fixed Drone-sheet registration ordering by waiting until Foundry's `setup`

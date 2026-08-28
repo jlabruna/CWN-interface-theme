@@ -39,7 +39,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.7.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.7.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -114,6 +114,14 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   out of scope.
 
 ## Changes
+
+### 0.7.3
+
+- Registers the optional Drone Operations Sheet during Foundry's `ready`
+  phase, matching the lifecycle point proven by live console registration.
+- Keeps Character and NPC registration unchanged while avoiding the premature
+  Drone API warning from `init` and `setup`.
+- Includes lifecycle regression coverage and a ten-file browser hotfix upload.
 
 ### 0.7.2
 
