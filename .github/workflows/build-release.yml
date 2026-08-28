@@ -31,14 +31,16 @@ jobs:
           cp module.json ../module.json
           unzip -t ../cwn-interface-theme-${GITHUB_REF_NAME}.zip
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "module.json"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v073.mjs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-character-sheet-v064.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v080.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-character-sheet-v080.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-npc-sheet-v062.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-drone-sheet-v073.mjs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "styles/cwn-interface-theme-v070.css"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/header-v064.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "styles/cwn-interface-theme-v080.css"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/header-v080.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/combat-v064.hbs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/actions-v063.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/actions-v080.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/features-v080.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/inventory-v080.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/npc/combat-v062.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/drone/operations-v070.hbs"
       - name: Upload workflow artifact
@@ -46,12 +48,12 @@ jobs:
         with:
           name: cwn-interface-theme-${{ github.ref_name }}
           path: |
-            release/cwn-interface-theme-${GITHUB_REF_NAME}.zip
+            release/cwn-interface-theme-${{ github.ref_name }}.zip
             release/module.json
       - name: Attach files to GitHub release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            release/cwn-interface-theme-${GITHUB_REF_NAME}.zip
+            release/cwn-interface-theme-${{ github.ref_name }}.zip
             release/module.json
