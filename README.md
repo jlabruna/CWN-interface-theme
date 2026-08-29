@@ -43,7 +43,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.9.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.9.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

@@ -7,11 +7,11 @@ import {
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
   skillRankTier,
-} from "../scripts/sheets/cwn-character-sheet-v090.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v091.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v090.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v090.mjs", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v091.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v091.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v090.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v090", features: "v081", actions: "v080" };
@@ -89,7 +89,7 @@ test("native SWNR contracts remain the mechanical item executors", () => {
   }
 });
 
-test("character initiative joins the active combat and rolls the combatant", async () => {
+test("character initiative joins combat and passes the actor-native formula for every user", async () => {
   class FakeSwnrSheet {}
   const registered = [];
   const runtime = {
@@ -98,21 +98,29 @@ test("character initiative joins the active combat and rolls the combatant", asy
   };
   const SheetClass = registerCwnCharacterSheet(runtime);
   const rolled = [];
-  const actor = { id: "actor-1" };
+  const actor = {
+    id: "actor-1",
+    rollInitiative() {
+      return { formula: "2d8kh1 + @stats.dex.mod + 2" };
+    },
+  };
   const token = { actor, document: { id: "token-1" } };
   const combatant = { id: "combatant-1", tokenId: "token-1" };
   globalThis.canvas = { scene: { id: "scene-1" }, tokens: { controlled: [token], placeables: [token] } };
   globalThis.game = {
     combat: {
       combatants: { find: () => combatant },
-      async rollInitiative(ids) { rolled.push(ids); },
+      async rollInitiative(ids, options) { rolled.push({ ids, options }); },
     },
   };
   await SheetClass.DEFAULT_OPTIONS.actions.rollInitiative.call(
     { actor },
     { preventDefault() {} },
   );
-  assert.deepEqual(rolled, [["combatant-1"]]);
+  assert.deepEqual(rolled, [{
+    ids: ["combatant-1"],
+    options: { formula: "2d8kh1 + @stats.dex.mod + 2" },
+  }]);
   delete globalThis.canvas;
   delete globalThis.game;
   assert.equal(registered[0], SheetClass);

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.1
+
+- Fixed actor-specific initiative advantage and initiative modifiers for
+  player-owned Characters by passing SWNR's native actor initiative formula
+  into the Combat roll regardless of whether the GM or owning player presses
+  the sheet button.
+
 ## 0.9.0
 
 - Replaced editable Character account balance fields with a compact read-only
