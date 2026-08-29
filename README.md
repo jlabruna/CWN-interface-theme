@@ -43,7 +43,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.9.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.9.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -105,11 +105,17 @@ Enhancements' current weapon-roll augmentation when that module is active.
 Pilot assignment uses SWNR's native Actor-drop relationship and side effects;
 the picker only filters the candidates shown to the current user.
 
-Deploy, direct-control, and autonomous Command Deck buttons are concise chat
-declarations. They do not place Tokens, consume actions, move drones, execute
-autonomous attacks, monitor scenes, or store a second control-state model.
+Deploy Drone stores one module flag on the Drone Actor so the sheet can show
+whether it is packed or deployed; clicking it again records the Main Action to
+pack the drone. Direct-control and autonomous Command Deck buttons remain
+concise chat declarations. They do not place or remove Tokens, consume actions,
+move drones, execute autonomous attacks, monitor scenes, or store a parallel
+active-control model.
 Follow, Kill, Patrol, and Watch appear only for exact canonical native fitting
 names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
+Cargo reads native weapon-ammo and consumable-ammunition fields to show rounds
+remaining. Fitting additions respect SWNR's derived capacity; a GM may confirm
+an over-capacity custom build, while the sheet never removes existing Items.
 
 ## Known limitations
 
@@ -135,6 +141,16 @@ names because SWNR 2.3.1 does not provide a structured Command Deck subtype.
   out of scope.
 
 ## Changes
+
+### 0.9.2
+
+- Adds a persistent Deploy Drone / Pack Drone toggle with matching rules cards
+  and clearer Drop Control guidance.
+- Shows native remaining rounds for magazines and other ammunition in Cargo.
+- Enforces fitting capacity for players, provides a GM custom-build override,
+  and highlights existing over-capacity drones without deleting anything.
+- Hides the empty ship-defense creator while preserving existing legacy or
+  custom defensive Items.
 
 ### 0.8.1
 

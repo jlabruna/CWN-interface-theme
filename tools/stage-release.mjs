@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.9.1");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.9.1");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.9.2");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.9.2");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.9.1") {
-  throw new Error(`Expected module version 0.9.1 but found ${manifest.version}.`);
+if (manifest.version !== "0.9.2") {
+  throw new Error(`Expected module version 0.9.2 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -42,14 +42,13 @@ const browserReleaseFiles = [
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v091.mjs",
-  "scripts/sheets/cwn-character-sheet-v091.mjs",
-  "scripts/sheets/cwn-account-ledger-v090.mjs",
-  "styles/cwn-interface-theme-v090.css",
-  "templates/sheets/character/inventory-v090.hbs",
-  "templates/dialogs/account-ledger-v090.hbs",
-  "tests/account-ledger.test.mjs",
-  "tests/character-sheet.test.mjs",
+  "scripts/cwn-interface-theme-v092.mjs",
+  "scripts/sheets/cwn-drone-sheet-v092.mjs",
+  "styles/cwn-interface-theme-v092.css",
+  "templates/sheets/drone/operations-v092.hbs",
+  "templates/sheets/drone/fittings-v092.hbs",
+  "templates/sheets/drone/cargo-v092.hbs",
+  "tests/drone-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tools/stage-release.mjs",
 ];

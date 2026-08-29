@@ -4,22 +4,26 @@ import test from "node:test";
 
 import {
   COMMAND_DECK_NAMES,
+  DRONE_DEPLOYED_FLAG,
   DRONE_SHEET_LABEL,
+  checkFittingCapacity,
   createCwnDroneSheetClass,
   eligiblePilotActors,
   hasCanonicalFitting,
+  isDroneDeployed,
   prepareDroneSheetContext,
   registerCwnDroneSheet,
   resolveSwnrVehicleSheet,
-} from "../scripts/sheets/cwn-drone-sheet-v073.mjs";
+} from "../scripts/sheets/cwn-drone-sheet-v092.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v073.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v073.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v092.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v092.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v092.css", import.meta.url), "utf8");
 const templateNames = ["header", "operations", "fittings", "cargo", "configuration", "notes"];
+const templateVersions = { operations: "v092", fittings: "v092", cargo: "v092" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
-  await fs.readFile(new URL(`../templates/sheets/drone/${name}-v070.hbs`, import.meta.url), "utf8"),
+  await fs.readFile(new URL(`../templates/sheets/drone/${name}-${templateVersions[name] ?? "v070"}.hbs`, import.meta.url), "utf8"),
 ])));
 
 function countTopLevelElements(template) {
@@ -57,6 +61,11 @@ function actorFixture() {
     shock: { dmg: 0, ac: 0 },
     trauma: { die: "1d8", rating: 2 },
   });
+  const magazine = item("magazine", "item", "Combat Rifle Magazine", {
+    quantity: 1,
+    encumbrance: 0,
+    uses: { ammo: "ammo", consumable: "use", value: 11, max: 20 },
+  });
   const actor = {
     id: "drone-1",
     name: "Hummingbird",
@@ -68,11 +77,19 @@ function actorFixture() {
       customModel: "VC-14 Hummingbird",
       fittings: { value: 1, max: 3 },
       hardpoints: { value: 0, max: 1 },
-      carriedGear: [weapon],
+      carriedGear: [weapon, magazine],
     },
-    items: [weapon, ...fittings],
-    itemTypes: { shipFitting: fittings, shipDefense: [], shipWeapon: [], weapon: [weapon] },
+    flags: {},
+    items: [weapon, magazine, ...fittings],
+    itemTypes: { shipFitting: fittings, shipDefense: [], shipWeapon: [], weapon: [weapon], item: [magazine] },
     allApplicableEffects: () => [],
+    getFlag(scope, key) {
+      return this.flags[scope]?.[key];
+    },
+    async setFlag(scope, key, value) {
+      this.flags[scope] ??= {};
+      this.flags[scope][key] = value;
+    },
   };
   return actor;
 }
@@ -134,11 +151,42 @@ test("context uses native pilot, capacity, weapon, cargo, and fitting data witho
   assert.deepEqual(context.hardpointUsage, { maximum: 1, remaining: 0, used: 1 });
   assert.equal(context.weapons[0].ammo, "8/15");
   assert.equal(context.weapons[0].damage, "1d6");
-  assert.equal(context.cargoItems[0].id, "weapon");
+  const cargoWeapon = context.cargoItems.find((entry) => entry.item.id === "weapon");
+  const cargoMagazine = context.cargoItems.find((entry) => entry.item.id === "magazine");
+  assert.equal(cargoWeapon.ammo.label, "8/15");
+  assert.equal(cargoMagazine.ammo.label, "11/20");
+  assert.equal(cargoMagazine.ammo.empty, false);
   assert.equal(context.commandDeck.kill, true);
   assert.equal(context.commandDeck.follow, false);
   assert.equal(context.quickLaunch, true);
+  assert.equal(context.deployed, false);
+  assert.equal(context.hasDefenses, false);
+  assert.equal(context.fittingOverCapacity, false);
   assert.equal(JSON.stringify(actor), before);
+});
+
+test("native magazine uses are shown as remaining rounds, including empty magazines", () => {
+  const actor = actorFixture();
+  const magazine = actor.system.carriedGear.find((entry) => entry.id === "magazine");
+  magazine.system.uses.value = 0;
+  const context = prepareDroneSheetContext(actor);
+  const cargo = context.cargoItems.find((entry) => entry.item.id === "magazine");
+  assert.deepEqual(cargo.ammo, { empty: true, label: "0/20 · Empty" });
+  assert.match(templates.cargo, /Rounds \{\{cargo\.ammo\.label\}\}/u);
+});
+
+test("fitting capacity uses SWNR's native remaining value and allows only a GM override", () => {
+  const actor = actorFixture();
+  const tooLarge = item("large", "shipFitting", "Large Fitting", { mass: 2 });
+  assert.deepEqual(checkFittingCapacity(actor, tooLarge, { isGM: false }), {
+    added: 2,
+    remaining: 1,
+    projected: -1,
+    exceeded: true,
+    canOverride: false,
+  });
+  assert.equal(checkFittingCapacity(actor, tooLarge, { isGM: true }).canOverride, true);
+  assert.equal(checkFittingCapacity(actor, item("cargo", "item", "Cargo"), { isGM: false }).exceeded, false);
 });
 
 test("Command Deck controls use canonical fitting names rather than parsing prose", () => {
@@ -172,6 +220,8 @@ test("operations delegates attacks and reloads to native Item actions", () => {
   assert.match(templates.operations, /data-action="reload"/u);
   assert.match(templates.operations, /data-document-class="Item" data-drag="true"/u);
   assert.match(templates.fittings, /data-action="createDoc" data-document-class="Item" data-type="shipFitting"/u);
+  assert.doesNotMatch(templates.fittings, /data-type="shipDefense"/u);
+  assert.match(templates.fittings, /\{\{#if cwnit\.hasDefenses\}\}/u);
   assert.match(templates.configuration, /data-document-class="ActiveEffect"/u);
   assert.match(templates.configuration, /data-action="toggleEffect"/u);
   assert.match(templates.cargo, /data-action="createDoc" data-document-class="Item"/u);
@@ -184,7 +234,7 @@ test("pilot assignment delegates linking and unlinking to native SWNR paths", ()
   assert.doesNotMatch(source, /"system\.crewMembers"\s*:/u);
 });
 
-test("deploy and autonomous actions are declaration-only themed chat cards", async () => {
+test("deploy toggles persistent packed state and control actions remain themed declarations", async () => {
   class FakeVehicleSheet {
     static DEFAULT_OPTIONS = { actions: {} };
   }
@@ -204,6 +254,13 @@ test("deploy and autonomous actions are declaration-only themed chat cards", asy
       { preventDefault() {} },
       { dataset: { actionKey: "deploy" } },
     );
+    assert.equal(isDroneDeployed(actor), true);
+    await SheetClass.DEFAULT_OPTIONS.actions.declareDroneAction.call(
+      { actor },
+      { preventDefault() {} },
+      { dataset: { actionKey: "deploy" } },
+    );
+    assert.equal(isDroneDeployed(actor), false);
     await SheetClass.DEFAULT_OPTIONS.actions.issueAutonomousCommand.call(
       { actor },
       { preventDefault() {} },
@@ -213,12 +270,68 @@ test("deploy and autonomous actions are declaration-only themed chat cards", asy
     globalThis.ChatMessage = previousChatMessage;
     globalThis.game = previousGame;
   }
-  assert.equal(created.length, 2);
+  assert.equal(created.length, 3);
   assert.match(created[0].content, /On Turn \(Quick Launch fitting\)/u);
-  assert.match(created[0].content, /no token was placed/iu);
-  assert.match(created[1].content, /Target Token/u);
-  assert.match(created[1].content, /does not automate movement, attacks, perception, or autonomous state/u);
+  assert.match(created[0].content, /marked deployed/iu);
+  assert.match(created[1].content, /Pack Hummingbird/u);
+  assert.match(created[1].content, /marked packed/iu);
+  assert.match(created[2].content, /Target Token/u);
+  assert.match(created[2].content, /does not automate movement, attacks, perception, or autonomous state/u);
   assert.ok(created.every((entry) => entry.content.includes("cwnit-drone-command")));
+});
+
+test("Drop Control explains that deployment and pilot links remain unchanged", async () => {
+  class FakeVehicleSheet { static DEFAULT_OPTIONS = { actions: {} }; }
+  const SheetClass = createCwnDroneSheetClass(FakeVehicleSheet);
+  const actor = actorFixture();
+  const created = [];
+  const previousChatMessage = globalThis.ChatMessage;
+  globalThis.ChatMessage = { create: async (data) => created.push(data) };
+  try {
+    await SheetClass.DEFAULT_OPTIONS.actions.declareDroneAction.call(
+      { actor },
+      { preventDefault() {} },
+      { dataset: { actionKey: "drop" } },
+    );
+  } finally {
+    globalThis.ChatMessage = previousChatMessage;
+  }
+  assert.match(created[0].content, /remains deployed but inert/iu);
+  assert.match(created[0].content, /pilot link and deployment state are unchanged/iu);
+});
+
+test("over-capacity drops are blocked for players and require GM confirmation", async () => {
+  class FakeVehicleSheet {
+    static DEFAULT_OPTIONS = { actions: {} };
+    async _onDropItemCreate(itemData) {
+      this.created = itemData;
+      return [itemData];
+    }
+  }
+  const SheetClass = createCwnDroneSheetClass(FakeVehicleSheet);
+  const sheet = new SheetClass();
+  sheet.actor = actorFixture();
+  const large = item("large", "shipFitting", "Large Fitting", { mass: 2 });
+  const warnings = [];
+  const previousGame = globalThis.game;
+  const previousUi = globalThis.ui;
+  const previousFoundry = globalThis.foundry;
+  globalThis.ui = { notifications: { warn: (message) => warnings.push(message) } };
+  try {
+    globalThis.game = { user: { isGM: false } };
+    assert.equal(await sheet._onDropItemCreate(large, {}), false);
+    assert.equal(sheet.created, undefined);
+    assert.match(warnings[0], /Ask the GM/u);
+
+    globalThis.game = { user: { isGM: true } };
+    globalThis.foundry = { applications: { api: { DialogV2: { confirm: async () => true } } } };
+    await sheet._onDropItemCreate(large, {});
+    assert.equal(sheet.created, large);
+  } finally {
+    globalThis.game = previousGame;
+    globalThis.ui = previousUi;
+    globalThis.foundry = previousFoundry;
+  }
 });
 
 test("sheet exposes the requested five tabs and operations is first", () => {
@@ -244,4 +357,8 @@ test("drone styling is isolated, dense, responsive, and themes its chat cards", 
   assert.match(css, /\.cwnit-chat-message \.cwnit-drone-command/u);
   assert.match(css, /\.cwnit-drone-sheet-window prose-mirror/u);
   assert.match(css, /@media \(max-width: 860px\)/u);
+  assert.match(css, /\.cwnit-drone__deployment\.is-deployed/u);
+  assert.match(css, /\.cwnit-drone__capacity-badges \.is-over-capacity/u);
+  assert.match(templates.operations, /Pack Drone/u);
+  assert.equal(DRONE_DEPLOYED_FLAG, "deployed");
 });

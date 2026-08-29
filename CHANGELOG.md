@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.2
+
+- Made Deploy Drone a persistent packed/deployed toggle: deployed drones keep
+  the illuminated control, and a second click posts the Main Action Pack Drone
+  card without placing or removing Tokens or changing the native pilot link.
+- Clarified Drop Control as releasing active control while leaving the drone
+  deployed and inert until command is assumed again.
+- Added native remaining-round displays for magazines and other ammunition
+  Items in Cargo, including an explicit empty state.
+- Enforced SWNR's native drone fitting capacity for new or dropped fittings.
+  Players are blocked when an addition would exceed capacity, while GMs may
+  confirm an override for custom drones; existing over-capacity drones remain
+  intact and are highlighted.
+- Hid the unused Defensive Systems creator for ordinary CWN drones while still
+  displaying and preserving any existing SWNR ship-defense Items for legacy or
+  cross-system compatibility.
+- Added cache-busted v0.9.2 runtime, Drone templates and stylesheet, focused
+  regression coverage, release staging, and workflow verification.
+
 ## 0.9.1
 
 - Fixed actor-specific initiative advantage and initiative modifiers for
