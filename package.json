@@ -1,10 +1,10 @@
 {
   "name": "cwn-interface-theme",
   "private": true,
-  "version": "0.8.1",
+  "version": "0.8.2",
   "type": "module",
   "scripts": {
-    "check": "node --check scripts/cwn-interface-theme-v081.mjs && node --check scripts/sheets/cwn-sheet-shared-v062.mjs && node --check scripts/sheets/cwn-npc-sheet-v062.mjs && node --check scripts/sheets/cwn-character-sheet-v081.mjs && node --check scripts/sheets/cwn-drone-sheet-v073.mjs && node --check tools/stage-release.mjs",
+    "check": "node --check scripts/cwn-interface-theme-v082.mjs && node --check scripts/sheets/cwn-sheet-shared-v062.mjs && node --check scripts/sheets/cwn-npc-sheet-v062.mjs && node --check scripts/sheets/cwn-character-sheet-v082.mjs && node --check scripts/sheets/cwn-drone-sheet-v073.mjs && node --check tools/stage-release.mjs",
     "test": "node --test tests",
     "stage": "node tools/stage-release.mjs",
     "build": "npm run check && npm test && npm run stage"

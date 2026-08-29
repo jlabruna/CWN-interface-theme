@@ -6,14 +6,15 @@ import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
-} from "../scripts/sheets/cwn-character-sheet-v081.mjs";
+  skillRankTier,
+} from "../scripts/sheets/cwn-character-sheet-v082.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v081.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v081.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v081.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v082.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v082.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v082.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
-const templateVersions = { header: "v081", combat: "v081", inventory: "v081", features: "v081", actions: "v080" };
+const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v081", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
   await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
@@ -126,6 +127,67 @@ test("skills are compact, lockable, and upgrades produce a chat confirmation", (
   assert.doesNotMatch(source, /rollSkill:\s*this\._onRollSkill/u);
   assert.doesNotMatch(source, /installSkillMessageModeCompat|Object\.defineProperty\(skill/u);
   assert.match(templates.skills, /data-action="rollSkill" data-item-id="\{\{skill\._id\}\}"/u);
+});
+
+test("skill ranks use semantic numeric-only colour tiers", () => {
+  assert.equal(skillRankTier(-1), "untrained");
+  assert.equal(skillRankTier(0), "trained");
+  assert.equal(skillRankTier(1), "professional");
+  assert.equal(skillRankTier(2), "expert");
+  assert.equal(skillRankTier(5), "expert");
+  assert.match(templates.skills, /<b class="cwnit-sheet__skill-level cwnit-sheet__skill-level--\{\{lookup/u);
+  for (const tier of ["untrained", "trained", "professional", "expert"]) {
+    assert.match(css, new RegExp(`--cwnit-skill-rank-${tier}`, "u"));
+    assert.match(css, new RegExp(`cwnit-sheet__skill-level--${tier}`, "u"));
+  }
+  assert.doesNotMatch(templates.skills, /cwnit-sheet__skill-roll[^>]*(?:untrained|trained|professional|expert)/u);
+});
+
+test("Psychic Points follows the native Show Psychic field without hiding skills", () => {
+  assert.match(templates.skills, /\{\{#if system\.tweak\.showPsychic\}\}<label>Psychic Points/u);
+  assert.match(templates.skills, /#each cwnit\.skills as \|skill\|/u);
+  assert.doesNotMatch(source, /skills\.filter\([^)]*showPsychic/su);
+});
+
+test("ordinary rerenders restore the active Character tab scroll position", () => {
+  class FakeSwnrSheet { _onRender() {} }
+  const SheetClass = registerCwnCharacterSheet({
+    swnr: { applications: { SWNActorSheet: FakeSwnrSheet } },
+    foundry: { documents: { collections: { Actors: { registerSheet() {} } } } },
+  });
+  const sheet = new SheetClass();
+  const listeners = {};
+  const scrollContainer = {
+    scrollTop: 0,
+    addEventListener(type, handler) { listeners[type] = handler; },
+  };
+  const tabListeners = {};
+  const combatTab = {
+    dataset: { tab: "combat" },
+    addEventListener(type, handler) { tabListeners[type] = handler; },
+  };
+  sheet.tabGroups = { primary: "skills" };
+  sheet._cwnitScrollPositions = new Map([["skills", 137]]);
+  sheet.element = {
+    querySelector(selector) {
+      return selector === ".cwnit-sheet__body.active" ? scrollContainer : null;
+    },
+    querySelectorAll() { return [combatTab]; },
+  };
+  sheet._onRender({}, {});
+  assert.equal(scrollContainer.scrollTop, 137);
+  scrollContainer.scrollTop = 221;
+  listeners.scroll();
+  assert.equal(sheet._cwnitScrollPositions.get("skills"), 221);
+  tabListeners.click();
+  assert.equal(sheet._cwnitScrollPositions.get("combat"), 0);
+});
+
+test("Character tabs and checkboxes use consistent scoped controls", () => {
+  assert.match(css, /\.cwnit-character-sheet-window nav\.tabs > \[data-tab\]\.active/u);
+  assert.match(css, /input\[type="checkbox"\]/u);
+  assert.match(css, /appearance: auto !important/u);
+  assert.match(css, /accent-color: var\(--cwnit-sheet-secondary\)/u);
 });
 
 test("identity fields are CWN-specific and submit Background only once", () => {
@@ -290,6 +352,35 @@ test("End Scene reports native and CE recovery through one themed summary", asyn
   delete globalThis.game;
   delete globalThis.ChatMessage;
   assert.equal(registered[0], SheetClass);
+});
+
+test("End Scene remains functional when Combat Enhancements is disabled", async () => {
+  class FakeSwnrSheet {
+    async _resetSoak() {
+      this.actor.system.soakTotal.value = this.actor.system.soakTotal.max;
+    }
+  }
+  const SheetClass = registerCwnCharacterSheet({
+    swnr: { applications: { SWNActorSheet: FakeSwnrSheet } },
+    foundry: { documents: { collections: { Actors: { registerSheet() {} } } } },
+  });
+  const actor = { id: "actor-without-ce", system: { soakTotal: { value: 1, max: 4 } } };
+  const messages = [];
+  globalThis.swnr = { utils: { refreshActor: async () => ({ poolsRefreshed: 0, effortReleased: [] }) } };
+  globalThis.game = {};
+  globalThis.ChatMessage = class {
+    static getSpeaker() { return { actor: actor.id }; }
+    static async create(data) { messages.push(data); }
+  };
+  const sheet = new SheetClass();
+  sheet.actor = actor;
+  await SheetClass.DEFAULT_OPTIONS.actions.scene.call(sheet, { preventDefault() {} }, {});
+  assert.equal(messages.length, 1);
+  assert.match(messages[0].content, /Soak:<\/strong> 1\/4 → 4\/4/u);
+  assert.match(messages[0].content, /Scene abilities:<\/strong> none required recovery/u);
+  delete globalThis.swnr;
+  delete globalThis.game;
+  delete globalThis.ChatMessage;
 });
 
 test("System Strain display identifies SWNR usable capacity without rounding or mutation", () => {

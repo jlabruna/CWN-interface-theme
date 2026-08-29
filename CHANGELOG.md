@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.2
+
+- Added semantic, numeric-only Skill rank colours: cyan for untrained (-1),
+  green for trained (+0), magenta for professional (+1), and gold for expert
+  ranks (+2 and higher).
+- Made the Skills summary show Psychic Points only when SWNR's native Show
+  Psychic option is enabled, without hiding or changing any owned Skill Item.
+- Preserved the active Character workspace's vertical scroll position across
+  ordinary actor-update rerenders while keeping deliberate tab changes and new
+  sheet windows at the top.
+- Tightened the Skills summary and row spacing, refined the GM Advanced
+  Configuration layout, normalized checkbox presentation, and made every
+  active bottom tab use the same full-width highlight as Combat.
+- Added a Combat Enhancements-disabled End Scene regression alongside focused
+  coverage for skill tiers, Psychic Points visibility, scroll restoration,
+  tabs, and checkboxes.
+
 ## 0.8.1
 
 - Preserved the open/closed state of Advanced Configuration and the new compact
