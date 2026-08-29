@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.8.3");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.8.3");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.9.0");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.9.0");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.8.3") {
-  throw new Error(`Expected module version 0.8.3 but found ${manifest.version}.`);
+if (manifest.version !== "0.9.0") {
+  throw new Error(`Expected module version 0.9.0 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -42,8 +42,13 @@ const browserReleaseFiles = [
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v083.mjs",
-  "styles/cwn-interface-theme-v083.css",
+  "scripts/cwn-interface-theme-v090.mjs",
+  "scripts/sheets/cwn-character-sheet-v090.mjs",
+  "scripts/sheets/cwn-account-ledger-v090.mjs",
+  "styles/cwn-interface-theme-v090.css",
+  "templates/sheets/character/inventory-v090.hbs",
+  "templates/dialogs/account-ledger-v090.hbs",
+  "tests/account-ledger.test.mjs",
   "tests/character-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tools/stage-release.mjs",

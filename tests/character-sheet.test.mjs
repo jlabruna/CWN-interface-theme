@@ -7,14 +7,14 @@ import {
   CHARACTER_SHEET_LABEL,
   registerCwnCharacterSheet,
   skillRankTier,
-} from "../scripts/sheets/cwn-character-sheet-v082.mjs";
+} from "../scripts/sheets/cwn-character-sheet-v090.mjs";
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v082.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v083.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v083.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v090.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v090.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v090.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
-const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v081", features: "v081", actions: "v080" };
+const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v090", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
   name,
   await fs.readFile(new URL(`../templates/sheets/character/${name}-${templateVersions[name] ?? "v062"}.hbs`, import.meta.url), "utf8"),
@@ -398,14 +398,19 @@ test("System Strain display identifies SWNR usable capacity without rounding or 
   assert.doesNotMatch(source, /Math\.(?:round|floor|ceil).*strain/iu);
 });
 
-test("Inventory renders every native account and delegates account management to SWNR", () => {
-  assert.match(templates.inventory, /system\.credits\.carriedBase/u);
-  assert.match(templates.inventory, /#each system\.credits\.extraCurrencies as \|currency idx\|/u);
-  assert.match(templates.inventory, /data-action="creditChange"/u);
+test("Inventory exposes read-only native balances through the public CE ledger API", () => {
+  assert.match(source, /cwnCombatEnhancements\?\.accounts/u);
+  assert.match(source, /accountLedgerApi\.peek\(actor\)/u);
+  assert.match(templates.inventory, /#each cwnit\.accounts as \|account\|/u);
+  assert.match(templates.inventory, /data-action="openAccountLedger"/u);
+  assert.match(templates.inventory, /data-action="addLedgerAccount"/u);
+  assert.match(templates.inventory, /data-action="editLedgerAccount"/u);
+  assert.match(templates.inventory, /<output class=/u);
+  assert.doesNotMatch(templates.inventory, /data-action="creditChange"/u);
+  assert.doesNotMatch(templates.inventory, /name="system\.credits/u);
+  assert.match(templates.inventory, /Transactions require CWN Combat Enhancements 0\.22\.0/u);
   assert.match(templates.inventory, /data-action="addCurrency"/u);
-  assert.match(templates.inventory, /data-action="editCurrency" data-currency-idx="\{\{idx\}\}"/u);
-  assert.doesNotMatch(source, /extraCurrencies.*(?:update|splice|push)/u);
-  assert.doesNotMatch(templates.inventory, /transaction/iu);
+  assert.match(templates.inventory, /data-action="editCurrency"/u);
 });
 
 test("weapon classification uses Content Pack base weapon then family then mode", () => {

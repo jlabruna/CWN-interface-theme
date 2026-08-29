@@ -1,0 +1,43 @@
+<section class="tab cwnit-sheet__body {{tab.cssClass}}" data-group="primary" data-tab="inventory">
+  <div class="cwnit-sheet__section-heading">
+    <div><p>{{localize "CWNIT.Sheet.Character.LogisticsOverline"}}</p><h2>{{localize "CWNIT.Sheet.Character.Inventory"}}</h2></div>
+  </div>
+
+  <details class="cwnit-sheet__currency cwnit-sheet__accounts cwnit-sheet__accounts-drawer grid grid-5col" {{#if cwnit.accountsOpen}}open{{/if}}>
+    <summary><span><i class="fa-solid fa-building-columns"></i> Accounts &amp; Monthly Expenses</span><strong>{{cwnit.primaryAccount.name}} {{cwnit.primaryAccount.balanceText}}</strong></summary>
+    <header>
+      <div><p>Finance</p><h2>Accounts</h2></div>
+      {{#if cwnit.accountLedgerAvailable}}
+        <button type="button" data-action="addLedgerAccount"><i class="fa-solid fa-plus"></i> Account</button>
+      {{else}}
+        <button type="button" data-action="addCurrency" title="Transactions require CWN Combat Enhancements 0.22.0 or newer"><i class="fa-solid fa-plus"></i> Account</button>
+      {{/if}}
+    </header>
+    <ol>
+      {{#each cwnit.accounts as |account|}}
+        <li class="cwnit-sheet__account {{#if account.primary}}cwnit-sheet__account--primary{{/if}}">
+          <div class="cwnit-sheet__account-name"><i class="fa-solid {{#if account.primary}}fa-wallet{{else}}fa-building-columns{{/if}}"></i><span><strong>{{account.name}}</strong><small>{{#if account.primary}}Primary · Stowed{{else}}{{account.typeName}} · {{#if account.carried}}Carried{{else}}Not carried{{/if}}{{/if}}</small></span></div>
+          <output class="{{#if account.negative}}is-negative{{/if}}">{{account.balanceText}}</output>
+          <div class="cwnit-sheet__account-actions">
+            {{#if @root.cwnit.accountLedgerAvailable}}
+              <button type="button" data-action="openAccountLedger" data-account-id="{{account.id}}" data-account-kind="{{account.kind}}" data-account-index="{{account.index}}"><i class="fa-solid fa-receipt"></i> Transactions</button>
+              {{#unless account.primary}}<button type="button" data-action="editLedgerAccount" data-account-id="{{account.id}}" data-account-kind="extra" data-account-index="{{account.index}}" title="Rename, convert, or delete account"><i class="fa-solid fa-pen-to-square"></i></button>{{/unless}}
+            {{else}}
+              <button type="button" disabled title="Transactions require CWN Combat Enhancements 0.22.0 or newer"><i class="fa-solid fa-receipt"></i> Transactions</button>
+              {{#unless account.primary}}<button type="button" data-action="editCurrency" data-currency-idx="{{account.index}}" title="Edit, convert, or delete account"><i class="fa-solid fa-pen-to-square"></i></button>{{/unless}}
+            {{/if}}
+          </div>
+        </li>
+      {{/each}}
+    </ol>
+  </details>
+
+  <div class="cwnit-sheet__encumbrance"><div><span style="width:{{system.encumbrance.ready.percentage}}%"></span><b>Readied {{system.encumbrance.ready.value}} / {{system.encumbrance.ready.max}}</b></div><div><span style="width:{{system.encumbrance.stowed.percentage}}%"></span><b>Stowed {{system.encumbrance.stowed.value}} / {{system.encumbrance.stowed.max}}</b></div></div>
+  <div class="cwnit-sheet__native-lists">
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.weapon type="weapon" name="Weapons"}}
+    {{> "systems/swnr/templates/actor/fragments/consumable-list.hbs" itemList=actor.system.consumables type="item" name="Consumables/Ammo"}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.itemTypes.armor type="armor" name="Armor"}}
+    {{> "systems/swnr/templates/actor/fragments/items-list.hbs" itemList=actor.system.gear type="item" name="Items"}}
+  </div>
+  {{#if cwnit.otherItems.length}}<section class="cwnit-sheet__panel"><h2>Other Documents</h2><ol class="cwnit-sheet__compact-list">{{#each cwnit.otherItems as |item|}}<li class="item" data-item-id="{{item._id}}" data-document-class="Item" data-drag="true"><img src="{{item.img}}" alt="" /><button type="button" data-action="viewDoc">{{item.name}}</button><small>{{item.type}}</small></li>{{/each}}</ol></section>{{/if}}
+</section>

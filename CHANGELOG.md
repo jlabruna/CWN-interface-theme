@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.0
+
+- Replaced editable Character account balance fields with a compact read-only
+  native-balance summary and per-account Transactions controls.
+- Added a themed account-ledger window with positive whole-number Credit and
+  Debit actions, mandatory descriptions, newest-first signed history, user and
+  local date/time attribution, resulting balances, negative-balance styling,
+  and a clear zero-history state.
+- Added Character account creation, rename, carried-state editing, native-rule
+  conversion, and confirmed deletion through Combat Enhancements 0.22.0's
+  public account API, while preserving SWNR's native balance fields and the
+  existing Monthly Expenses hook.
+- Added safe degradation when Combat Enhancements is unavailable: native
+  account management remains available, transaction controls explain the
+  missing dependency, and no ledger UI attempts to mutate balances directly.
+- Added dark/light ledger styling and focused account UI, history-limit,
+  integration, manifest, and regression coverage.
+
 ## 0.8.3
 
 - Fixed the Character sheet's non-Combat active-tab treatment by overriding

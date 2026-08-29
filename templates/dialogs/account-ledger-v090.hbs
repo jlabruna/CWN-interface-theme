@@ -1,0 +1,46 @@
+<section class="cwnit-ledger" data-account-id="{{account.id}}">
+  <header class="cwnit-ledger__header">
+    <div>
+      <p>Account ledger</p>
+      <h1>{{account.name}}</h1>
+    </div>
+    <div class="cwnit-ledger__balance">
+      <span>Current balance</span>
+      <strong>{{account.balanceText}}</strong>
+    </div>
+  </header>
+
+  <section class="cwnit-ledger__transaction-panel">
+    <label>
+      <span>Amount</span>
+      <input data-cwnit-ledger-amount type="number" min="1" step="1" inputmode="numeric" placeholder="0" />
+    </label>
+    <div class="cwnit-ledger__transaction-actions">
+      <button type="button" class="is-credit" data-action="credit"><i class="fa-solid fa-plus"></i> Credit</button>
+      <button type="button" class="is-debit" data-action="debit"><i class="fa-solid fa-minus"></i> Debit</button>
+    </div>
+    <p>A description is required before the transaction is committed.</p>
+  </section>
+
+  <section class="cwnit-ledger__history">
+    <header>
+      <h2>Transaction History</h2>
+      <span>Newest first</span>
+    </header>
+    <ol>
+      {{#each transactions as |entry|}}
+        <li>
+          <div class="cwnit-ledger__entry-heading">
+            <time datetime="{{entry.isoTimestamp}}">{{entry.dateText}}</time>
+            <strong class="{{entry.amountClass}}">{{entry.amountText}}</strong>
+          </div>
+          <p>{{entry.description}}</p>
+          <footer><span>{{entry.userName}}</span><span>Balance: {{entry.balanceText}}</span></footer>
+        </li>
+      {{else}}
+        <li class="cwnit-ledger__empty">No transactions have been recorded for this zero-balance account.</li>
+      {{/each}}
+    </ol>
+    {{#if omittedCount}}<p class="cwnit-ledger__omitted">{{omittedCount}} older transactions are retained but not shown in this window.</p>{{/if}}
+  </section>
+</section>

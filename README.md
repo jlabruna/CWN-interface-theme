@@ -19,6 +19,10 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
   combat dashboard, native Readied weapon and armor controls, full skills and
   inventory handling, cyberware, features, actions, biography, native saves
   and initiative, and safe Combat Enhancements Action Centre access.
+- Gives that Character sheet a compact Accounts drawer and, when CWN Combat
+  Enhancements 0.22.0 or newer is active, themed per-account transaction
+  ledgers with mandatory descriptions and append-only history. SWNR's native
+  Dollars and extra-currency balances remain authoritative.
 - Adds an optional **CWN NPC Sheet** for SWNR NPC actors. It is a compact,
   dark tactical workspace with native attacks, reloads, inventory, cyberware,
   features, powers, effects, biography, notes, drag/drop, and item management.
@@ -39,7 +43,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.8.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.9.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -61,8 +65,24 @@ would be unsafe and unnecessarily expensive.
 ## Compatibility design
 
 This module may style elements produced by CWN Combat Enhancements when that
-module is installed, but neither module requires the other. Disabling this
-theme must never disable or change Combat Enhancements automation.
+module is installed, but neither module has a hard installation dependency on
+the other. The Character sheet's transaction buttons require Combat
+Enhancements 0.22.0 or newer and explain that requirement when it is absent;
+native SWNR account management remains available. Disabling this theme must
+never disable or change Combat Enhancements automation or ledger data.
+
+## Character account ledger
+
+Open **Inventory > Accounts & Monthly Expenses**, then choose
+**Transactions** beside an account. Credit and Debit amounts must be positive
+whole numbers and every committed transaction requires a description. The
+history records the signed change, resulting balance, user, and local date/time
+and is shown newest first. Negative balances are supported.
+
+The visible balance is always read from SWNR's native Character data. Combat
+Enhancements stores only identity and append-only history in actor flags. New
+accounts, renames, carried-state changes, conversions, and confirmed deletions
+also go through its public API so history remains attached to the account.
 
 Theme selection reads Foundry's explicit **Interface** colour-scheme
 preference. The separate **Applications** preference does not affect chat-card
