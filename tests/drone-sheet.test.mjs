@@ -14,11 +14,11 @@ import {
   prepareDroneSheetContext,
   registerCwnDroneSheet,
   resolveSwnrVehicleSheet,
-} from "../scripts/sheets/cwn-drone-sheet-v092.mjs";
+} from "../scripts/sheets/cwn-drone-sheet-v0100.mjs";
 
-const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v092.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v092.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v092.css", import.meta.url), "utf8");
+const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v0100.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0100.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v0100.css", import.meta.url), "utf8");
 const templateNames = ["header", "operations", "fittings", "cargo", "configuration", "notes"];
 const templateVersions = { operations: "v092", fittings: "v092", cargo: "v092" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -330,6 +330,33 @@ test("over-capacity drops are blocked for players and require GM confirmation", 
   } finally {
     globalThis.game = previousGame;
     globalThis.ui = previousUi;
+    globalThis.foundry = previousFoundry;
+  }
+});
+
+test("GM fitting override preserves DialogV2.confirm class binding", async () => {
+  class FakeVehicleSheet {
+    async _onDropItemCreate(itemData) { this.created = itemData; }
+  }
+  class RuntimeDialogV2 {
+    static async confirm() {
+      assert.equal(this, RuntimeDialogV2);
+      return true;
+    }
+  }
+  const SheetClass = createCwnDroneSheetClass(FakeVehicleSheet);
+  const sheet = new SheetClass();
+  sheet.actor = actorFixture();
+  const previousGame = globalThis.game;
+  const previousFoundry = globalThis.foundry;
+  try {
+    globalThis.game = { user: { isGM: true } };
+    globalThis.foundry = { applications: { api: { DialogV2: RuntimeDialogV2 } } };
+    const fitting = item("large-bound", "shipFitting", "Large Bound Fitting", { mass: 3 });
+    await sheet._onDropItemCreate(fitting, {});
+    assert.equal(sheet.created, fitting);
+  } finally {
+    globalThis.game = previousGame;
     globalThis.foundry = previousFoundry;
   }
 });

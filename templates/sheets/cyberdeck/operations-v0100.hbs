@@ -1,0 +1,26 @@
+<section class="tab cwnit-cyberdeck__body {{tab.cssClass}}" data-group="primary" data-tab="operations">
+  <div class="cwnit-cyberdeck__dashboard">
+    <section class="cwnit-cyberdeck__panel cwnit-cyberdeck__hacker">
+      <div class="cwnit-cyberdeck__section-heading"><div><small>Assigned Operator</small><h2>Hacker</h2></div><button type="button" data-action="assignHacker"><i class="fa-solid fa-user-gear"></i> {{#if cwnit.hacker}}Change{{else}}Assign{{/if}}</button></div>
+      {{#if cwnit.hacker}}
+        <div class="cwnit-cyberdeck__hacker-card">
+          <img src="{{cwnit.hacker.img}}" alt="" /><div><strong>{{cwnit.hacker.name}}</strong><span>{{cwnit.hacker.type}}</span><small>INT {{cwnit.hackerStats.intMod}} · Program {{cwnit.hackerStats.programRank}} · {{cwnit.hackerStats.programPool}}</small></div>
+          <button type="button" data-action="openHacker">Open</button><button type="button" data-action="unlinkHacker">Unlink</button>
+        </div>
+      {{else}}<p class="cwnit-cyberdeck__empty">Assign an owned Character or NPC before beginning network operations.</p>{{/if}}
+    </section>
+    <section class="cwnit-cyberdeck__panel cwnit-cyberdeck__network-status">
+      <div class="cwnit-cyberdeck__section-heading"><div><small>Combat Enhancements</small><h2>Network Status</h2></div></div>
+      {{#if cwnit.ceAvailable}}
+        {{#if cwnit.session}}<strong class="is-online">Connected — {{cwnit.session.networkName}}</strong><span>Node: {{cwnit.session.nodeName}}</span><span>{{cwnit.session.connectionType}}{{#if cwnit.session.wirelessPenalty}} (−2){{/if}}</span>
+        {{else}}<strong class="is-offline">Offline</strong><span>No active Network Console session for this deck.</span>{{/if}}
+        <button type="button" data-action="openNetworkConsole"><i class="fa-solid fa-network-wired"></i> Open Network Console</button>
+      {{else}}<strong class="is-offline">Console Unavailable</strong><span>The native deck remains fully usable. Enable Combat Enhancements for live network sessions.</span>{{/if}}
+    </section>
+  </div>
+  <section class="cwnit-cyberdeck__panel">
+    <div class="cwnit-cyberdeck__section-heading"><div><small>Loaded Runtime</small><h2>Active Programs</h2></div><span>{{cwnit.runningPrograms.length}} using CPU</span></div>
+    <ol class="cwnit-cyberdeck__rows">{{#each cwnit.runningPrograms as |item|}}<li class="item" data-item-id="{{item.id}}" data-document-class="Item"><img src="{{item.img}}" alt="" /><strong>{{item.name}}</strong><span>{{item.system.useAffects}}</span><button type="button" data-action="viewDoc">Open</button></li>{{else}}<li class="cwnit-cyberdeck__empty">No ongoing programs are consuming CPU.</li>{{/each}}</ol>
+  </section>
+  <section class="cwnit-cyberdeck__panel cwnit-cyberdeck__memory-breakdown"><div class="cwnit-cyberdeck__section-heading"><div><small>Native SWNR Calculation</small><h2>Memory Load</h2></div></div><dl><div><dt>Verbs</dt><dd>{{cwnit.resources.memory.breakdown.verbs}}</dd></div><div><dt>Subjects</dt><dd>{{cwnit.resources.memory.breakdown.subjects}}</dd></div><div><dt>Files</dt><dd>{{cwnit.resources.memory.breakdown.files}}</dd></div><div><dt>Free</dt><dd>{{cwnit.resources.memory.value}}</dd></div></dl></section>
+</section>

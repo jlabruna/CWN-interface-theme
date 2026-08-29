@@ -1,0 +1,17 @@
+<header class="cwnit-cyberdeck__header">
+  <button type="button" class="cwnit-cyberdeck__portrait" data-action="onEditImage" data-edit="img"><img src="{{actor.img}}" alt="{{actor.name}}" /></button>
+  <div class="cwnit-cyberdeck__identity">
+    <small>CWN INTRUSION OPERATIONS DECK</small>
+    <input name="name" value="{{actor.name}}" aria-label="Cyberdeck name" />
+    <span>{{#if cwnit.hacker}}Linked to {{cwnit.hacker.name}}{{else}}No hacker linked{{/if}}</span>
+  </div>
+  <div class="cwnit-cyberdeck__header-actions">
+    <button type="button" data-action="openNetworkConsole" {{#unless cwnit.ceAvailable}}disabled title="Combat Enhancements Network Console is unavailable"{{/unless}}><i class="fa-solid fa-network-wired"></i> Open Network Console</button>
+  </div>
+  <dl class="cwnit-cyberdeck__resource-strip">
+    <div><dt>Access</dt><dd>{{cwnit.resources.access.value}} / {{cwnit.resources.access.max}}</dd><small>Hacker + Deck</small></div>
+    <div><dt>CPU</dt><dd>{{cwnit.resources.cpu.value}} / {{cwnit.resources.cpu.max}}</dd><small>{{cwnit.resources.cpu.value}} Free</small></div>
+    <div><dt>Memory</dt><dd>{{cwnit.resources.memory.used}} / {{cwnit.resources.memory.max}}</dd><small>{{cwnit.resources.memory.value}} Free</small></div>
+    <div><dt>Shielding</dt><dd>{{cwnit.resources.shielding.value}} / {{cwnit.resources.shielding.max}}</dd><small>Current / Max</small></div>
+  </dl>
+</header>

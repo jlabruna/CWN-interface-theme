@@ -1,0 +1,4 @@
+<section class="tab cwnit-cyberdeck__body {{tab.cssClass}}" data-group="primary" data-tab="notes">
+  <div class="cwnit-cyberdeck__section-heading"><div><small>Operator Record</small><h2>Notes</h2></div></div>
+  {{#if editable}}<textarea name="flags.cwn-interface-theme.cyberdeckNotes" class="cwnit-cyberdeck__notes" placeholder="Maintenance notes, loadout plans, passwords, and operator reminders...">{{cwnit.notes}}</textarea>{{else}}<div class="cwnit-cyberdeck__notes-readonly">{{cwnit.notes}}</div>{{/if}}
+</section>

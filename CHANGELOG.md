@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.0
+
+- Added an optional, non-default CWN Cyberdeck Operations Sheet for SWNR Cyberdeck Actors, preserving the native sheet and requiring no migration.
+- Added native hacker assignment, Access/CPU/Memory/Shielding dashboards, loaded Verb and Subject views, persistent Data File management, hardware configuration, GM diagnostics, and deck notes.
+- Integrated with Combat Enhancements through its public Network Console API for deck/hacker preselection and live session status, while retaining safe CE-disabled operation.
+- Fixed Drone fitting-capacity confirmation by preserving `DialogV2.confirm` class binding and added a runtime-shaped regression.
+- Corrected NPC and Drone bottom-tab sizing and inset active accents using sheet-specific navigation selectors.
+- Added focused Cyberdeck, registration, permissions, resource, persistence, integration, and release coverage.
+
 ## 0.9.2
 
 - Made Deploy Drone a persistent packed/deployed toggle: deployed drones keep

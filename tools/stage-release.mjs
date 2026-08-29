@@ -5,12 +5,13 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.9.2");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.9.2");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.10.0");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.10.0");
+const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.10.0");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.9.2") {
-  throw new Error(`Expected module version 0.9.2 but found ${manifest.version}.`);
+if (manifest.version !== "0.10.0") {
+  throw new Error(`Expected module version 0.10.0 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -42,12 +43,20 @@ const browserReleaseFiles = [
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v092.mjs",
-  "scripts/sheets/cwn-drone-sheet-v092.mjs",
-  "styles/cwn-interface-theme-v092.css",
+  "scripts/cwn-interface-theme-v0100.mjs",
+  "scripts/sheets/cwn-drone-sheet-v0100.mjs",
+  "scripts/sheets/cwn-cyberdeck-sheet-v0100.mjs",
+  "styles/cwn-interface-theme-v0100.css",
   "templates/sheets/drone/operations-v092.hbs",
   "templates/sheets/drone/fittings-v092.hbs",
   "templates/sheets/drone/cargo-v092.hbs",
+  "templates/sheets/cyberdeck/header-v0100.hbs",
+  "templates/sheets/cyberdeck/operations-v0100.hbs",
+  "templates/sheets/cyberdeck/programs-v0100.hbs",
+  "templates/sheets/cyberdeck/files-v0100.hbs",
+  "templates/sheets/cyberdeck/configuration-v0100.hbs",
+  "templates/sheets/cyberdeck/notes-v0100.hbs",
+  "tests/cyberdeck-sheet.test.mjs",
   "tests/drone-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tools/stage-release.mjs",
@@ -64,6 +73,12 @@ await fs.copyFile(
   path.join(moduleRoot, ".github", "workflows", "build-release.yml"),
   path.join(browserDotfilesRoot, ".github", "workflows", "build-release.yml"),
 );
+await removeTree(browserWorkflowRoot);
+await fs.mkdir(browserWorkflowRoot, { recursive: true });
+await fs.copyFile(
+  path.join(moduleRoot, ".github", "workflows", "build-release.yml"),
+  path.join(browserWorkflowRoot, "build-release.yml"),
+);
 // .gitignore is useful in a local checkout, but browser uploads can omit hidden
 // files. Do not make release staging depend on this developer-only file.
 try {
@@ -74,5 +89,6 @@ try {
 
 console.log(
   `Staged CWN Interface Theme ${manifest.version} at ${stageRoot}. `
-  + `Browser upload files are at ${browserUploadRoot}; hidden paths are at ${browserDotfilesRoot}.`,
+  + `Browser upload files are at ${browserUploadRoot}; hidden paths are at ${browserDotfilesRoot}; `
+  + `visible workflow upload is at ${browserWorkflowRoot}.`,
 );

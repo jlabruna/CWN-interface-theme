@@ -30,6 +30,10 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
   presents live control declarations, the native linked pilot, mounted
   weapons, Command Deck actions, fittings, cargo, configuration, effects, and
   notes without replacing SWNR or Combat Enhancements mechanics.
+- Adds an optional **CWN Cyberdeck Operations Sheet** for SWNR Cyberdeck actors.
+  It presents native Shielding, Access, CPU, Memory, Programs, copied Datafiles,
+  hacker assignment, configuration, and notes, and can open a compatible Combat
+  Enhancements Network Console directly on that deck.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -43,22 +47,24 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.9.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.10.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
 
-Open an SWNR character, NPC, or Drone, choose **Sheet Configuration** from the
-sheet header, and select **CWN Character Sheet**, **CWN NPC Sheet**, or **CWN
-Drone Operations Sheet**. Native SWNR sheets remain registered and remain the
-defaults unless a user explicitly changes an individual actor's sheet.
+Open an SWNR character, NPC, Drone, or Cyberdeck, choose **Sheet Configuration**
+from the sheet header, and select the corresponding CWN sheet. Native SWNR
+sheets remain registered and remain the defaults unless a user explicitly
+changes an individual actor's sheet.
 
 The Character and NPC alternatives subclass SWNR's supported actor-sheet
-export. The Drone alternative subclasses SWNR's registered native vehicle
-sheet class. All three use SWNR's own item-roll, reload, form-update,
+export. The Drone and Cyberdeck alternatives subclass SWNR's registered native
+sheet classes. All four use SWNR's own item-roll, reload, form-update,
 drag/drop, and document actions. They add no actor fields, migrations, or
-game-rule automation. Linked cyberdecks are read from SWNR's existing direct
-actor links. Linked drones are deferred on the Character sheet because SWNR
+game-rule automation. The Cyberdeck sheet's Notes tab uses one Theme flag
+because the native Cyberdeck schema has no notes field; all operational data
+remains native or belongs to Combat Enhancements. Linked cyberdecks are read
+from SWNR's existing direct actor links. Linked drones are deferred on the Character sheet because SWNR
 stores that relationship on the drone and a sheet-wide reverse world scan
 would be unsafe and unnecessarily expensive.
 
