@@ -11,8 +11,8 @@ import {
 import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v082.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v082.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v082.css", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v083.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v083.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v081", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -185,6 +185,11 @@ test("ordinary rerenders restore the active Character tab scroll position", () =
 
 test("Character tabs and checkboxes use consistent scoped controls", () => {
   assert.match(css, /\.cwnit-character-sheet-window nav\.tabs > \[data-tab\]\.active/u);
+  assert.match(css, /display: grid !important/u);
+  assert.match(css, /grid-template-columns: repeat\(7, minmax\(0, 1fr\)\) !important/u);
+  assert.match(css, /flex: none !important/u);
+  assert.match(css, /box-shadow: inset 0 -3px 0 var\(--cwnit-sheet-primary\)/u);
+  assert.doesNotMatch(css, /nav\.tabs > \[data-tab\]\.active \{[^}]*border-bottom: 3px/su);
   assert.match(css, /input\[type="checkbox"\]/u);
   assert.match(css, /appearance: auto !important/u);
   assert.match(css, /accent-color: var\(--cwnit-sheet-secondary\)/u);

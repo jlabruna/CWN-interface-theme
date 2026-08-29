@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.3
+
+- Fixed the Character sheet's non-Combat active-tab treatment by overriding
+  Foundry's competing flex sizing with seven equal-width grid tracks.
+- Replaced the edge-aligned active-tab border with an inset accent so the red
+  indicator remains fully visible instead of being clipped by the sheet
+  window boundary.
+
 ## 0.8.2
 
 - Added semantic, numeric-only Skill rank colours: cyan for untrained (-1),
