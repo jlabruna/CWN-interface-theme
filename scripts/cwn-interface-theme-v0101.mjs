@@ -1,11 +1,11 @@
-import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.11.2";
-import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.11.2";
-import { registerCwnDroneSettings, registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.11.2";
-import { registerLinkedSheetRefreshHooks } from "./sheet-refresh.mjs?v=0.11.2";
+import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.11.3";
+import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.11.3";
+import { registerCwnDroneSettings, registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.11.3";
+import { registerLinkedSheetRefreshHooks } from "./sheet-refresh.mjs?v=0.11.3";
 import {
   registerCwnCyberdeckSettings,
   registerCwnCyberdeckSheet,
-} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.11.2";
+} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.11.3";
 
 const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
@@ -18,8 +18,6 @@ Hooks.once("init", () => {
   if (game.system.id !== "swnr") return;
   registerCwnCyberdeckSettings();
   registerCwnDroneSettings();
-  registerCwnNpcSheet();
-  registerCwnCharacterSheet();
 });
 
 Hooks.on("renderChatMessageHTML", (_message, html) => {
@@ -66,6 +64,10 @@ Hooks.on("pauseGame", () => {
 
 Hooks.once("ready", () => {
   if (game.system.id !== "swnr") return;
+  // SWNR registers its native Actor sheets during init. Register every
+  // optional Actor sheet only after that registry is fully populated.
+  registerCwnNpcSheet();
+  registerCwnCharacterSheet();
   registerCwnDroneSheet();
   registerCwnCyberdeckSheet();
   refreshChatThemes();

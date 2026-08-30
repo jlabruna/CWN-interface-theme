@@ -1,10 +1,10 @@
 {
   "name": "cwn-interface-theme",
   "private": true,
-  "version": "0.11.2",
+  "version": "0.11.3",
   "type": "module",
   "scripts": {
-    "check": "node --check scripts/cwn-interface-theme-v0112.mjs && node --check scripts/cwn-interface-theme-v0101.mjs && node --check scripts/sheet-refresh.mjs && node --check scripts/sheets/drone-pilot-link.mjs && node --check scripts/sheets/cwn-sheet-shared-v062.mjs && node --check scripts/sheets/cwn-npc-sheet-v062.mjs && node --check scripts/sheets/cwn-character-sheet-v091.mjs && node --check scripts/sheets/cwn-account-ledger-v090.mjs && node --check scripts/sheets/cwn-drone-sheet-v0100.mjs && node --check scripts/sheets/cwn-cyberdeck-sheet-v0101.mjs && node --check tools/stage-release.mjs",
+    "check": "node --check scripts/cwn-interface-theme-v0113.mjs && node --check scripts/cwn-interface-theme-v0101.mjs && node --check scripts/sheet-refresh.mjs && node --check scripts/sheets/drone-pilot-link.mjs && node --check scripts/sheets/cwn-sheet-shared-v062.mjs && node --check scripts/sheets/cwn-npc-sheet-v062.mjs && node --check scripts/sheets/cwn-character-sheet-v091.mjs && node --check scripts/sheets/cwn-account-ledger-v090.mjs && node --check scripts/sheets/cwn-drone-sheet-v0100.mjs && node --check scripts/sheets/cwn-cyberdeck-sheet-v0101.mjs && node --check tools/stage-release.mjs",
     "test": "node --test tests",
     "stage": "node tools/stage-release.mjs",
     "build": "npm run check && npm test && npm run stage"

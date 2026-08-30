@@ -11,6 +11,7 @@ import {
 } from "../scripts/sheets/cwn-npc-sheet-v062.mjs";
 
 const sheetSource = await fs.readFile(new URL("../scripts/sheets/cwn-npc-sheet-v062.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0101.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v070.css", import.meta.url), "utf8");
 const templateFiles = {
   header: "header-v062",
@@ -24,6 +25,14 @@ const templates = Object.fromEntries(await Promise.all(Object.keys(templateFiles
   name,
   await fs.readFile(new URL(`../templates/sheets/npc/${templateFiles[name]}.hbs`, import.meta.url), "utf8"),
 ])));
+
+test("NPC registration waits until SWNR has completed its init sheet registry", () => {
+  const initStart = moduleSource.indexOf('Hooks.once("init"');
+  const readyStart = moduleSource.indexOf('Hooks.once("ready"');
+  assert.ok(initStart >= 0 && readyStart > initStart);
+  assert.doesNotMatch(moduleSource.slice(initStart, readyStart), /registerCwnNpcSheet\(\)/u);
+  assert.match(moduleSource.slice(readyStart), /registerCwnNpcSheet\(\)/u);
+});
 
 function countTopLevelElements(template) {
   const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);

@@ -3,7 +3,9 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.11.2 makes Drone pilot linking idempotent and identity-safe, adds
+Version 0.11.3 restores reliable CWN Character and NPC sheet registration after
+SWNR completes its native sheet registry. It retains the 0.11.2 work that makes
+Drone pilot linking idempotent and identity-safe, adds
 Linked Drones to Character and NPC Cyberware views, and displays Phase 1
 Maintenance capacity through Combat Enhancements 0.25.0. Legacy unprovenanced
 Drone-like inventory Items are never deleted automatically.
@@ -64,7 +66,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.11.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.11.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

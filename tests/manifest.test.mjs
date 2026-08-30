@@ -7,13 +7,13 @@ const manifest = JSON.parse(
 );
 
 test("manifest targets Foundry V14 and SWNR 2.3.1", () => {
-  assert.equal(manifest.version, "0.11.2");
+  assert.equal(manifest.version, "0.11.3");
   assert.equal(manifest.compatibility.verified, "14.365");
   assert.equal(manifest.compatibility.maximum, undefined);
   const swnr = manifest.relationships.systems.find((entry) => entry.id === "swnr");
   assert.equal(swnr.compatibility.minimum, "2.3.1");
   assert.equal(swnr.compatibility.verified, "2.3.1");
-  assert.deepEqual(manifest.esmodules, ["scripts/cwn-interface-theme-v0112.mjs"]);
+  assert.deepEqual(manifest.esmodules, ["scripts/cwn-interface-theme-v0113.mjs"]);
   assert.deepEqual(manifest.styles, ["styles/cwn-interface-theme-v0101.css"]);
 });
 

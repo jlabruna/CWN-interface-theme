@@ -11,7 +11,7 @@ import {
 import { linkedDronesForPilot, weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v091.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v091.mjs", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0101.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v090.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v090", features: "v081", actions: "v080" };
@@ -49,6 +49,14 @@ test("character sheet registers for character actors only and is never default",
   const SheetClass = registerCwnCharacterSheet(runtime);
   assert.equal(Object.getPrototypeOf(SheetClass), FakeSwnrSheet);
   assert.deepEqual(calls[0][2], { types: ["character"], makeDefault: false, label: CHARACTER_SHEET_LABEL });
+});
+
+test("character registration waits until SWNR has completed its init sheet registry", () => {
+  const initStart = moduleSource.indexOf('Hooks.once("init"');
+  const readyStart = moduleSource.indexOf('Hooks.once("ready"');
+  assert.ok(initStart >= 0 && readyStart > initStart);
+  assert.doesNotMatch(moduleSource.slice(initStart, readyStart), /registerCwnCharacterSheet\(\)/u);
+  assert.match(moduleSource.slice(readyStart), /registerCwnCharacterSheet\(\)/u);
 });
 
 test("character sheet safely declines registration without supported SWNR API", () => {

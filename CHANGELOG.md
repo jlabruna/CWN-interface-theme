@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.3
+
+- Fixed CWN Character and NPC sheet availability by registering the optional sheets during Foundry's `ready` lifecycle, after SWNR has completed its native Actor-sheet registry.
+- Added lifecycle regression coverage that fails if Character or NPC registration moves back into the earlier initialization window.
+
 ## 0.11.2
 
 - Made world Drone `crewMembers` the authoritative pilot relationship and added provenance-tracked SWNR inventory records so repeated assignment is idempotent and unlink removes only the exact relationship record.
