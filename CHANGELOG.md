@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.1
+
+- Fixed open Character sheets so their reverse-linked Drone list rerenders immediately when a Drone is linked, unlinked, or moved to another pilot.
+- Fixed open Cyberdeck sheets so their linked hacker's Access display rerenders immediately after rules-based, Rest-based, or forced Access refreshes.
+- Kept the refresh narrowly scoped to already-open dependent sheets; closed sheets are never opened automatically and no stored Actor data is changed.
+- Added nested and flattened Foundry update-path regression coverage for both cross-Actor refresh routes.
+
 ## 0.11.0
 
 - Added **Linked Drones** to the Character Cyberware tab, derived safely from visible Drone pilot links and opening each Drone sheet directly.

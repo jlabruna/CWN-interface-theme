@@ -1,15 +1,18 @@
-import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.11.0";
-import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.11.0";
-import { registerCwnDroneSettings, registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.11.0";
+import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.11.1";
+import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.11.1";
+import { registerCwnDroneSettings, registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.11.1";
+import { registerLinkedSheetRefreshHooks } from "./sheet-refresh.mjs?v=0.11.1";
 import {
   registerCwnCyberdeckSettings,
   registerCwnCyberdeckSheet,
-} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.11.0";
+} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.11.1";
 
 const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
 const PAUSE_TEXT_KEY = "CWNIT.Pause.SystemHalted";
 let lastReducedMotion;
+
+registerLinkedSheetRefreshHooks();
 
 Hooks.once("init", () => {
   if (game.system.id !== "swnr") return;

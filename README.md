@@ -33,7 +33,8 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Lists visible, pilot-linked Drones on the Character Cyberware tab and opens
   their sheets directly. The Drone sheet recognizes tagged Drone Pilot benefits
   through Combat Enhancements 0.24.0 and shows the resulting Assume Command
-  cost on both the control and chat card.
+  cost on both the control and chat card. Open Character sheets refresh this
+  list immediately when a separate Drone Actor changes pilots.
 - Adds an optional **CWN Cyberdeck Operations Sheet** for SWNR Cyberdeck actors.
   It presents native Shielding, Access, CPU, Memory, Programs, copied Datafiles,
   hacker assignment, configuration, and notes, and can open a compatible Combat
@@ -43,7 +44,8 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
   a visible warning without deleting existing content. Its Operations tab and
   the Character Action Centre can perform the rules-based one-hour,
   once-per-day Access refresh, while permitted Advanced Configuration users
-  have a separate unlimited testing override.
+  have a separate unlimited testing override. Open Cyberdeck sheets refresh
+  immediately when their linked hacker's Access changes.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -57,7 +59,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.11.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.11.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
