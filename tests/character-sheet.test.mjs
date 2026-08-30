@@ -8,7 +8,7 @@ import {
   registerCwnCharacterSheet,
   skillRankTier,
 } from "../scripts/sheets/cwn-character-sheet-v091.mjs";
-import { weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
+import { linkedDronesForPilot, weaponClassification } from "../scripts/sheets/cwn-sheet-shared-v062.mjs";
 
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v091.mjs", import.meta.url), "utf8");
 const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v091.mjs", import.meta.url), "utf8");
@@ -215,6 +215,18 @@ test("identity fields are CWN-specific and submit Background only once", () => {
   assert.match(templates.actions, /Rest &amp; Recover/u);
 });
 
+test("Cyberware lists reverse-linked visible drones and opens them through the shared Actor action", () => {
+  const pilot = { id: "pilot" };
+  const visible = { id: "visible", name: "Visible Drone", type: "drone", system: { crewMembers: ["pilot"] }, testUserPermission: () => true };
+  const hidden = { id: "hidden", name: "Hidden Drone", type: "drone", system: { crewMembers: ["pilot"] }, testUserPermission: () => false };
+  const otherPilot = { id: "other", name: "Other Drone", type: "drone", system: { crewMembers: ["someone-else"] }, testUserPermission: () => true };
+  assert.deepEqual(linkedDronesForPilot(pilot, { actors: [hidden, otherPilot, visible], user: { isGM: false } }), [visible]);
+  assert.deepEqual(linkedDronesForPilot(pilot, { actors: [hidden, visible], user: { isGM: true } }).map((actor) => actor.id), ["hidden", "visible"]);
+  assert.match(templates.cyberware, /Linked Drones/u);
+  assert.match(templates.cyberware, /#each cwnit\.linkedDrones/u);
+  assert.match(templates.cyberware, /data-action="openLinkedActor" data-actor-id="\{\{drone\.id\}\}"/u);
+});
+
 test("level-up HP remains native and is surfaced through Action Centre setup", () => {
   assert.match(moduleSource, /renderApplicationV2/u);
   assert.match(moduleSource, /cwnce-action-center/u);
@@ -279,13 +291,17 @@ test("common combat actions are declaration-only references", () => {
   assert.doesNotMatch(source, /actor\.update|updateEmbeddedDocuments|registerSchema|migrat/iu);
 });
 
-test("scene reset uses native SWNR refresh and recovery keeps the inherited rest action", () => {
+test("scene reset and Rest use native SWNR recovery while Rest offers optional rules Access reprogramming", () => {
   assert.match(templates.header, /data-action="scene"/u);
   assert.match(templates.actions, /data-action="rest"/u);
   assert.match(source, /refreshActor\(\{ actor: this\.actor, cadence: "scene", createChat: false \}\)/u);
   assert.match(source, /await this\._resetSoak\(\)/u);
   assert.match(source, /resetCombatEnhancementSceneUsage/u);
   assert.match(source, /cwnit-scene-refresh/u);
+  assert.match(source, /rest: this\._onRestWithAccess/u);
+  assert.match(source, /Spend one hour reprogramming a linked cyberdeck/u);
+  assert.match(source, /beginNewDay/u);
+  assert.match(source, /accessApi\?\.refresh/u);
   assert.doesNotMatch(source, /actor\.update\(\{[^}]*system\.(?:soak|pools)/su);
 });
 

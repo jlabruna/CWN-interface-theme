@@ -1,10 +1,10 @@
-import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.10.1";
-import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.10.1";
-import { registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.10.1";
+import { registerCwnNpcSheet } from "./sheets/cwn-npc-sheet-v062.mjs?v=0.11.0";
+import { registerCwnCharacterSheet } from "./sheets/cwn-character-sheet-v091.mjs?v=0.11.0";
+import { registerCwnDroneSettings, registerCwnDroneSheet } from "./sheets/cwn-drone-sheet-v0100.mjs?v=0.11.0";
 import {
   registerCwnCyberdeckSettings,
   registerCwnCyberdeckSheet,
-} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.10.1";
+} from "./sheets/cwn-cyberdeck-sheet-v0101.mjs?v=0.11.0";
 
 const MODULE_ID = "cwn-interface-theme";
 const THEME_CLASSES = ["cwnit-theme-light", "cwnit-theme-dark"];
@@ -14,6 +14,7 @@ let lastReducedMotion;
 Hooks.once("init", () => {
   if (game.system.id !== "swnr") return;
   registerCwnCyberdeckSettings();
+  registerCwnDroneSettings();
   registerCwnNpcSheet();
   registerCwnCharacterSheet();
 });
@@ -103,6 +104,7 @@ function refreshChatThemes() {
     applyChatTheme(message);
   }
 }
+
 
 /**
  * Add the native SWNR level-up HP task to Combat Enhancements' Action Centre

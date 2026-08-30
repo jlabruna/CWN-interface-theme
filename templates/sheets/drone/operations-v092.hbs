@@ -2,10 +2,12 @@
   <div class="cwnit-drone__section-heading"><div><p>{{localize "CWNIT.Sheet.Drone.OperationsOverline"}}</p><h2>{{localize "CWNIT.Sheet.Drone.DroneControl"}}</h2></div></div>
   <section class="cwnit-drone__control-console">
     <button type="button" class="cwnit-drone__deployment {{#if cwnit.deployed}}is-deployed{{/if}}" data-action="declareDroneAction" data-action-key="deploy" aria-pressed="{{cwnit.deployed}}"><i class="fa-solid {{#if cwnit.deployed}}fa-box-archive{{else}}fa-power-off{{/if}}"></i><span>{{#if cwnit.deployed}}Pack Drone{{else}}Deploy Drone{{/if}}<small>{{#if cwnit.deployed}}Main Action{{else}}{{#if cwnit.quickLaunch}}On Turn · Quick Launch{{else}}Main Action{{/if}}{{/if}}</small></span></button>
-    <button type="button" data-action="declareDroneAction" data-action-key="assume"><i class="fa-solid fa-tower-broadcast"></i><span>Assume Command<small>Main + Move</small></span></button>
+    <button type="button" data-action="declareDroneAction" data-action-key="assume"><i class="fa-solid fa-tower-broadcast"></i><span>Assume Command<small>{{cwnit.pilotBenefits.assumeCostShort}}</small></span></button>
     <button type="button" data-action="declareDroneAction" data-action-key="drop"><i class="fa-solid fa-link-slash"></i><span>Drop Control<small>On Turn</small></span></button>
     <p>Deployment is saved on this drone. Drop Control releases active control without packing it; control declarations post to chat.</p>
   </section>
+
+  {{#if cwnit.pilotBenefits.focusLevel}}<section class="cwnit-drone__pilot-benefits"><div class="cwnit-drone__section-heading"><div><p>Linked Pilot Rules</p><h2>Pilot Benefits</h2></div></div><dl><div><dt>Drone Pilot</dt><dd>Level {{cwnit.pilotBenefits.focusLevel}}</dd></div>{{#if cwnit.pilotBenefits.assumeOnTurnEligible}}<div><dt>Assume Command</dt><dd>{{cwnit.pilotBenefits.assumeCostShort}}{{#if cwnit.pilotBenefits.assumeTracked}} · tracked this round{{/if}}</dd></div><div><dt>Controlled-drone hit bonus</dt><dd>+{{cwnit.pilotBenefits.controlledDroneHitBonus}}</dd></div><div><dt>Bonus command Main Action</dt><dd>Once per scene · Action Centre</dd></div>{{/if}}{{#if cwnit.pilotBenefits.onTargetAttackBonus}}<div><dt>On Target attack adjustment</dt><dd>+{{cwnit.pilotBenefits.onTargetAttackBonus}}</dd></div>{{/if}}</dl></section>{{/if}}
 
   {{#if cwnit.hasAutonomousCommands}}
     <div class="cwnit-drone__section-heading"><div><p>Installed Command Deck</p><h2>Autonomous Commands</h2></div><button type="button" data-action="declareDroneAction" data-action-key="halt"><i class="fa-solid fa-stop"></i> Halt Autonomous Mode · On Turn</button></div>

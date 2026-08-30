@@ -6,6 +6,8 @@ import {
   COMMAND_DECK_NAMES,
   DRONE_DEPLOYED_FLAG,
   DRONE_SHEET_LABEL,
+  PLAYER_DRONE_ADVANCED_CONFIG_SETTING,
+  canUseAdvancedDroneConfiguration,
   checkFittingCapacity,
   createCwnDroneSheetClass,
   eligiblePilotActors,
@@ -324,7 +326,7 @@ test("over-capacity drops are blocked for players and require GM confirmation", 
     assert.match(warnings[0], /Ask the GM/u);
 
     globalThis.game = { user: { isGM: true } };
-    globalThis.foundry = { applications: { api: { DialogV2: { confirm: async () => true } } } };
+    globalThis.foundry = { applications: { api: { DialogV2: { wait: async () => true } } } };
     await sheet._onDropItemCreate(large, {});
     assert.equal(sheet.created, large);
   } finally {
@@ -334,12 +336,12 @@ test("over-capacity drops are blocked for players and require GM confirmation", 
   }
 });
 
-test("GM fitting override preserves DialogV2.confirm class binding", async () => {
+test("GM fitting override uses the Foundry-safe DialogV2.wait path", async () => {
   class FakeVehicleSheet {
     async _onDropItemCreate(itemData) { this.created = itemData; }
   }
   class RuntimeDialogV2 {
-    static async confirm() {
+    static async wait() {
       assert.equal(this, RuntimeDialogV2);
       return true;
     }
@@ -359,6 +361,26 @@ test("GM fitting override preserves DialogV2.confirm class binding", async () =>
     globalThis.game = previousGame;
     globalThis.foundry = previousFoundry;
   }
+});
+
+test("advanced Drone configuration is GM-always and world-setting controlled for player owners", () => {
+  const actor = { isOwner: true };
+  assert.equal(canUseAdvancedDroneConfiguration(actor, { user: { isGM: true }, settings: { get: () => false } }), true);
+  assert.equal(canUseAdvancedDroneConfiguration(actor, { user: { isGM: false }, settings: { get: () => true } }), true);
+  assert.equal(canUseAdvancedDroneConfiguration(actor, { user: { isGM: false }, settings: { get: () => false } }), false);
+  assert.equal(canUseAdvancedDroneConfiguration({ isOwner: false }, { user: { isGM: false }, settings: { get: () => true } }), false);
+  assert.equal(PLAYER_DRONE_ADVANCED_CONFIG_SETTING, "allowPlayerDroneAdvancedConfiguration");
+  assert.match(moduleSource, /registerCwnDroneSettings\(\)/u);
+  assert.match(templates.configuration, /#if cwnit\.canConfigureAdvanced/u);
+  assert.match(templates.configuration, /Configuration is always visible as a summary/u);
+});
+
+test("Drone Pilot benefits drive Assume Command cost and the matching chat declaration", () => {
+  assert.match(templates.operations, /cwnit\.pilotBenefits\.assumeCostShort/u);
+  assert.match(templates.operations, /Linked Pilot Rules/u);
+  assert.match(source, /game\?\.cwnCombatEnhancements\?\.drone/u);
+  assert.match(source, /useAssumeCommand/u);
+  assert.match(source, /action\.cost = use\.assumeCost/u);
 });
 
 test("sheet exposes the requested five tabs and operations is first", () => {

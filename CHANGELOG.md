@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0
+
+- Added **Linked Drones** to the Character Cyberware tab, derived safely from visible Drone pilot links and opening each Drone sheet directly.
+- Integrated tagged Drone Pilot benefits from the linked actor. Level 2 changes Assume Command to an On Turn action once per combat round and updates the matching chat card.
+- Added the disabled-by-default **Allow Players to Edit Drone Advanced Configuration** world setting. All users retain a read-only summary; GMs and permitted owners can edit raw fields and Effects.
+- Added the rules-based **Reprogram Deck** Cyberdeck operation and optional Rest checkbox, plus an unlimited **Force Refresh Access** control available to every user permitted into Cyberdeck Advanced Configuration.
+- Fixed Drone over-capacity confirmation to use Foundry V14's safe `DialogV2.wait` path, avoiding the prior console-only failure.
+- Expanded Cyberdeck Memory presentation with explicit effective-capacity and usage detail.
+
 ## 0.10.1
 
 - Fixed Cyberdeck form submission by placing SWNR's native `data-edit="img"`

@@ -30,13 +30,20 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
   presents live control declarations, the native linked pilot, mounted
   weapons, Command Deck actions, fittings, cargo, configuration, effects, and
   notes without replacing SWNR or Combat Enhancements mechanics.
+- Lists visible, pilot-linked Drones on the Character Cyberware tab and opens
+  their sheets directly. The Drone sheet recognizes tagged Drone Pilot benefits
+  through Combat Enhancements 0.24.0 and shows the resulting Assume Command
+  cost on both the control and chat card.
 - Adds an optional **CWN Cyberdeck Operations Sheet** for SWNR Cyberdeck actors.
   It presents native Shielding, Access, CPU, Memory, Programs, copied Datafiles,
   hacker assignment, configuration, and notes, and can open a compatible Combat
   Enhancements Network Console directly on that deck. Configuration includes
   published Cyberdeck model presets, while effective program capacity includes
   tagged Expert Programmer benefits and blocks new over-capacity additions with
-  a visible warning without deleting existing content.
+  a visible warning without deleting existing content. Its Operations tab and
+  the Character Action Centre can perform the rules-based one-hour,
+  once-per-day Access refresh, while permitted Advanced Configuration users
+  have a separate unlimited testing override.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -50,7 +57,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.10.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.11.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -67,14 +74,18 @@ drag/drop, and document actions. They add no actor fields, migrations, or
 game-rule automation. The Cyberdeck sheet's Notes tab uses one Theme flag
 because the native Cyberdeck schema has no notes field; all operational data
 remains native or belongs to Combat Enhancements. Linked cyberdecks are read
-from SWNR's existing direct actor links. Linked drones are deferred on the Character sheet because SWNR
-stores that relationship on the drone and a sheet-wide reverse world scan
-would be unsafe and unnecessarily expensive.
+from SWNR's existing direct actor links. Linked drones are derived from visible
+Drone actors whose native first crew-member link identifies the Character.
 
 The world setting **Allow Player Cyberdeck Advanced Configuration** controls
 whether player owners may view and edit the Cyberdeck sheet's Advanced
 Configuration source fields. It is disabled by default; GMs always retain
 access. Open **Configure Settings > Module Settings** as GM to change it.
+
+The separate **Allow Players to Edit Drone Advanced Configuration** setting is
+also disabled by default. The Drone Configuration summary remains visible to
+owners; raw source fields and Effect mutations require GM status or this world
+permission.
 
 ## Compatibility design
 

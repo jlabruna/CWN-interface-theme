@@ -307,6 +307,7 @@ export function createCwnCharacterSheetClass(SWNActorSheet) {
       actions: {
         openActionCentre: this._onOpenActionCentre,
         rollInitiative: this._onRollInitiative,
+        rest: this._onRestWithAccess,
         scene: this._onSceneWithSummary,
         declareAction: this._onDeclareAction,
         toggleSkillControls: this._onToggleSkillControls,
@@ -424,6 +425,54 @@ export function createCwnCharacterSheetClass(SWNActorSheet) {
     static async _onOpenActionCentre(event) {
       event.preventDefault();
       await globalThis.game?.cwnCombatEnhancements?.actions?.open?.(this.actor);
+    }
+
+    static async _onRestWithAccess(event) {
+      event.preventDefault();
+      const DialogV2 = globalThis.foundry?.applications?.api?.DialogV2;
+      if (!DialogV2?.wait) return;
+      const linkedDeckIds = Array.from(this.actor.system?.cyberdecks ?? []).filter(Boolean);
+      const restDescription = globalThis.game?.i18n?.localize?.("swnr.sheet.rest-desc") ?? "Rest for the night?";
+      const result = await DialogV2.wait({
+        window: { title: globalThis.game?.i18n?.localize?.("swnr.sheet.rest-title") ?? "Rest" },
+        modal: true,
+        rejectClose: false,
+        content: `<form>${restDescription}${linkedDeckIds.length ? '<label class="cwnit-sheet__rest-access"><input type="checkbox" name="reprogramAccess"> Spend one hour reprogramming a linked cyberdeck and refresh Access (once per day)</label>' : ""}</form>`,
+        buttons: [
+          { action: "normal", label: "Yes", icon: "fas fa-check", default: true, callback: (_dialogEvent, button) => ({ rest: "normal", reprogram: Boolean(button.form.elements.reprogramAccess?.checked) }) },
+          { action: "no_hp", label: "Yes, but no HP", icon: "fas fa-check", callback: (_dialogEvent, button) => ({ rest: "no_hp", reprogram: Boolean(button.form.elements.reprogramAccess?.checked) }) },
+          { action: "no", label: "No", icon: "fas fa-times", callback: () => null },
+        ],
+        close: () => null,
+      });
+      if (!result) return;
+
+      await globalThis.swnr?.utils?.refreshActor?.({
+        actor: this.actor,
+        cadence: "day",
+        frail: result.rest === "no_hp",
+      });
+      await this._resetSoak?.();
+
+      const accessApi = globalThis.game?.cwnCombatEnhancements?.access;
+      if (typeof accessApi?.beginNewDay === "function") await accessApi.beginNewDay(this.actor);
+      if (!result.reprogram) return;
+      if (typeof accessApi?.refresh !== "function") {
+        globalThis.ui?.notifications?.warn?.("Rest completed, but the matching Combat Enhancements release is required to track Access refresh.");
+        return;
+      }
+      const deck = linkedDeckIds.map((id) => globalThis.game?.actors?.get?.(id)).find((entry) => entry?.type === "cyberdeck");
+      if (!deck) return;
+      try {
+        const refresh = await accessApi.refresh(this.actor, { cyberdeck: deck });
+        if (refresh.alreadyFull) {
+          globalThis.ui?.notifications?.info?.("Access was already full; the daily refresh was not consumed.");
+          return;
+        }
+        await postActorChat(this.actor, `<article class="cwnit-access-refresh"><header><i class="fa-solid fa-laptop-code"></i><h3>Reprogrammed ${escapeHtml(deck.name)}</h3></header><p>One hour spent reprogramming the deck. Access ${refresh.before.effectiveValue}/${refresh.before.effectiveMax} → ${refresh.after.effectiveValue}/${refresh.after.effectiveMax}. Daily refresh used.</p></article>`);
+      } catch (error) {
+        globalThis.ui?.notifications?.warn?.(error?.message ?? "Access could not be refreshed after Rest.");
+      }
     }
 
     static async _onRollInitiative(event) {

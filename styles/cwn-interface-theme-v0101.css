@@ -2945,3 +2945,75 @@
 .cwnit-scene-refresh header :is(i, h3) { margin: 0; color: var(--cwnit-accent); text-shadow: none; }
 .cwnit-scene-refresh ul { margin: 9px 0 0; padding-left: 20px; }
 .cwnit-scene-refresh li { margin: 4px 0; color: var(--cwnit-text); }
+.cwnit-cyberdeck__reprogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 0.6rem;
+}
+
+.cwnit-cyberdeck__reprogram small {
+  opacity: 0.75;
+}
+
+.cwnit-cyberdeck__override {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--cwnit-cyan, #31dff4);
+  background: rgb(49 223 244 / 6%);
+}
+
+.cwnit-cyberdeck__override h3,
+.cwnit-cyberdeck__override p {
+  margin: 0;
+}
+
+.cwnit-sheet__rest-access {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.65rem;
+  border: 1px solid rgb(49 223 244 / 45%);
+}
+
+.cwnit-drone__configuration-summary,
+.cwnit-drone__pilot-benefits dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  margin: 0.75rem 0;
+  background: rgb(69 112 138 / 40%);
+}
+
+.cwnit-drone__configuration-summary > div,
+.cwnit-drone__pilot-benefits dl > div {
+  padding: 0.65rem;
+  background: var(--cwnit-panel, #101c28);
+}
+
+.cwnit-drone__configuration-summary dt,
+.cwnit-drone__pilot-benefits dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+.cwnit-drone__configuration-summary dd,
+.cwnit-drone__pilot-benefits dd {
+  margin: 0.2rem 0 0;
+  color: var(--cwnit-cyan, #31dff4);
+  font-weight: 700;
+}
+
+.cwnit-drone__advanced {
+  margin: 0.75rem 0;
+  padding: 0.65rem;
+  border: 1px solid rgb(69 112 138 / 60%);
+}

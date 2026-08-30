@@ -90,12 +90,25 @@ export function cyberdeckProgramMemoryState(actor, hacker = null, proposed = [])
   const subjects = programs.filter((item) => item.system?.type === "subject");
   const files = programs.filter((item) => item.system?.type === "dataFile");
   const rules = expertProgrammerCyberdeckRules(hacker);
-  const chargedElements = Math.max(0, verbs.length + subjects.length - rules.bonusElements);
-  const used = files.length + chargedElements * rules.elementCost;
+  const writtenElements = verbs.length + subjects.length;
+  const freeElements = Math.min(writtenElements, rules.bonusElements);
+  const chargedElements = Math.max(0, writtenElements - rules.bonusElements);
+  const writtenMemory = chargedElements * rules.elementCost;
+  const used = files.length + writtenMemory;
   const max = number(actor?.system?.memory?.max);
   return {
     value: Math.max(0, max - used), max, used, over: Math.max(0, used - max),
-    breakdown: { verbs: verbs.length, subjects: subjects.length, files: files.length },
+    breakdown: {
+      verbs: verbs.length,
+      subjects: subjects.length,
+      writtenElements,
+      freeElements,
+      chargedElements,
+      elementCost: rules.elementCost,
+      writtenMemory,
+      files: files.length,
+      summary: `${writtenElements} written; ${freeElements} free; ${chargedElements} x ${rules.elementCost} = ${writtenMemory} Memory; ${files.length} file${files.length === 1 ? "" : "s"} = ${files.length} Memory`,
+    },
     expertProgrammer: rules,
   };
 }
@@ -259,6 +272,8 @@ export function createCwnCyberdeckSheetClass(SWNCyberdeckSheet) {
         openNetworkConsole: this._onOpenNetworkConsole,
         createCyberdeckItem: this._onCreateCyberdeckItem,
         applyCyberdeckModel: this._onApplyCyberdeckModel,
+        reprogramAccess: this._onReprogramAccess,
+        forceRefreshAccess: this._onForceRefreshAccess,
       },
     };
 
@@ -385,6 +400,61 @@ export function createCwnCyberdeckSheetClass(SWNCyberdeckSheet) {
       await applyCyberdeckModel(this.actor, model.key);
       const state = cyberdeckProgramMemoryState(this.actor, linkedHacker(this.actor));
       if (state.over > 0) globalThis.ui?.notifications?.warn?.(`Model applied, but existing programs exceed effective Memory by ${state.over}. Nothing was removed.`);
+    }
+
+    static async _onReprogramAccess(event) {
+      event.preventDefault();
+      const hacker = linkedHacker(this.actor);
+      const api = globalThis.game?.cwnCombatEnhancements?.access;
+      if (!hacker) {
+        globalThis.ui?.notifications?.warn?.("Assign a hacker before refreshing Access.");
+        return;
+      }
+      if (typeof api?.reprogram !== "function") {
+        globalThis.ui?.notifications?.warn?.("Enable the matching CWN Combat Enhancements release to track the rules-based Access refresh.");
+        return;
+      }
+      try {
+        const result = await api.reprogram(hacker, { cyberdeck: this.actor });
+        if (result?.alreadyFull) globalThis.ui?.notifications?.info?.("Access is already full; the daily refresh was not used.");
+      } catch (error) {
+        globalThis.ui?.notifications?.warn?.(error?.message ?? "Access could not be refreshed.");
+      }
+    }
+
+    static async _onForceRefreshAccess(event) {
+      event.preventDefault();
+      if (!canUseAdvancedCyberdeckConfiguration(this.actor)) return;
+      const hacker = linkedHacker(this.actor);
+      const api = globalThis.game?.cwnCombatEnhancements?.access;
+      if (!hacker) {
+        globalThis.ui?.notifications?.warn?.("Assign a hacker before refreshing Access.");
+        return;
+      }
+      if (typeof api?.forceRefresh !== "function") {
+        globalThis.ui?.notifications?.warn?.("Enable the matching CWN Combat Enhancements release to use the Access override.");
+        return;
+      }
+      const DialogV2 = globalThis.foundry?.applications?.api?.DialogV2;
+      if (!DialogV2?.wait) return;
+      const choice = await DialogV2.wait({
+        window: { title: "Force Refresh Access" },
+        modal: true,
+        rejectClose: false,
+        content: `<form><p class="notification warning">Administrative override: this ignores the one-hour and once-per-day rules.</p><label class="checkbox"><input type="checkbox" name="resetDaily"> Reset legitimate daily refresh tracking for regression testing</label></form>`,
+        buttons: [
+          { action: "refresh", label: "Force Refresh", default: true, callback: (_dialogEvent, button) => ({ confirmed: true, resetDailyTracking: button.form.elements.resetDaily.checked }) },
+          { action: "cancel", label: "Cancel", callback: () => null },
+        ],
+        close: () => null,
+      });
+      if (!choice?.confirmed) return;
+      try {
+        const result = await api.forceRefresh(hacker, { cyberdeck: this.actor, resetDailyTracking: choice.resetDailyTracking });
+        globalThis.ui?.notifications?.info?.(result?.alreadyFull ? "Access is already full." : "Access force-refreshed.");
+      } catch (error) {
+        globalThis.ui?.notifications?.warn?.(error?.message ?? "Access could not be force-refreshed.");
+      }
     }
 
     static async _onAssignHacker(event) {

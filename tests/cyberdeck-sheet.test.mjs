@@ -104,7 +104,11 @@ test("deck view derives native resources, loaded programs, and files", () => {
   assert.deepEqual(context.resources.access, { value: 3, max: 4, hackerValue: 2, hackerMax: 3, bonus: 1 });
   assert.deepEqual(context.resources.cpu, { value: 2, max: 3, used: 1, focusBonus: 0 });
   assert.equal(context.resources.memory.used, 3);
-  assert.deepEqual(context.resources.memory.breakdown, { verbs: 1, subjects: 1, files: 1 });
+  assert.equal(context.resources.memory.breakdown.verbs, 1);
+  assert.equal(context.resources.memory.breakdown.subjects, 1);
+  assert.equal(context.resources.memory.breakdown.writtenElements, 2);
+  assert.equal(context.resources.memory.breakdown.chargedElements, 2);
+  assert.equal(context.resources.memory.breakdown.files, 1);
   assert.deepEqual(context.resources.shielding, { value: 8, max: 10 });
   assert.equal(context.verbs[0].item.name, "Blind");
   assert.equal(context.subjects[0].item.name, "Camera");
@@ -207,15 +211,20 @@ test("sheet provides five tabs, CE-safe controls, GM fields, notes, and native i
   for (const name of names) assert.match(templates[name], /^(?:<header|<section)/u);
   assert.match(templates.header, /openNetworkConsole/u);
   assert.match(templates.operations, /assignHacker/u);
+  assert.match(templates.operations, /data-action="reprogramAccess"/u);
   assert.match(templates.programs, /data-action="viewDoc"/u);
   assert.match(templates.programs, /Effective Memory/u);
   assert.match(templates.configuration, /applyCyberdeckModel/u);
+  assert.match(templates.configuration, /data-action="forceRefreshAccess"/u);
+  assert.match(templates.configuration, /anyone permitted to use this Advanced Configuration panel/u);
   assert.match(templates.files, /data-action="deleteDoc"/u);
   assert.match(templates.configuration, /system\.wirelessConnectionPenalty/u);
   assert.match(templates.configuration, /\{\{#if cwnit\.canConfigureAdvanced\}\}/u);
   assert.match(templates.notes, /flags\.cwn-interface-theme\.cyberdeckNotes/u);
   assert.match(source, /getCyberdeckStatus/u);
   assert.match(source, /Enable CWN Combat Enhancements/u);
+  assert.match(source, /api\?\.reprogram/u);
+  assert.match(source, /api\?\.forceRefresh/u);
   assert.match(css, /\.cwnit-cyberdeck-sheet-window/u);
 });
 

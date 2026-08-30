@@ -7,8 +7,34 @@ import {
 } from "./cwn-sheet-shared-v062.mjs";
 
 export const DRONE_SHEET_LABEL = "CWN Drone Operations Sheet";
+export const PLAYER_DRONE_ADVANCED_CONFIG_SETTING = "allowPlayerDroneAdvancedConfiguration";
 
 export const DRONE_DEPLOYED_FLAG = "deployed";
+
+export function registerCwnDroneSettings(runtime = globalThis) {
+  runtime.game?.settings?.register?.(MODULE_ID, PLAYER_DRONE_ADVANCED_CONFIG_SETTING, {
+    name: "Allow Players to Edit Drone Advanced Configuration",
+    hint: "Owners can edit raw Drone source fields and Effects. When disabled, players retain a read-only Configuration summary.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+    restricted: true,
+  });
+}
+
+export function canUseAdvancedDroneConfiguration(actor, {
+  user = globalThis.game?.user,
+  settings = globalThis.game?.settings,
+} = {}) {
+  if (user?.isGM) return true;
+  if (!actor?.isOwner) return false;
+  try {
+    return Boolean(settings?.get?.(MODULE_ID, PLAYER_DRONE_ADVANCED_CONFIG_SETTING));
+  } catch (_error) {
+    return false;
+  }
+}
 
 export const COMMAND_DECK_NAMES = Object.freeze({
   follow: "command deck/follow",
@@ -45,6 +71,33 @@ function plainText(value, maximumLength = 230) {
     .trim();
   if (!text) return "Open the fitting for full operational details.";
   return text.length > maximumLength ? `${text.slice(0, maximumLength - 1).trimEnd()}…` : text;
+}
+
+function localFocusLevel(actor, key) {
+  if (actor?.type !== "character") return 0;
+  return Array.from(actor?.items ?? []).reduce((highest, item) => {
+    if (item?.type !== "feature" || item.system?.type !== "focus") return highest;
+    if (item.flags?.["cwn-content-pack"]?.focusKey !== key) return highest;
+    return Math.max(highest, Math.max(0, Math.min(2, Math.trunc(number(item.system?.level)))));
+  }, 0);
+}
+
+function resolvedDroneBenefits(pilot) {
+  const api = globalThis.game?.cwnCombatEnhancements?.drone;
+  if (typeof api?.benefits === "function") return api.benefits(pilot);
+  const focusLevel = localFocusLevel(pilot, "drone-pilot");
+  const qualifies = focusLevel >= 2;
+  return {
+    focusLevel,
+    controlledDroneHitBonus: qualifies ? 2 : 0,
+    onTargetAttackBonus: 0,
+    assumeOnTurnEligible: qualifies,
+    assumeOnTurnAvailable: qualifies,
+    assumeCost: qualifies ? "On Turn" : "Main + Move Actions",
+    assumeCostShort: qualifies ? "On Turn" : "Main + Move",
+    assumeTracked: false,
+    bonusMainActionPerScene: qualifies,
+  };
 }
 
 function ammoLabel(ammo = {}) {
@@ -205,6 +258,7 @@ export function prepareDroneSheetContext(actor, {
   );
 
   const fittingUsage = resourceUsage(system.fittings);
+  const pilotBenefits = resolvedDroneBenefits(pilot);
   return {
     pilot,
     modelLabel,
@@ -224,6 +278,8 @@ export function prepareDroneSheetContext(actor, {
     hasDefenses: defenses.length > 0,
     quickLaunch: Array.from(actor?.itemTypes?.shipFitting ?? [])
       .some((item) => normalizeName(item?.name) === "quick launch"),
+    pilotBenefits,
+    canConfigureAdvanced: canUseAdvancedDroneConfiguration(actor),
   };
 }
 
@@ -246,14 +302,20 @@ async function approveFittingCapacity(actor, itemData) {
   }
 
   const DialogV2 = globalThis.foundry?.applications?.api?.DialogV2;
-  if (typeof DialogV2?.confirm !== "function") {
+  if (typeof DialogV2?.wait !== "function") {
     globalThis.ui?.notifications?.warn?.(`${message} The GM override dialog is unavailable.`);
     return false;
   }
-  return Boolean(await DialogV2.confirm({
+  return Boolean(await DialogV2.wait({
     window: { title: "Exceed Drone Fitting Capacity?" },
     content: `<p>${escapeHtml(message)}</p><p>Only continue for a custom or intentionally over-capacity drone. Existing Items will not be removed.</p>`,
     modal: true,
+    rejectClose: false,
+    buttons: [
+      { action: "override", label: "Add Over Capacity", default: true, callback: () => true },
+      { action: "cancel", label: "Cancel", callback: () => false },
+    ],
+    close: () => false,
   }));
 }
 
@@ -438,9 +500,13 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
       const actions = {
         assume: {
           title: `Assume Command — ${this.actor.name}`,
-          cost: "Main + Move Actions",
+          cost: cwnit.pilotBenefits.assumeCost,
           details: [{ label: "Pilot", value: pilot }],
-          note: "Declaration only; no Theme-owned control state was created. Drone Pilot level 2 may alter this action once per round.",
+          note: cwnit.pilotBenefits.assumeOnTurnEligible
+            ? (cwnit.pilotBenefits.assumeOnTurnAvailable
+              ? "Drone Pilot level 2: On Turn once this round. No Theme-owned control state was created."
+              : "The Drone Pilot On Turn benefit was already used this round, so the normal Main + Move cost applies. No Theme-owned control state was created.")
+            : "Declaration only; no Theme-owned control state was created.",
         },
         drop: {
           title: `Drop Control — ${this.actor.name}`,
@@ -458,7 +524,20 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
       const action = actions[target.dataset.actionKey];
       if (!action) return;
       if (target.dataset.actionKey === "halt" && !cwnit.hasAutonomousCommands) return;
+      if (target.dataset.actionKey === "assume" && cwnit.pilot) {
+        const api = globalThis.game?.cwnCombatEnhancements?.drone;
+        if (typeof api?.useAssumeCommand === "function") {
+          const use = await api.useAssumeCommand(cwnit.pilot);
+          action.cost = use.assumeCost;
+          action.note = use.usedOnTurnBenefit
+            ? "Drone Pilot level 2: On Turn once this round. No Theme-owned control state was created."
+            : (use.assumeOnTurnEligible
+              ? "The Drone Pilot On Turn benefit was already used this round, so the normal Main + Move cost applies. No Theme-owned control state was created."
+              : "Declaration only; no Theme-owned control state was created.");
+        }
+      }
       await postDroneChat(this.actor, action);
+      if (target.dataset.actionKey === "assume") await this.render();
     }
 
     static async _onIssueAutonomousCommand(event, target) {

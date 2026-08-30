@@ -1,7 +1,8 @@
 <section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="configuration">
   <div class="cwnit-drone__section-heading"><div><p>Workshop Access</p><h2>Configuration</h2></div></div>
-  <p class="cwnit-drone__hint">These are SWNR's native Drone fields. Changing Model may trigger SWNR's native default-stat prompt.</p>
-  <div class="cwnit-drone__config-grid">
+  <p class="cwnit-drone__hint">Configuration is always visible as a summary. Raw SWNR fields are editable only when the world permission allows it.</p>
+  <dl class="cwnit-drone__configuration-summary"><div><dt>Model</dt><dd>{{cwnit.modelLabel}}</dd></div><div><dt>Tech Level</dt><dd>{{system.tl}}</dd></div><div><dt>Cost</dt><dd>{{system.cost}}</dd></div><div><dt>Encumbrance</dt><dd>{{system.enc}}</dd></div><div><dt>Armor Class</dt><dd>{{system.ac}}</dd></div><div><dt>Trauma Target</dt><dd>{{system.traumaTarget}}</dd></div><div><dt>Move</dt><dd>{{system.speed}} {{system.moveType}}</dd></div><div><dt>Control Range</dt><dd>{{system.range}}</dd></div><div><dt>Fittings</dt><dd>{{cwnit.fittingUsage.used}} / {{cwnit.fittingUsage.maximum}}</dd></div><div><dt>Hardpoints</dt><dd>{{cwnit.hardpointUsage.used}} / {{cwnit.hardpointUsage.maximum}}</dd></div><div><dt>Power</dt><dd>{{system.power.value}} / {{system.power.max}}</dd></div><div><dt>Armor</dt><dd>{{system.armor.value}} / {{system.armor.max}}</dd></div></dl>
+  {{#if cwnit.canConfigureAdvanced}}<details class="cwnit-drone__advanced"><summary><i class="fa-solid fa-screwdriver-wrench"></i> Advanced Configuration</summary><p>Changing Model may trigger SWNR's native default-stat prompt.</p><div class="cwnit-drone__config-grid">
     <label><span>Model</span>{{formInput systemFields.model value=system.model localize=true}}</label>
     {{#if (eq system.model "custom")}}<label><span>Custom Model</span><input name="system.customModel" type="text" value="{{system.customModel}}" /></label>{{/if}}
     <label><span>Tech Level</span><input name="system.tl" type="number" value="{{system.tl}}" /></label>
@@ -17,12 +18,12 @@
     <label><span>Power Capacity</span><input name="system.power.max" type="number" value="{{system.power.max}}" /></label>
     <label><span>Armor Current</span><input name="system.armor.value" type="number" value="{{system.armor.value}}" /></label>
     <label><span>Armor Maximum</span><input name="system.armor.max" type="number" value="{{system.armor.max}}" /></label>
-  </div>
+  </div></details>{{/if}}
 
-  <div class="cwnit-drone__section-heading cwnit-drone__subheading"><div><p>Actor &amp; Item Effects</p><h2>Effects</h2></div>{{#if editable}}<button type="button" data-action="createDoc" data-document-class="ActiveEffect" data-origin="{{actor.uuid}}" data-img="icons/svg/aura.svg"><i class="fa-solid fa-plus"></i> Add Effect</button>{{/if}}</div>
+  <div class="cwnit-drone__section-heading cwnit-drone__subheading"><div><p>Actor &amp; Item Effects</p><h2>Effects</h2></div>{{#if cwnit.canConfigureAdvanced}}<button type="button" data-action="createDoc" data-document-class="ActiveEffect" data-origin="{{actor.uuid}}" data-img="icons/svg/aura.svg"><i class="fa-solid fa-plus"></i> Add Effect</button>{{/if}}</div>
   <ol class="cwnit-drone__effect-list">
     {{#each cwnit.effects as |entry|}}
-      <li class="effect" data-effect-id="{{entry.effect.id}}" data-parent-id="{{entry.parentId}}" data-document-class="ActiveEffect" data-drag="true"><img src="{{entry.effect.img}}" alt="" /><strong>{{entry.effect.name}}</strong><span>{{entry.source}}</span><span>{{entry.duration}}</span><div>{{#if @root.editable}}<button type="button" data-action="toggleEffect" title="Toggle Effect"><i class="fa-solid {{#if entry.effect.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></button>{{/if}}<button type="button" data-action="viewDoc"><i class="fa-solid fa-pen-to-square"></i></button>{{#if @root.editable}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
+      <li class="effect" data-effect-id="{{entry.effect.id}}" data-parent-id="{{entry.parentId}}" data-document-class="ActiveEffect" data-drag="true"><img src="{{entry.effect.img}}" alt="" /><strong>{{entry.effect.name}}</strong><span>{{entry.source}}</span><span>{{entry.duration}}</span><div>{{#if @root.cwnit.canConfigureAdvanced}}<button type="button" data-action="toggleEffect" title="Toggle Effect"><i class="fa-solid {{#if entry.effect.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></button>{{/if}}<button type="button" data-action="viewDoc"><i class="fa-solid fa-eye"></i></button>{{#if @root.cwnit.canConfigureAdvanced}}<button type="button" data-action="deleteDoc"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
     {{else}}<li class="cwnit-drone__empty">No effects are currently present.</li>{{/each}}
   </ol>
 </section>

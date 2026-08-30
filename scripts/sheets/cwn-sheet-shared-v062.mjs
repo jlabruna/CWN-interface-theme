@@ -101,7 +101,21 @@ export async function loadNativePartials(runtime = globalThis) {
   await runtime.foundry?.applications?.handlebars?.loadTemplates?.(NATIVE_PARTIALS);
 }
 
-export function prepareCommonSheetContext(actor, { resolveActor = () => null } = {}) {
+export function linkedDronesForPilot(actor, {
+  actors = globalThis.game?.actors?.contents ?? globalThis.game?.actors ?? [],
+  user = globalThis.game?.user,
+} = {}) {
+  return Array.from(actors ?? [])
+    .filter((entry) => entry?.type === "drone" && String(entry.system?.crewMembers?.[0] ?? "") === String(actor?.id ?? ""))
+    .filter((entry) => user?.isGM || entry.isOwner || entry.testUserPermission?.(user, "OBSERVER"))
+    .sort((left, right) => String(left.name).localeCompare(String(right.name)));
+}
+
+export function prepareCommonSheetContext(actor, {
+  resolveActor = () => null,
+  actors = globalThis.game?.actors?.contents ?? globalThis.game?.actors ?? [],
+  user = globalThis.game?.user,
+} = {}) {
   const items = sortDocuments(actor?.items ?? []);
   const knownTypes = new Set(["weapon", "armor", "item", "cyberware", "feature", "power", "skill"]);
   const powerGroups = actor?.itemTypes?.power
@@ -124,5 +138,13 @@ export function prepareCommonSheetContext(actor, { resolveActor = () => null } =
     otherItems: items.filter((item) => !knownTypes.has(item.type)),
     effects: sortDocuments(actor?.effects ?? []),
     linkedCyberdecks: cyberdeckIds.map((id) => resolveActor(id)).filter(Boolean),
+    linkedDrones: linkedDronesForPilot(actor, { actors, user }).map((drone) => ({
+      actor: drone,
+      id: drone.id,
+      name: drone.name,
+      img: drone.img,
+      model: drone.system?.model === "custom" ? drone.system?.customModel || "Custom" : drone.system?.model || "Drone",
+      deployed: Boolean(drone.getFlag?.(MODULE_ID, "deployed") ?? drone.flags?.[MODULE_ID]?.deployed),
+    })),
   };
 }
