@@ -31,13 +31,13 @@ jobs:
           cp module.json ../module.json
           unzip -t ../cwn-interface-theme-${GITHUB_REF_NAME}.zip
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "module.json"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v0100.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v0101.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-character-sheet-v091.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-account-ledger-v090.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-npc-sheet-v062.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-drone-sheet-v0100.mjs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-cyberdeck-sheet-v0100.mjs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "styles/cwn-interface-theme-v0100.css"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-cyberdeck-sheet-v0101.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "styles/cwn-interface-theme-v0101.css"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/header-v081.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/combat-v081.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/character/actions-v080.hbs"
@@ -49,11 +49,11 @@ jobs:
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/drone/operations-v092.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/drone/fittings-v092.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/drone/cargo-v092.hbs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/header-v0100.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/header-v0101.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/operations-v0100.hbs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/programs-v0100.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/programs-v0101.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/files-v0100.hbs"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/configuration-v0100.hbs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/configuration-v0101.hbs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "templates/sheets/cyberdeck/notes-v0100.hbs"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
