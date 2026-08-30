@@ -5,13 +5,13 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.10.0");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.10.0");
-const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.10.0");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.10.1");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.10.1");
+const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.10.1");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.10.0") {
-  throw new Error(`Expected module version 0.10.0 but found ${manifest.version}.`);
+if (manifest.version !== "0.10.1") {
+  throw new Error(`Expected module version 0.10.1 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -43,19 +43,13 @@ const browserReleaseFiles = [
   "README.md",
   "module.json",
   "package.json",
-  "scripts/cwn-interface-theme-v0100.mjs",
-  "scripts/sheets/cwn-drone-sheet-v0100.mjs",
-  "scripts/sheets/cwn-cyberdeck-sheet-v0100.mjs",
-  "styles/cwn-interface-theme-v0100.css",
-  "templates/sheets/drone/operations-v092.hbs",
-  "templates/sheets/drone/fittings-v092.hbs",
-  "templates/sheets/drone/cargo-v092.hbs",
-  "templates/sheets/cyberdeck/header-v0100.hbs",
-  "templates/sheets/cyberdeck/operations-v0100.hbs",
-  "templates/sheets/cyberdeck/programs-v0100.hbs",
-  "templates/sheets/cyberdeck/files-v0100.hbs",
-  "templates/sheets/cyberdeck/configuration-v0100.hbs",
-  "templates/sheets/cyberdeck/notes-v0100.hbs",
+  "lang/en.json",
+  "scripts/cwn-interface-theme-v0101.mjs",
+  "scripts/sheets/cwn-cyberdeck-sheet-v0101.mjs",
+  "styles/cwn-interface-theme-v0101.css",
+  "templates/sheets/cyberdeck/header-v0101.hbs",
+  "templates/sheets/cyberdeck/configuration-v0101.hbs",
+  "templates/sheets/cyberdeck/programs-v0101.hbs",
   "tests/cyberdeck-sheet.test.mjs",
   "tests/drone-sheet.test.mjs",
   "tests/manifest.test.mjs",

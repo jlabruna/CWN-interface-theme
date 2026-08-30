@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.10.1
+
+- Fixed Cyberdeck form submission by placing SWNR's native `data-edit="img"`
+  contract on the portrait image rather than its wrapper, preventing an invalid
+  empty `img` value from blocking Advanced Configuration updates.
+- Added the GM-controlled **Allow Player Cyberdeck Advanced Configuration**
+  world setting. GMs always retain access; when enabled, player owners can view
+  and edit the stored Cyberdeck source fields.
+- Added focused image-form-contract, setting-registration, ownership, and
+  Advanced Configuration visibility regression coverage.
+- Added the published Cyberdeck model selector with the eight supplied base
+  profiles and a confirmed Apply Model Defaults action that writes native SWNR
+  Access, Memory, Shielding, CPU, Encumbrance, and Cost fields.
+- Added effective Memory display and visible creation/drop blocking at
+  capacity, including Expert Programmer's level-1 extra elements, level-2
+  half-Memory elements, and level-2 Program-skill CPU bonus.
+- Preserved existing over-capacity programs and files, warning instead of
+  deleting data when a model change lowers capacity.
+
 ## 0.10.0
 
 - Added an optional, non-default CWN Cyberdeck Operations Sheet for SWNR Cyberdeck Actors, preserving the native sheet and requiring no migration.

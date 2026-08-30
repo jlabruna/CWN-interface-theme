@@ -1,5 +1,7 @@
 {
   "CWNIT.Pause.SystemHalted": "SYSTEM HALTED",
+  "CWNIT.Settings.PlayerCyberdeckAdvanced.Name": "Allow Player Cyberdeck Advanced Configuration",
+  "CWNIT.Settings.PlayerCyberdeckAdvanced.Hint": "Allow player owners to view and edit the Advanced Configuration section on the CWN Cyberdeck Operations Sheet. GMs always have access.",
   "CWNIT.Sheet.Drone.AssignPilot": "Assign Pilot",
   "CWNIT.Sheet.Drone.CustomModel": "Custom Drone",
   "CWNIT.Sheet.Drone.DroneControl": "Drone Control",

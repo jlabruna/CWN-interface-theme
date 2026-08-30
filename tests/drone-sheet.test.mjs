@@ -17,8 +17,8 @@ import {
 } from "../scripts/sheets/cwn-drone-sheet-v0100.mjs";
 
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-drone-sheet-v0100.mjs", import.meta.url), "utf8");
-const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0100.mjs", import.meta.url), "utf8");
-const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v0100.css", import.meta.url), "utf8");
+const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0101.mjs", import.meta.url), "utf8");
+const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v0101.css", import.meta.url), "utf8");
 const templateNames = ["header", "operations", "fittings", "cargo", "configuration", "notes"];
 const templateVersions = { operations: "v092", fittings: "v092", cargo: "v092" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [

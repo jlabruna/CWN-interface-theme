@@ -33,7 +33,10 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 - Adds an optional **CWN Cyberdeck Operations Sheet** for SWNR Cyberdeck actors.
   It presents native Shielding, Access, CPU, Memory, Programs, copied Datafiles,
   hacker assignment, configuration, and notes, and can open a compatible Combat
-  Enhancements Network Console directly on that deck.
+  Enhancements Network Console directly on that deck. Configuration includes
+  published Cyberdeck model presets, while effective program capacity includes
+  tagged Expert Programmer benefits and blocks new over-capacity additions with
+  a visible warning without deleting existing content.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -47,7 +50,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.10.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.10.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -67,6 +70,11 @@ remains native or belongs to Combat Enhancements. Linked cyberdecks are read
 from SWNR's existing direct actor links. Linked drones are deferred on the Character sheet because SWNR
 stores that relationship on the drone and a sheet-wide reverse world scan
 would be unsafe and unnecessarily expensive.
+
+The world setting **Allow Player Cyberdeck Advanced Configuration** controls
+whether player owners may view and edit the Cyberdeck sheet's Advanced
+Configuration source fields. It is disabled by default; GMs always retain
+access. Open **Configure Settings > Module Settings** as GM to change it.
 
 ## Compatibility design
 
