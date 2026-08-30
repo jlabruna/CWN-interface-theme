@@ -155,6 +155,8 @@ test("templates preserve native SWNR roll, reload, item management, and drag con
   assert.match(templates.inventory, /systems\/swnr\/templates\/actor\/fragments\/items-list\.hbs/u);
   assert.match(templates.inventory, /consumable-list\.hbs/u);
   assert.match(templates.cyberware, /cyberware-list\.hbs/u);
+  assert.match(templates.cyberware, /Linked Drones/u);
+  assert.match(templates.cyberware, /#each cwnit\.linkedDrones/u);
   assert.match(templates.features, /data-document-class="ActiveEffect"/u);
   assert.match(templates.combat, /<li class="cwnit-sheet--npc__attack item"/u);
   assert.doesNotMatch(templates.combat, /data-action="reactionRoll"/u);

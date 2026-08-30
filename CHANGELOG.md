@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.2
+
+- Made world Drone `crewMembers` the authoritative pilot relationship and added provenance-tracked SWNR inventory records so repeated assignment is idempotent and unlink removes only the exact relationship record.
+- Refreshed every open Character/NPC application displaying a changed Drone relationship and retained Actor-ID identity for similarly named Drones.
+- Added Linked Drones parity to the custom NPC Cyberware tab.
+- Added the compact Character Maintenance capacity display and detailed calculation dialog through Combat Enhancements' public Maintenance API.
+
 ## 0.11.1
 
 - Fixed open Character sheets so their reverse-linked Drone list rerenders immediately when a Drone is linked, unlinked, or moved to another pilot.

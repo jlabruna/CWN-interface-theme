@@ -1,4 +1,5 @@
 const previousDronePilots = new Map();
+import { openApplicationsForActor } from "./sheets/drone-pilot-link.mjs?v=0.11.2";
 
 function changedLeafPaths(value, prefix = "", output = []) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -19,16 +20,16 @@ export function updateTouchesPath(changes, watchedPath) {
   return changedLeafPaths(changes).some((path) => path === watchedPath || path.startsWith(`${watchedPath}.`));
 }
 
-function renderOpenActorSheet(actor) {
-  const sheet = actor?.sheet;
-  if (!sheet?.rendered || typeof sheet.render !== "function") return false;
-  void sheet.render();
-  return true;
+function renderOpenActorSheet(actor, runtime = globalThis) {
+  const applications = openApplicationsForActor(actor, runtime);
+  for (const application of applications) void application.render?.({ parts: ["cyberware"] });
+  return applications.length > 0;
 }
 
 export function refreshDependentSheets(actor, changes, {
   actors = globalThis.game?.actors,
   previousPilotId = null,
+  runtime = globalThis,
 } = {}) {
   const dependentIds = new Set();
   if (actor?.type === "drone" && updateTouchesPath(changes, "system.crewMembers")) {
@@ -39,7 +40,7 @@ export function refreshDependentSheets(actor, changes, {
   if ((actor?.type === "character" || actor?.type === "npc") && updateTouchesPath(changes, "system.access")) {
     for (const cyberdeckId of actor.system?.cyberdecks ?? []) dependentIds.add(String(cyberdeckId));
   }
-  return Array.from(dependentIds).filter((id) => renderOpenActorSheet(actors?.get?.(id)));
+  return Array.from(dependentIds).filter((id) => renderOpenActorSheet(actors?.get?.(id), runtime));
 }
 
 export function registerLinkedSheetRefreshHooks(runtime = globalThis) {
@@ -54,6 +55,6 @@ export function registerLinkedSheetRefreshHooks(runtime = globalThis) {
     const key = actor?.uuid ?? actor?.id;
     const previousPilotId = previousDronePilots.get(key) ?? null;
     previousDronePilots.delete(key);
-    refreshDependentSheets(actor, changes, { actors: runtime.game?.actors, previousPilotId });
+    refreshDependentSheets(actor, changes, { actors: runtime.game?.actors, previousPilotId, runtime });
   });
 }

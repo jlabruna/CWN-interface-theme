@@ -225,6 +225,7 @@ test("Cyberware lists reverse-linked visible drones and opens them through the s
   assert.match(templates.cyberware, /Linked Drones/u);
   assert.match(templates.cyberware, /#each cwnit\.linkedDrones/u);
   assert.match(templates.cyberware, /data-action="openLinkedActor" data-actor-id="\{\{drone\.id\}\}"/u);
+  assert.match(templates.cyberware, /data-action="openMaintenance"/u);
 });
 
 test("level-up HP remains native and is surfaced through Action Centre setup", () => {

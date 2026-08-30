@@ -85,6 +85,10 @@ function prepareCharacterContext(actor, resolveActor, {
     return !field || Boolean(system.tweak?.[field]);
   });
   const accountLedgerApi = globalThis.game?.cwnCombatEnhancements?.accounts;
+  const maintenanceApi = globalThis.game?.cwnCombatEnhancements?.maintenance;
+  const maintenance = typeof maintenanceApi?.calculate === "function"
+    ? maintenanceApi.calculate(actor)
+    : null;
   const nativeAccounts = [
     {
       id: "base",
@@ -133,6 +137,7 @@ function prepareCharacterContext(actor, resolveActor, {
     visiblePowers,
     accountLedgerAvailable: typeof accountLedgerApi?.history === "function",
     accounts,
+    maintenance,
     primaryAccount: accounts[0],
     skillRankTiers: Object.fromEntries(
       cwnit.skills.map((skill) => [skill.id ?? skill._id, skillRankTier(skill.system?.rank)]),
@@ -313,6 +318,7 @@ export function createCwnCharacterSheetClass(SWNActorSheet) {
         toggleSkillControls: this._onToggleSkillControls,
         skillUp: this._onSkillUpWithChat,
         openLinkedActor: this._onOpenLinkedActor,
+        openMaintenance: this._onOpenMaintenance,
         openAccountLedger: this._onOpenAccountLedger,
         addLedgerAccount: this._onAddLedgerAccount,
         editLedgerAccount: this._onEditLedgerAccount,
@@ -589,6 +595,26 @@ export function createCwnCharacterSheetClass(SWNActorSheet) {
       event.preventDefault();
       const linkedActor = globalThis.game?.actors?.get?.(target.dataset.actorId);
       if (linkedActor?.sheet) await linkedActor.sheet.render(true);
+    }
+
+    static async _onOpenMaintenance(event) {
+      event.preventDefault();
+      const calculate = globalThis.game?.cwnCombatEnhancements?.maintenance?.calculate;
+      if (typeof calculate !== "function") {
+        globalThis.ui?.notifications?.warn?.("Maintenance details require CWN Combat Enhancements 0.25.0 or newer.");
+        return;
+      }
+      const value = calculate(this.actor);
+      const signed = (number) => Number(number) >= 0 ? `+${Number(number)}` : String(Number(number));
+      const fixLabel = value.tinkerLevel >= 2
+        ? `Fix-${value.fixRank} treated as Fix-${value.effectiveFixRank} by Tinker II`
+        : `Fix-${value.fixRank}`;
+      await globalThis.foundry?.applications?.api?.DialogV2?.wait?.({
+        window: { title: `Maintenance — ${this.actor.name}`, icon: "fa-solid fa-screwdriver-wrench" },
+        classes: ["cwnit-maintenance-dialog"], modal: true, rejectClose: false,
+        content: `<section class="cwnit-maintenance-breakdown"><h2>Maintenance Capacity: <b>${value.total}</b></h2><dl><div><dt>Intelligence modifier</dt><dd>${signed(value.intelligenceModifier)}</dd></div><div><dt>Constitution modifier</dt><dd>${signed(value.constitutionModifier)}</dd></div><div><dt>${escapeHtml(fixLabel)} contribution</dt><dd>+${value.fixContribution}</dd></div><div><dt>Base Maintenance</dt><dd>${value.base}</dd></div>${value.tinkerLevel >= 1 ? `<div><dt>Tinker I</dt><dd>×${value.multiplier}</dd></div>` : ""}<div class="is-total"><dt>Total Maintenance</dt><dd>${value.total}</dd></div></dl><p>Maintenance is a capacity, not a daily spendable pool. This Phase 1 view does not track commitments.</p></section>`,
+        buttons: [{ action: "close", label: "Close", default: true, callback: () => true }],
+      });
     }
 
     static async _onOpenAccountLedger(event, target) {

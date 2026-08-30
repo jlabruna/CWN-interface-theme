@@ -295,6 +295,32 @@
   margin-bottom: 10px;
 }
 
+.cwnit-character-sheet-window .cwnit-sheet__maintenance {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: auto;
+  min-height: 0;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid rgb(49 223 244 / 45%);
+  background: rgb(8 21 31 / 78%);
+  color: var(--cwnit-sheet-text);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cwnit-character-sheet-window .cwnit-sheet__maintenance b {
+  color: var(--cwnit-sheet-secondary);
+  font-size: 1.15rem;
+}
+
+.cwnit-maintenance-breakdown h2 b,
+.cwnit-maintenance-breakdown dd { color: #31dff4; }
+.cwnit-maintenance-breakdown dl { display: grid; gap: 1px; background: rgb(69 112 138 / 45%); }
+.cwnit-maintenance-breakdown dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem; background: #101c28; }
+.cwnit-maintenance-breakdown dd { margin: 0; font-weight: 700; }
+.cwnit-maintenance-breakdown .is-total { border-top: 1px solid #31dff4; }
+
 .cwnit-character-sheet-window :is(.cwnit-sheet__section-heading, .cwnit-sheet__panel) h2,
 .cwnit-character-sheet-window .cwnit-sheet__action-centre-panel h3 {
   margin: 0;

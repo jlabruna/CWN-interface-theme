@@ -5,6 +5,7 @@ import {
   sortDocuments,
   weaponClassification,
 } from "./cwn-sheet-shared-v062.mjs";
+import { linkDronePilot, unlinkDronePilot } from "./drone-pilot-link.mjs?v=0.11.2";
 
 export const DRONE_SHEET_LABEL = "CWN Drone Operations Sheet";
 export const PLAYER_DRONE_ADVANCED_CONFIG_SETTING = "allowPlayerDroneAdvancedConfiguration";
@@ -353,6 +354,7 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
       window: { resizable: true },
       actions: {
         assignPilot: this._onAssignPilot,
+        pilotDelete: this._onUnlinkPilot,
         createDoc: this._onCreateDroneDocument,
         declareDroneAction: this._onDeclareDroneAction,
         issueAutonomousCommand: this._onIssueAutonomousCommand,
@@ -419,6 +421,22 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
       return super._onDropItemCreate(itemData, event);
     }
 
+    async _onDropActor(event, data) {
+      if (!this.actor.isOwner) return false;
+      const pilot = await globalThis.fromUuid?.(data?.uuid) ?? globalThis.fromUuidSync?.(data?.uuid);
+      if (!pilot || (pilot.type !== "character" && pilot.type !== "npc")) {
+        globalThis.ui?.notifications?.error?.("Only Character or NPC Actors can be dropped onto a Drone.");
+        return false;
+      }
+      const currentId = this.actor.system?.crewMembers?.[0] ?? "";
+      if (currentId && String(currentId) !== String(pilot.id)) {
+        globalThis.ui?.notifications?.warn?.(`${this.actor.name} already has a pilot. Use Change to replace them.`);
+        return false;
+      }
+      await linkDronePilot(this.actor, pilot);
+      return true;
+    }
+
     static async _onCreateDroneDocument(event, target) {
       if (target.dataset.type === "shipFitting") {
         const proposed = { type: "shipFitting", system: { mass: 1 } };
@@ -447,7 +465,7 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
       ).join("");
       const selectedId = await globalThis.foundry?.applications?.api?.DialogV2?.prompt?.({
         window: { title: `Assign Pilot — ${this.actor.name}` },
-        content: `<label class="cwnit-drone__pilot-picker">Pilot<select name="pilotId">${options}</select></label><p>This uses SWNR's native drone-pilot link and inventory handling.</p>`,
+        content: `<label class="cwnit-drone__pilot-picker">Pilot<select name="pilotId">${options}</select></label><p>The Drone Actor remains the authority for this link. One provenance-tracked SWNR inventory record is maintained for the pilot.</p>`,
         modal: true,
         rejectClose: false,
         ok: {
@@ -466,15 +484,16 @@ export function createCwnDroneSheetClass(SWNVehicleSheet) {
         return;
       }
 
-      if (currentId) {
-        const nativeUnlink = SWNVehicleSheet.DEFAULT_OPTIONS?.actions?.pilotDelete;
-        if (typeof nativeUnlink !== "function") {
-          globalThis.ui?.notifications?.error?.("SWNR's native pilot unlink action is unavailable.");
-          return;
-        }
-        await nativeUnlink.call(this, { preventDefault() {} }, null);
+      await linkDronePilot(this.actor, selected);
+    }
+
+    static async _onUnlinkPilot(event) {
+      event.preventDefault();
+      if (!this.actor.system?.crewMembers?.[0]) {
+        globalThis.ui?.notifications?.warn?.("No pilot is assigned to this Drone.");
+        return;
       }
-      await this._onDropActor(event, { type: "Actor", uuid: selected.uuid });
+      await unlinkDronePilot(this.actor);
     }
 
     static async _onDeclareDroneAction(event, target) {

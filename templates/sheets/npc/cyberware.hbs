@@ -12,4 +12,12 @@
     </div>
     <p class="cwnit-sheet--npc__hint">{{localize 'CWNIT.Sheet.NPC.LinkedAssetsHint'}}</p>
   </section>
+  <section class="cwnit-sheet--npc__panel">
+    <h2>Linked Drones</h2>
+    <div class="cwnit-sheet--npc__linked-grid">
+      {{#each cwnit.linkedDrones as |drone|}}
+        <button type="button" data-action="openLinkedActor" data-actor-id="{{drone.id}}" title="World Drone Actor {{drone.id}}"><img src="{{drone.img}}" alt="" /><span>{{drone.name}}</span><small>{{drone.model}} · {{#if drone.deployed}}Deployed{{else}}Packed{{/if}}</small><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+      {{else}}<p class="cwnit-sheet--npc__empty">No linked drones.</p>{{/each}}
+    </div>
+  </section>
 </section>

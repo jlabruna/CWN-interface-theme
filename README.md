@@ -3,6 +3,11 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
+Version 0.11.2 makes Drone pilot linking idempotent and identity-safe, adds
+Linked Drones to Character and NPC Cyberware views, and displays Phase 1
+Maintenance capacity through Combat Enhancements 0.25.0. Legacy unprovenanced
+Drone-like inventory Items are never deleted automatically.
+
 ## Current scope
 
 - Styles SWNR system cards and ordinary player messages without changing chat
@@ -32,7 +37,7 @@ running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
   notes without replacing SWNR or Combat Enhancements mechanics.
 - Lists visible, pilot-linked Drones on the Character Cyberware tab and opens
   their sheets directly. The Drone sheet recognizes tagged Drone Pilot benefits
-  through Combat Enhancements 0.24.0 and shows the resulting Assume Command
+  through Combat Enhancements 0.25.0 and shows the resulting Assume Command
   cost on both the control and chat card. Open Character sheets refresh this
   list immediately when a separate Drone Actor changes pilots.
 - Adds an optional **CWN Cyberdeck Operations Sheet** for SWNR Cyberdeck actors.
@@ -59,7 +64,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.11.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.11.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

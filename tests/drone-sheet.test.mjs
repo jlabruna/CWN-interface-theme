@@ -230,10 +230,10 @@ test("operations delegates attacks and reloads to native Item actions", () => {
   assert.doesNotMatch(source, /rollAttack|pilotTotal|effectiveSkillRank|attackRollDie/u);
 });
 
-test("pilot assignment delegates linking and unlinking to native SWNR paths", () => {
-  assert.match(source, /this\._onDropActor\(event, \{ type: "Actor", uuid: selected\.uuid \}\)/u);
-  assert.match(source, /SWNVehicleSheet\.DEFAULT_OPTIONS\?\.actions\?\.pilotDelete/u);
-  assert.doesNotMatch(source, /"system\.crewMembers"\s*:/u);
+test("pilot assignment uses the provenance-aware authoritative link helper", () => {
+  assert.match(source, /linkDronePilot\(this\.actor, selected\)/u);
+  assert.match(source, /unlinkDronePilot\(this\.actor\)/u);
+  assert.doesNotMatch(source, /SWNVehicleSheet\.DEFAULT_OPTIONS\?\.actions\?\.pilotDelete/u);
 });
 
 test("deploy toggles persistent packed state and control actions remain themed declarations", async () => {
