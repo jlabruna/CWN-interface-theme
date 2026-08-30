@@ -31,7 +31,8 @@ jobs:
           cp module.json ../module.json
           unzip -t ../cwn-interface-theme-${GITHUB_REF_NAME}.zip
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "module.json"
-          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v0110.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/cwn-interface-theme-v0111.mjs"
+          unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheet-refresh.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-character-sheet-v091.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-account-ledger-v090.mjs"
           unzip -Z1 ../cwn-interface-theme-${GITHUB_REF_NAME}.zip | grep -qx "scripts/sheets/cwn-npc-sheet-v062.mjs"
