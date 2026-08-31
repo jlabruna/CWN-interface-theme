@@ -1,4 +1,4 @@
-# Permission Audit — CWN Interface Theme 0.12.0
+# Permission Audit — CWN Interface Theme 0.12.1
 
 Date: 2026-09-01  
 Scope: the optional Character, NPC, Drone, and Cyberdeck sheets as they existed before the Vehicle Operations release. This is an inspection report. No permission changes were made to those four sheets in this release, apart from shared rerendering needed for Linked Vehicles and the approved always-visible Character Cyberware tab.

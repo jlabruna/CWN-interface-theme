@@ -1,0 +1,93 @@
+/* Vehicle Operations patch layer for Interface Theme 0.12.1. */
+.cwnit-vehicle-sheet-window nav.tabs {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+
+.cwnit-vehicle-sheet-window .cwnit-drone__vitals > .cwnit-vehicle__ac {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  place-content: center;
+  column-gap: 7px;
+  row-gap: 3px;
+  min-width: 0;
+  text-align: center;
+}
+
+.cwnit-vehicle-sheet-window .cwnit-vehicle__ac > small {
+  grid-column: 1 / -1;
+  max-width: 100%;
+  overflow: visible;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.cwnit-vehicle__weapon-card dl {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cwnit-vehicle-mount {
+  display: grid;
+  gap: .75rem;
+}
+
+.cwnit-vehicle-mount > label,
+.cwnit-vehicle-mount > div > label {
+  display: grid;
+  gap: .25rem;
+}
+
+.cwnit-vehicle-mount > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.cwnit-vehicle-chat {
+  padding: .7rem;
+  border: 1px solid #41616d;
+  border-left: 4px solid #54d7e8;
+  background: #141b22;
+  color: #e0ebef;
+}
+
+.cwnit-vehicle-chat > header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding-bottom: .4rem;
+  border-bottom: 1px solid #41616d;
+}
+
+.cwnit-vehicle-chat :is(h3, p, dl, dt, dd, footer) {
+  color: #e0ebef;
+  text-shadow: none;
+}
+
+.cwnit-vehicle-chat h3 { margin: 0; color: #54d7e8; }
+.cwnit-vehicle-chat dl { display: grid; gap: .3rem; }
+.cwnit-vehicle-chat dl > div { display: flex; justify-content: space-between; gap: 1rem; }
+.cwnit-vehicle-chat :is(dt, dd) { margin: 0; }
+.cwnit-vehicle-chat dd { font-weight: 800; text-align: right; }
+.cwnit-vehicle-chat footer { margin-top: .65rem; font-weight: 700; }
+
+.cwnit-chat-message .cwnit-vehicle-chat {
+  border-color: var(--cwnit-border);
+  border-left-color: var(--cwnit-accent);
+  background: var(--cwnit-background-raised) !important;
+  color: var(--cwnit-text) !important;
+}
+
+.cwnit-chat-message .cwnit-vehicle-chat :is(h3, header i) {
+  color: var(--cwnit-accent) !important;
+}
+
+.cwnit-chat-message .cwnit-vehicle-chat :is(p, dl, dt, dd, strong, footer) {
+  color: var(--cwnit-text) !important;
+  text-shadow: none !important;
+}
+
+@media (max-width: 780px) {
+  .cwnit-vehicle-mount > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cwnit-vehicle__weapon-card dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

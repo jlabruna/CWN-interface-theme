@@ -3,10 +3,11 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.12.0 adds the optional CWN Vehicle Operations Sheet, Linked Vehicles,
-an always-available Character Cyberware tab, Vehicle Advanced Configuration
-permission, and visible Vehicle/Drone capacity failures. Authoritative Vehicle
-AC, mounted attacks, capacity checks, and repair use Combat Enhancements 0.26.0.
+Version 0.12.1 polishes the Vehicle Operations release with a six-column tab
+footer, narrow-width AC derivation, themed Vehicle chat cards, explicit Gunner
+clear controls, mounted ammo visibility, and a safe workflow for converting an
+existing carried SWNR Weapon into a native mounted weapon. Authoritative Vehicle
+AC, attacks, capacity checks, and repair continue to use Combat Enhancements 0.26.0.
 
 ## Current scope
 
@@ -74,7 +75,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.12.0.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.12.1.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

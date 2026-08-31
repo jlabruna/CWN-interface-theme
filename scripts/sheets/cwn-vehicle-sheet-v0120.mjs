@@ -3,8 +3,8 @@ import {
   number,
   queueMissingBaseWarning,
   sortDocuments,
-} from "./cwn-sheet-shared-v062.mjs?v=0.12.0";
-import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.0";
+} from "./cwn-sheet-shared-v062.mjs?v=0.12.1";
+import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.1";
 
 export const VEHICLE_SHEET_LABEL = "CWN Vehicle Operations Sheet";
 export const PLAYER_VEHICLE_ADVANCED_CONFIG_SETTING = "allowPlayerVehicleAdvancedConfiguration";
@@ -64,7 +64,60 @@ function resourceUsage(resource = {}) {
 function ammoLabel(ammo = {}) {
   if (!ammo.type || ammo.type === "none") return "—";
   if (ammo.type === "infinite") return "∞";
-  return `${number(ammo.value)}/${number(ammo.max)}`;
+  return `${number(ammo.value)} / ${number(ammo.max)}`;
+}
+
+function cloneData(value, fallback = {}) {
+  if (value == null) return fallback;
+  const clone = globalThis.foundry?.utils?.deepClone;
+  if (typeof clone === "function") return clone(value);
+  return JSON.parse(JSON.stringify(value));
+}
+
+export function mountableVehicleWeapons(vehicle) {
+  return sortDocuments(vehicle?.itemTypes?.weapon ?? [])
+    .filter((item) => !item.system?.destroyed);
+}
+
+export function mountedWeaponDataFromCarriedWeapon(item, {
+  power = 0,
+  mass = 0,
+  hardpoint = 1,
+  minClass = "s",
+} = {}) {
+  if (item?.type !== "weapon") throw new Error("Only a carried SWNR Weapon can be converted into a mounted weapon.");
+  const source = typeof item.toObject === "function" ? item.toObject() : item;
+  const system = source.system ?? {};
+  return {
+    name: source.name ?? item.name ?? "Mounted Weapon",
+    img: source.img ?? item.img,
+    type: "shipWeapon",
+    system: {
+      description: system.description ?? "",
+      favorite: Boolean(system.favorite),
+      tl: system.tl ?? null,
+      broken: Boolean(system.broken),
+      destroyed: Boolean(system.destroyed),
+      juryRigged: Boolean(system.juryRigged),
+      cost: number(system.cost),
+      costMultiplier: Boolean(system.costMultiplier),
+      mass: Math.max(0, number(mass)),
+      massMultiplier: false,
+      power: Math.max(0, number(power)),
+      powerMultiplier: false,
+      minClass: String(minClass || "s"),
+      type: "vehicle",
+      damage: system.damage ?? "",
+      ab: number(system.ab ?? system.attackBonus),
+      hardpoint: Math.max(0, number(hardpoint, 1)),
+      qualities: system.qualities ?? "",
+      ammo: cloneData(system.ammo, { type: "none", max: 0, value: 0 }),
+      trauma: cloneData(system.trauma, { die: "1d6", rating: "", vehicle: false }),
+      range: cloneData(system.range, { normal: 1, max: 2 }),
+      stat: typeof system.stat === "string" ? system.stat : "dex",
+    },
+    flags: cloneData(source.flags, {}),
+  };
 }
 
 function prepareMountedWeapon(vehicle, item, { resolveActor, user }) {
@@ -175,6 +228,7 @@ export function prepareVehicleSheetContext(actor, {
     fittings: sortDocuments(actor.itemTypes?.shipFitting ?? []).map(prepareVehicleItem),
     defenses: sortDocuments(actor.itemTypes?.shipDefense ?? []).map(prepareVehicleItem),
     cargoItems: sortDocuments(actor.system?.carriedGear ?? []).map(prepareCargoItem),
+    mountableWeapons: mountableVehicleWeapons(actor),
     cargoResources: Array.from(actor.system?.cargoCarried ?? []).map((entry, index) => ({ ...entry, index })),
     effects: sortDocuments(Array.from(allEffects)).map(prepareEffect),
     powerUsage: resourceUsage(actor.system?.power),
@@ -278,6 +332,7 @@ export function createCwnVehicleSheetClass(SWNVehicleSheet) {
         toggleOperating: this._onToggleOperating,
         assignGunner: this._onAssignGunner,
         unlinkGunner: this._onUnlinkGunner,
+        mountExistingWeapon: this._onMountExistingWeapon,
         attackVehicleWeapon: this._onAttackVehicleWeapon,
         repairVehicle: this._onRepairVehicle,
         createDoc: this._onCreateVehicleDocument,
@@ -445,6 +500,43 @@ export function createCwnVehicleSheetClass(SWNVehicleSheet) {
         const current = vehicleApi()?.gunner?.(weapon);
         const selected = await chooseCrew({ title: `Assign Gunner — ${weapon?.name ?? "Weapon"}`, selectedId: current?.id });
         if (selected) await vehicleApi()?.assignGunner?.(this.actor, weapon, selected);
+      } catch (error) { notifyError(error); }
+    }
+
+    static async _onMountExistingWeapon(event) {
+      event.preventDefault();
+      try {
+        assertManager(this.actor);
+        const candidates = mountableVehicleWeapons(this.actor);
+        if (!candidates.length) throw new Error("This Vehicle has no carried weapons available to mount.");
+        const options = candidates.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("");
+        const defaultSize = String(this.actor.system?.size || "s");
+        const values = await globalThis.foundry?.applications?.api?.DialogV2?.prompt?.({
+          window: { title: `Mount Existing Weapon — ${this.actor.name}` }, modal: true, rejectClose: false,
+          content: `<div class="cwnit-vehicle-mount"><p>This converts one carried SWNR Weapon into a native mounted weapon. Its combat and ammunition data are preserved. The carried original is removed only after the mounted weapon is created successfully.</p><label>Carried weapon<select name="itemId">${options}</select></label><div><label>Power<input type="number" name="power" min="0" step="1" value="0"></label><label>Mass<input type="number" name="mass" min="0" step="1" value="0"></label><label>Hardpoints<input type="number" name="hardpoint" min="0" step="1" value="1"></label><label>Minimum size<select name="minClass"><option value="s" ${defaultSize === "s" ? "selected" : ""}>Small</option><option value="m" ${defaultSize === "m" ? "selected" : ""}>Medium</option><option value="l" ${defaultSize === "l" ? "selected" : ""}>Large</option></select></label></div><p>Review the mounted Item after conversion if its installation requirements differ.</p></div>`,
+          ok: { label: "Mount Weapon", callback: (_dialogEvent, button) => ({
+            itemId: button.form.elements.itemId.value,
+            power: number(button.form.elements.power.value),
+            mass: number(button.form.elements.mass.value),
+            hardpoint: number(button.form.elements.hardpoint.value, 1),
+            minClass: button.form.elements.minClass.value,
+          }) },
+        });
+        if (!values) return;
+        const source = this.actor.items?.get?.(values.itemId);
+        if (!source || source.type !== "weapon") throw new Error("That carried weapon is no longer available.");
+        const mountedData = mountedWeaponDataFromCarriedWeapon(source, values);
+        if (!await approveVehicleCapacity(this.actor, mountedData)) return;
+        const created = await this.actor.createEmbeddedDocuments?.("Item", [mountedData]);
+        const mounted = created?.[0];
+        if (!mounted) throw new Error("The mounted weapon could not be created.");
+        try {
+          await source.delete();
+        } catch (error) {
+          await mounted.delete?.();
+          throw new Error(`The carried weapon could not be removed, so the mounting conversion was rolled back. ${error?.message ?? ""}`.trim());
+        }
+        globalThis.ui?.notifications?.info?.(`${source.name} is now mounted on ${this.actor.name}.`);
       } catch (error) { notifyError(error); }
     }
 

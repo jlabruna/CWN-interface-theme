@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.12.1
+
+- Fixed the Vehicle footer so all six tabs remain on one row at every supported sheet width.
+- Changed the Vehicle header label to **AC** and kept the Operating/Stationary base derivation directly beneath the value at narrow widths.
+- Added complete adaptive styling for Vehicle state and repair chat cards.
+- Added **Mount Existing Weapon**, which safely converts a carried native SWNR Weapon into a mounted `shipWeapon`, preserving combat/ammunition data and rolling back on a failed source removal.
+- Made mounted ammo a dedicated Operations stat, added established edit/assignment icons, and added an explicit Clear Gunner control to the detailed Weapons tab.
+- Added focused layout, theming, conversion, ammo, icon, and Gunner-control regression coverage.
+
 ## 0.12.0
 
 - Added an optional shared CWN Vehicle Operations Sheet for SWNR Vehicle Actors with Operations, Weapons, Fittings, Cargo, Configuration, and Notes tabs.

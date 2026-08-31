@@ -9,6 +9,8 @@ import {
   clearVehicleDriver,
   eligibleVehicleCrew,
   linkedVehiclesForDriver,
+  mountableVehicleWeapons,
+  mountedWeaponDataFromCarriedWeapon,
   prepareVehicleSheetContext,
   registerCwnVehicleSettings,
   registerCwnVehicleSheet,
@@ -70,7 +72,36 @@ test("Vehicle context exposes Driver, authoritative AC, resources, and explicit 
     assert.deepEqual(context.powerUsage, { maximum: 5, remaining: 2, used: 3, over: false });
     assert.equal(context.mountedWeapons[0].gunner, driver);
     assert.equal(context.mountedWeapons[0].canAttack, true);
+    assert.equal(context.mountedWeapons[0].ammo, "4 / 10");
   } finally { globalThis.game = oldGame; }
+});
+
+test("carried SWNR weapons convert to mounted weapons without losing combat or ammunition data", () => {
+  const rifle = {
+    id: "rifle", name: "Autocannon", type: "weapon", img: "rifle.webp", sort: 2,
+    system: {
+      description: "Vehicle pintle gun", damage: "2d8", ab: 2, stat: "dex", qualities: "AP 5",
+      ammo: { type: "ammo", value: 17, max: 30, burst: true },
+      trauma: { die: "1d10", rating: 3, vehicle: true }, range: { normal: 100, max: 300 }, cost: 4000,
+    },
+    flags: { "cwn-content-pack": { weaponFamily: "heavy-rifle" } },
+  };
+  const broken = { ...rifle, id: "broken", name: "Broken Gun", system: { ...rifle.system, destroyed: true } };
+  const car = vehicle({ itemTypes: { weapon: [broken, rifle], shipWeapon: [], shipFitting: [], shipDefense: [] } });
+  assert.deepEqual(mountableVehicleWeapons(car).map((item) => item.id), ["rifle"]);
+  const mounted = mountedWeaponDataFromCarriedWeapon(rifle, { power: 2, mass: 3, hardpoint: 1, minClass: "m" });
+  assert.equal(mounted.type, "shipWeapon");
+  assert.equal(mounted.name, rifle.name);
+  assert.equal(mounted.system.damage, "2d8");
+  assert.equal(mounted.system.ab, 2);
+  assert.deepEqual(mounted.system.ammo, rifle.system.ammo);
+  assert.deepEqual(mounted.system.trauma, rifle.system.trauma);
+  assert.deepEqual(mounted.system.range, rifle.system.range);
+  assert.equal(mounted.system.power, 2);
+  assert.equal(mounted.system.mass, 3);
+  assert.equal(mounted.system.hardpoint, 1);
+  assert.equal(mounted.system.minClass, "m");
+  assert.deepEqual(mounted.flags, rifle.flags);
 });
 
 test("Linked Vehicles use the first native crew ID and respect visibility", () => {
@@ -154,6 +185,7 @@ test("dropping a Character replaces the single Driver without inventory Items", 
 });
 
 test("templates expose all approved tabs, attack gating, repair, and capacity feedback", () => {
+  const header = read("templates/sheets/vehicle/header.hbs");
   const operations = read("templates/sheets/vehicle/operations.hbs");
   const weapons = read("templates/sheets/vehicle/weapons.hbs");
   const fittings = read("templates/sheets/vehicle/fittings.hbs");
@@ -162,10 +194,25 @@ test("templates expose all approved tabs, attack gating, repair, and capacity fe
   assert.match(operations, /data-action="toggleOperating"/u);
   assert.match(operations, /data-action="repairVehicle"/u);
   assert.match(operations, /data-action="attackVehicleWeapon"/u);
+  assert.match(operations, /<dt>Ammo<\/dt>/u);
+  assert.match(operations, /data-action="unlinkGunner"[^>]*>[\s\S]*?Clear/u);
+  assert.match(operations, /fa-pen-to-square/u);
   assert.match(weapons, /New Mounted Weapon/u);
+  assert.match(weapons, /Mount Existing Weapon/u);
+  assert.match(weapons, /data-action="unlinkGunner"/u);
+  assert.doesNotMatch(weapons, /fa-user-crosshairs/u);
+  assert.match(header, /class="cwnit-vehicle__ac"><span>AC<\/span>/u);
   assert.match(fittings, /Power, Mass, hardpoints/u);
   assert.match(character, /Linked Vehicles/u);
   assert.match(npc, /Linked Vehicles/u);
+});
+
+test("Vehicle patch CSS keeps six tabs on one row, preserves narrow AC detail, and themes chat cards", () => {
+  const css = read("styles/cwn-interface-theme-v0121.css");
+  assert.match(css, /\.cwnit-vehicle-sheet-window nav\.tabs \{[\s\S]*repeat\(6,/u);
+  assert.match(css, /\.cwnit-vehicle__ac > small/u);
+  assert.match(css, /\.cwnit-chat-message \.cwnit-vehicle-chat/u);
+  assert.match(css, /var\(--cwnit-text\)/u);
 });
 
 test("Character sheet always includes Cyberware for linked assets and Maintenance", () => {

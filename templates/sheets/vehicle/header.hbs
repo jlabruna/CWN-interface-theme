@@ -22,7 +22,7 @@
   {{#if cwnit.totalled}}<div class="cwnit-vehicle__totalled"><i class="fa-solid fa-triangle-exclamation"></i> TOTALLED — zero HP; this Vehicle cannot operate, attack, or be repaired.</div>{{/if}}
   <section class="cwnit-drone__vitals">
     <label><span>HP</span><input name="system.health.value" type="number" value="{{system.health.value}}" {{#unless cwnit.canManage}}disabled{{/unless}} /><b>/</b><input name="system.health.max" type="number" value="{{system.health.max}}" {{#unless cwnit.canManage}}disabled{{/unless}} /></label>
-    <div><span>Effective AC</span><strong>{{cwnit.ac.effective}}</strong><small>{{cwnit.ac.stateLabel}}: base {{cwnit.ac.base}} {{cwnit.ac.modifierText}}</small></div>
+    <div class="cwnit-vehicle__ac"><span>AC</span><strong>{{cwnit.ac.effective}}</strong><small>{{cwnit.ac.stateLabel}}: base {{cwnit.ac.base}} {{cwnit.ac.modifierText}}</small></div>
     <div><span>Trauma Target</span><strong>{{system.traumaTarget}}</strong></div>
     <div><span>Armor</span><strong>{{system.armor.value}} / {{system.armor.max}}</strong></div>
     <div><span>Speed</span><strong>{{system.speed}}</strong></div>
