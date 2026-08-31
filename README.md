@@ -3,10 +3,10 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.12.1 polishes the Vehicle Operations release with a six-column tab
-footer, narrow-width AC derivation, themed Vehicle chat cards, explicit Gunner
-clear controls, mounted ammo visibility, and a safe workflow for converting an
-existing carried SWNR Weapon into a native mounted weapon. Authoritative Vehicle
+Version 0.12.2 makes Vehicle weapon installation reversible. A Vehicle owner or
+GM can unmount a native mounted weapon back to ordinary Stowed Cargo while
+preserving its current combat and ammunition data, releasing its mounting
+capacity, and clearing the obsolete Gunner relationship. Authoritative Vehicle
 AC, attacks, capacity checks, and repair continue to use Combat Enhancements 0.26.0.
 
 ## Current scope
@@ -58,7 +58,8 @@ AC, attacks, capacity checks, and repair continue to use Combat Enhancements 0.2
   capacities, assigns one explicit Character/NPC Gunner to each mounted
   `shipWeapon`, and delegates attacks, fitting validation, and repairs to Combat
   Enhancements 0.26.0. Assigned Gunners may attack only their own weapons and
-  receive no Vehicle ownership or management permissions.
+  receive no Vehicle ownership or management permissions. Vehicle owners and
+  GMs can mount carried Weapons and safely unmount them back to Stowed Cargo.
 - Lists visible Driver-linked Vehicles on Character and NPC Cyberware tabs and
   opens them directly. The Character Cyberware tab is always present even when
   the Character owns no cyberware, preserving Maintenance and linked assets.
@@ -75,7 +76,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.12.1.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.12.2.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

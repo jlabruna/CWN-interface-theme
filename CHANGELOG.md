@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.2
+
+- Added an owner/GM **Unmount** control to every mounted Vehicle weapon on both Operations and Weapons.
+- Unmounting converts the native mounted `shipWeapon` back into an ordinary Stowed SWNR Weapon, releases mounting capacity, and removes the obsolete Gunner relationship with the mounted Item.
+- Preserved current mounted combat and ammunition values while restoring carried-only fields from a private conversion snapshot when available; older mounted weapons use safe native Weapon defaults.
+- Added rollback protection so a failed source deletion does not leave both mounted and carried copies.
+- Added reversible-conversion, current-ammo, carried-field, stale-Gunner, and template regression coverage.
+
 ## 0.12.1
 
 - Fixed the Vehicle footer so all six tabs remain on one row at every supported sheet width.

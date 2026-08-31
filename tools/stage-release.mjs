@@ -5,13 +5,13 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.12.1");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.12.1");
-const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.12.1");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.12.2");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.12.2");
+const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.12.2");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.12.1") {
-  throw new Error(`Expected module version 0.12.1 but found ${manifest.version}.`);
+if (manifest.version !== "0.12.2") {
+  throw new Error(`Expected module version 0.12.2 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -46,7 +46,7 @@ const browserReleaseFiles = [
   "module.json",
   "package.json",
   "lang/en.json",
-  "scripts/cwn-interface-theme-v0121.mjs",
+  "scripts/cwn-interface-theme-v0122.mjs",
   "scripts/cwn-interface-theme-v0101.mjs",
   "scripts/sheet-refresh.mjs",
   "scripts/sheets/cwn-sheet-shared-v062.mjs",

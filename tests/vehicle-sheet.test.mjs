@@ -9,6 +9,7 @@ import {
   clearVehicleDriver,
   eligibleVehicleCrew,
   linkedVehiclesForDriver,
+  carriedWeaponDataFromMountedWeapon,
   mountableVehicleWeapons,
   mountedWeaponDataFromCarriedWeapon,
   prepareVehicleSheetContext,
@@ -101,7 +102,51 @@ test("carried SWNR weapons convert to mounted weapons without losing combat or a
   assert.equal(mounted.system.mass, 3);
   assert.equal(mounted.system.hardpoint, 1);
   assert.equal(mounted.system.minClass, "m");
-  assert.deepEqual(mounted.flags, rifle.flags);
+  assert.deepEqual(mounted.flags["cwn-content-pack"], rifle.flags["cwn-content-pack"]);
+  assert.deepEqual(mounted.flags["cwn-interface-theme"].mountedWeaponSource.system, rifle.system);
+});
+
+test("mounted weapons return to Cargo with current ammo, restored carried fields, and no stale Gunner", () => {
+  const carried = {
+    name: "Autocannon", type: "weapon", img: "rifle.webp",
+    system: {
+      description: "Vehicle pintle gun", quantity: 2, encumbrance: 3, location: "readied", quality: "masterwork",
+      stat: "str", secondStat: "dex", skill: "shoot", skillBoostsDamage: true, shock: { dmg: "2", ac: 15 },
+      ammo: { type: "ammo", value: 17, max: 30, burst: true, suppress: true, longReload: false },
+      trauma: { die: "1d10", rating: 3 }, range: { normal: 100, max: 300 }, damage: "2d8", ab: 2, cost: 4000,
+    },
+    flags: { "cwn-content-pack": { weaponFamily: "heavy-rifle" } },
+  };
+  const mounted = mountedWeaponDataFromCarriedWeapon(carried, { power: 2, mass: 3, hardpoint: 1, minClass: "m" });
+  mounted.system.ammo.value = 6;
+  mounted.flags["cwn-combat-enhancements"] = { vehicleGunnerActorId: "gunner" };
+  const returned = carriedWeaponDataFromMountedWeapon(mounted);
+  assert.equal(returned.type, "weapon");
+  assert.equal(returned.system.location, "stowed");
+  assert.equal(returned.system.quantity, 2);
+  assert.equal(returned.system.encumbrance, 3);
+  assert.equal(returned.system.shock.dmg, "2");
+  assert.equal(returned.system.skillBoostsDamage, true);
+  assert.equal(returned.system.ammo.value, 6);
+  assert.equal(returned.system.ammo.burst, true);
+  assert.equal(returned.system.ammo.suppress, true);
+  assert.deepEqual(returned.flags["cwn-content-pack"], carried.flags["cwn-content-pack"]);
+  assert.equal(returned.flags["cwn-combat-enhancements"], undefined);
+  assert.equal(returned.flags["cwn-interface-theme"], undefined);
+});
+
+test("legacy mounted weapons without a carried snapshot still return as safe Stowed weapons", () => {
+  const returned = carriedWeaponDataFromMountedWeapon({
+    name: "Legacy Turret", type: "shipWeapon", img: "turret.webp",
+    system: { damage: "3d6", ab: 1, stat: "dex", ammo: { type: "ammo", value: 2, max: 10 }, range: { normal: 500, max: 2000 } },
+    flags: { "cwn-combat-enhancements": { vehicleGunnerActorId: "gunner" } },
+  });
+  assert.equal(returned.type, "weapon");
+  assert.equal(returned.system.location, "stowed");
+  assert.equal(returned.system.encumbrance, 1);
+  assert.equal(returned.system.damage, "3d6");
+  assert.deepEqual(returned.system.ammo, { longReload: false, suppress: false, type: "ammo", max: 10, value: 2, burst: false });
+  assert.equal(returned.flags["cwn-combat-enhancements"], undefined);
 });
 
 test("Linked Vehicles use the first native crew ID and respect visibility", () => {
@@ -196,10 +241,12 @@ test("templates expose all approved tabs, attack gating, repair, and capacity fe
   assert.match(operations, /data-action="attackVehicleWeapon"/u);
   assert.match(operations, /<dt>Ammo<\/dt>/u);
   assert.match(operations, /data-action="unlinkGunner"[^>]*>[\s\S]*?Clear/u);
+  assert.match(operations, /data-action="unmountWeapon"[^>]*>[\s\S]*?Unmount/u);
   assert.match(operations, /fa-pen-to-square/u);
   assert.match(weapons, /New Mounted Weapon/u);
   assert.match(weapons, /Mount Existing Weapon/u);
   assert.match(weapons, /data-action="unlinkGunner"/u);
+  assert.match(weapons, /data-action="unmountWeapon"[^>]*title="Unmount to Cargo"/u);
   assert.doesNotMatch(weapons, /fa-user-crosshairs/u);
   assert.match(header, /class="cwnit-vehicle__ac"><span>AC<\/span>/u);
   assert.match(fittings, /Power, Mass, hardpoints/u);

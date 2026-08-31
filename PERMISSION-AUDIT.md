@@ -1,4 +1,4 @@
-# Permission Audit — CWN Interface Theme 0.12.1
+# Permission Audit — CWN Interface Theme 0.12.2
 
 Date: 2026-09-01  
 Scope: the optional Character, NPC, Drone, and Cyberdeck sheets as they existed before the Vehicle Operations release. This is an inspection report. No permission changes were made to those four sheets in this release, apart from shared rerendering needed for Linked Vehicles and the approved always-visible Character Cyberware tab.
@@ -16,7 +16,7 @@ Scope: the optional Character, NPC, Drone, and Cyberdeck sheets as they existed 
 
 The new Vehicle sheet uses action-side checks in addition to conditional controls:
 
-- GM or Vehicle owner: assign/change/unlink Driver, assign/change/unlink Gunners, toggle Operating/Stationary, repair, edit Configuration, manage Items and Cargo.
+- GM or Vehicle owner: assign/change/unlink Driver, assign/change/unlink Gunners, toggle Operating/Stationary, repair, mount/unmount weapons, edit Configuration, and manage Items and Cargo.
 - Assigned Gunner: may attack only a mounted weapon explicitly linked to a Character/NPC Actor they own.
 - Assigned Gunner permission does not grant Vehicle editing, reload, Item deletion, Gunner assignment, Driver assignment, repair, or Configuration access.
 - A non-owner Gunner attack is revalidated and executed by the active GM through the module socket so ammunition can change without granting Vehicle ownership.

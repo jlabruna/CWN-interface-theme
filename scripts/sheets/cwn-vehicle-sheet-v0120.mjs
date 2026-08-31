@@ -3,8 +3,8 @@ import {
   number,
   queueMissingBaseWarning,
   sortDocuments,
-} from "./cwn-sheet-shared-v062.mjs?v=0.12.1";
-import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.1";
+} from "./cwn-sheet-shared-v062.mjs?v=0.12.2";
+import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.2";
 
 export const VEHICLE_SHEET_LABEL = "CWN Vehicle Operations Sheet";
 export const PLAYER_VEHICLE_ADVANCED_CONFIG_SETTING = "allowPlayerVehicleAdvancedConfiguration";
@@ -88,6 +88,11 @@ export function mountedWeaponDataFromCarriedWeapon(item, {
   if (item?.type !== "weapon") throw new Error("Only a carried SWNR Weapon can be converted into a mounted weapon.");
   const source = typeof item.toObject === "function" ? item.toObject() : item;
   const system = source.system ?? {};
+  const flags = cloneData(source.flags, {});
+  flags[MODULE_ID] = {
+    ...(flags[MODULE_ID] ?? {}),
+    mountedWeaponSource: { system: cloneData(system, {}) },
+  };
   return {
     name: source.name ?? item.name ?? "Mounted Weapon",
     img: source.img ?? item.img,
@@ -116,7 +121,68 @@ export function mountedWeaponDataFromCarriedWeapon(item, {
       range: cloneData(system.range, { normal: 1, max: 2 }),
       stat: typeof system.stat === "string" ? system.stat : "dex",
     },
-    flags: cloneData(source.flags, {}),
+    flags,
+  };
+}
+
+export function carriedWeaponDataFromMountedWeapon(item) {
+  if (item?.type !== "shipWeapon") throw new Error("Only a mounted SWNR Weapon can be returned to Cargo.");
+  const source = typeof item.toObject === "function" ? item.toObject() : item;
+  const mounted = source.system ?? {};
+  const saved = cloneData(source.flags?.[MODULE_ID]?.mountedWeaponSource?.system, {});
+  const flags = cloneData(source.flags, {});
+
+  if (flags["cwn-combat-enhancements"]) {
+    delete flags["cwn-combat-enhancements"].vehicleGunnerActorId;
+    if (!Object.keys(flags["cwn-combat-enhancements"]).length) delete flags["cwn-combat-enhancements"];
+  }
+  if (flags[MODULE_ID]) {
+    delete flags[MODULE_ID].mountedWeaponSource;
+    if (!Object.keys(flags[MODULE_ID]).length) delete flags[MODULE_ID];
+  }
+
+  return {
+    name: source.name ?? item.name ?? "Carried Weapon",
+    img: source.img ?? item.img,
+    type: "weapon",
+    system: {
+      quantity: Math.max(1, number(saved.quantity, 1)),
+      bundle: cloneData(saved.bundle, { bundled: false, amount: null }),
+      encumbrance: Math.max(0, number(saved.encumbrance, 1)),
+      location: "stowed",
+      quality: saved.quality ?? "stock",
+      noEncReadied: Boolean(saved.noEncReadied),
+      container: cloneData(saved.container, { isContainer: false, isOpen: true, capacity: { max: 0, value: 0 } }),
+      containerId: saved.containerId ?? "",
+      description: mounted.description ?? saved.description ?? "",
+      favorite: Boolean(mounted.favorite ?? saved.favorite),
+      modDesc: saved.modDesc ?? null,
+      condition: saved.condition ?? "perfect",
+      gmNotes: saved.gmNotes ?? null,
+      showGMNotes: Boolean(saved.showGMNotes),
+      tl: mounted.tl ?? saved.tl ?? null,
+      cost: number(mounted.cost ?? saved.cost),
+      stat: typeof mounted.stat === "string" ? mounted.stat : (saved.stat ?? "dex"),
+      secondStat: saved.secondStat ?? null,
+      skill: saved.skill ?? "ask",
+      skillBoostsDamage: Boolean(saved.skillBoostsDamage),
+      skillBoostsShock: Boolean(saved.skillBoostsShock),
+      shock: cloneData(saved.shock, { dmg: "0", ac: 10 }),
+      ab: number(mounted.ab ?? saved.ab),
+      ammo: {
+        ...cloneData(saved.ammo, { longReload: false, suppress: false, type: "none", max: 0, value: 0, burst: false }),
+        ...cloneData(mounted.ammo, {}),
+      },
+      range: { ...cloneData(saved.range, { normal: 1, max: 2 }), ...cloneData(mounted.range, {}) },
+      damage: mounted.damage ?? saved.damage ?? "1d6",
+      remember: cloneData(saved.remember, { use: false, burst: false, modifier: 0, isNonLethal: false }),
+      save: saved.save ?? null,
+      trauma: { ...cloneData(saved.trauma, { die: "1d6", rating: null }), ...cloneData(mounted.trauma, {}) },
+      isTwoHanded: Boolean(saved.isTwoHanded),
+      isNonLethal: Boolean(saved.isNonLethal),
+      isMelee: Boolean(saved.isMelee),
+    },
+    flags,
   };
 }
 
@@ -333,6 +399,7 @@ export function createCwnVehicleSheetClass(SWNVehicleSheet) {
         assignGunner: this._onAssignGunner,
         unlinkGunner: this._onUnlinkGunner,
         mountExistingWeapon: this._onMountExistingWeapon,
+        unmountWeapon: this._onUnmountWeapon,
         attackVehicleWeapon: this._onAttackVehicleWeapon,
         repairVehicle: this._onRepairVehicle,
         createDoc: this._onCreateVehicleDocument,
@@ -546,6 +613,36 @@ export function createCwnVehicleSheetClass(SWNVehicleSheet) {
         assertManager(this.actor);
         const weapon = this.actor.items?.get?.(target.dataset.itemId);
         await vehicleApi()?.clearGunner?.(this.actor, weapon);
+      } catch (error) { notifyError(error); }
+    }
+
+    static async _onUnmountWeapon(event, target) {
+      event.preventDefault();
+      try {
+        assertManager(this.actor);
+        const mounted = this.actor.items?.get?.(target.dataset.itemId);
+        if (!mounted || mounted.type !== "shipWeapon") throw new Error("That mounted weapon is no longer available.");
+        const confirmed = Boolean(await globalThis.foundry?.applications?.api?.DialogV2?.wait?.({
+          window: { title: `Unmount Weapon — ${mounted.name}` }, modal: true, rejectClose: false,
+          content: `<p>Return <strong>${escapeHtml(mounted.name)}</strong> to this Vehicle's Cargo as an ordinary SWNR Weapon?</p><p>Current combat and ammunition data are preserved, mounting capacity is released, and the Gunner assignment is cleared with the removed mounted Item.</p>`,
+          buttons: [
+            { action: "unmount", label: "Unmount to Cargo", default: true, callback: () => true },
+            { action: "cancel", label: "Cancel", callback: () => false },
+          ],
+          close: () => false,
+        }));
+        if (!confirmed) return;
+        const carriedData = carriedWeaponDataFromMountedWeapon(mounted);
+        const created = await this.actor.createEmbeddedDocuments?.("Item", [carriedData]);
+        const carried = created?.[0];
+        if (!carried) throw new Error("The carried weapon could not be created.");
+        try {
+          await mounted.delete();
+        } catch (error) {
+          await carried.delete?.();
+          throw new Error(`The mounted weapon could not be removed, so the unmount conversion was rolled back. ${error?.message ?? ""}`.trim());
+        }
+        globalThis.ui?.notifications?.info?.(`${mounted.name} was unmounted and returned to ${this.actor.name}'s Cargo.`);
       } catch (error) { notifyError(error); }
     }
 
