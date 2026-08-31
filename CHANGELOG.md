@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.12.0
+
+- Added an optional shared CWN Vehicle Operations Sheet for SWNR Vehicle Actors with Operations, Weapons, Fittings, Cargo, Configuration, and Notes tabs.
+- Added one native-ID Driver link, persistent Operating/Stationary state and effective AC presentation, compact first-tab mounted weapons, persistent per-weapon Character/NPC Gunners, detailed weapon management, RAW repair workflow, and prominent TOTALLED handling.
+- Added Power, Mass, hardpoint, and minimum-size installation feedback for vehicle weapons, fittings, and defenses, including explicit GM override confirmation for intentional custom Vehicles.
+- Added Linked Vehicles to Character and NPC Cyberware tabs, derived from native Vehicle crew IDs with live unlink/relink refresh and no duplicate inventory Items.
+- Made the Character Cyberware tab always available, including for Characters with zero cyberware, so Maintenance and linked Cyberdecks, Drones, and Vehicles remain usable.
+- Added a disabled-by-default **Allow Players to Edit Vehicle Advanced Configuration** world setting. GMs always retain access; Vehicle owners retain operational controls and a read-only Configuration summary when it is disabled.
+- Improved Drone over-capacity dialog failure handling so unexpected dialog errors become visible notifications rather than console-only promise failures, without changing Drone capacity mechanics or permissions.
+- Added `PERMISSION-AUDIT.md` documenting the inspected Character, NPC, Drone, Cyberdeck, and new Vehicle permission models and the recommended future Drone handler hardening.
+- Added Vehicle sheet, relationship, capacity, permission, zero-cyberware, and live refresh regression coverage.
+
 ## 0.11.3
 
 - Fixed CWN Character and NPC sheet availability by registering the optional sheets during Foundry's `ready` lifecycle, after SWNR has completed its native Actor-sheet registry.

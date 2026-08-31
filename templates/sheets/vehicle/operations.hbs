@@ -1,0 +1,16 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="operations">
+  <div class="cwnit-drone__section-heading"><div><p>LIVE OPERATIONS</p><h2>Vehicle Control</h2></div>{{#if cwnit.canManage}}<button type="button" data-action="toggleOperating" class="cwnit-vehicle__state {{#if cwnit.ac.operating}}is-operating{{/if}}"><i class="fa-solid {{#if cwnit.ac.operating}}fa-gauge-high{{else}}fa-square-parking{{/if}}"></i> {{#if cwnit.ac.operating}}Set Stationary{{else}}Set Operating{{/if}}</button><button type="button" data-action="repairVehicle"><i class="fa-solid fa-screwdriver-wrench"></i> Repair</button>{{/if}}</div>
+  <div class="cwnit-vehicle__state-summary"><strong>{{cwnit.ac.stateLabel}}</strong><span>Base AC {{cwnit.ac.base}}</span><span>{{#if cwnit.ac.operating}}Driver Drive {{cwnit.ac.driveText}}{{else}}Stationary penalty −4{{/if}}</span><b>Effective AC {{cwnit.ac.effective}}</b></div>
+  {{#unless cwnit.hasSupportingModule}}<p class="cwnit-vehicle__warning">CWN Combat Enhancements 0.26.0 or newer is required for authoritative Vehicle attacks, AC, repair, and capacity checks.</p>{{/unless}}
+  <div class="cwnit-drone__section-heading cwnit-drone__subheading"><div><p>MOUNTED SYSTEMS</p><h2>Weapons</h2></div></div>
+  <ol class="cwnit-vehicle__weapon-grid">
+    {{#each cwnit.mountedWeapons as |weapon|}}
+      <li class="item cwnit-vehicle__weapon-card" data-item-id="{{weapon.item.id}}" data-document-class="Item" data-drag="true">
+        <header><img src="{{weapon.item.img}}" alt="" /><div><h3>{{weapon.item.name}}</h3><small>{{weapon.stat}} · {{weapon.ammo}} ammo</small></div></header>
+        <dl><div><dt>Damage</dt><dd>{{weapon.damage}}</dd></div><div><dt>Range</dt><dd>{{weapon.range}}</dd></div><div><dt>Trauma</dt><dd>{{weapon.trauma}}</dd></div></dl>
+        <div class="cwnit-vehicle__gunner">{{#if weapon.gunner}}<span>Gunner <strong>{{weapon.gunner.name}}</strong></span><button type="button" data-action="openActor" data-actor-id="{{weapon.gunner.id}}" title="Open Gunner"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>{{else}}<span class="is-missing"><i class="fa-solid fa-triangle-exclamation"></i> No gunner assigned</span>{{/if}}{{#if weapon.canManage}}<button type="button" data-action="assignGunner" data-item-id="{{weapon.item.id}}">{{#if weapon.gunner}}Change{{else}}Assign{{/if}}</button>{{#if weapon.gunner}}<button type="button" data-action="unlinkGunner" data-item-id="{{weapon.item.id}}">Unlink</button>{{/if}}{{/if}}</div>
+        <div class="cwnit-vehicle__weapon-actions">{{#if weapon.canRequestAttack}}<button type="button" data-action="attackVehicleWeapon" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-crosshairs"></i> Attack</button>{{else}}<button type="button" disabled title="Only the assigned Gunner, Vehicle owner, or GM can attack"><i class="fa-solid fa-ban"></i> Attack</button>{{/if}}{{#if weapon.canReload}}<button type="button" data-action="reload" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-rotate"></i> Reload</button>{{/if}}<button type="button" data-action="viewDoc" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</button></div>
+      </li>
+    {{else}}<li class="cwnit-drone__empty">No mounted weapons installed.</li>{{/each}}
+  </ol>
+</section>

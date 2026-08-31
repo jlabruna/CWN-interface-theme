@@ -1,0 +1,32 @@
+<div class="cwnit-drone__masthead cwnit-vehicle">
+  <header class="cwnit-drone__header">
+    <div class="cwnit-drone__portrait"><img src="{{actor.img}}" alt="{{actor.name}}" data-action="onEditImage" data-edit="img" /></div>
+    <div class="cwnit-drone__identity">
+      <p class="cwnit-drone__eyebrow">CWN VEHICLE OPERATIONS CONSOLE</p>
+      <input class="cwnit-drone__name" name="name" type="text" value="{{actor.name}}" {{#unless cwnit.canManage}}disabled{{/unless}} />
+      <p class="cwnit-drone__model">SIZE {{system.size}} · {{system.kmph}} KPH · {{system.tonnage}} T</p>
+      <div class="cwnit-drone__capacity-summary"><span>Power <b>{{cwnit.powerUsage.used}} / {{cwnit.powerUsage.maximum}}</b></span><span>Mass <b>{{cwnit.massUsage.used}} / {{cwnit.massUsage.maximum}}</b></span><span>Hardpoints <b>{{cwnit.hardpointUsage.used}} / {{cwnit.hardpointUsage.maximum}}</b></span></div>
+    </div>
+    <section class="cwnit-drone__pilot" aria-label="Driver">
+      <small>DRIVER</small>
+      {{#if cwnit.driver}}
+        <strong>{{cwnit.driver.name}}</strong>
+        <div><button type="button" data-action="openActor" data-actor-id="{{cwnit.driver.id}}"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</button>{{#if cwnit.canManage}}<button type="button" data-action="assignDriver"><i class="fa-solid fa-repeat"></i> Change</button><button type="button" data-action="unlinkDriver"><i class="fa-solid fa-link-slash"></i> Unlink</button>{{/if}}</div>
+      {{else}}
+        <strong class="is-empty">No driver assigned</strong>
+        {{#if cwnit.canManage}}<button type="button" data-action="assignDriver"><i class="fa-solid fa-user-plus"></i> Assign Driver</button>{{/if}}
+      {{/if}}
+      <em>Character and NPC Actors can also be dropped here.</em>
+    </section>
+  </header>
+  {{#if cwnit.totalled}}<div class="cwnit-vehicle__totalled"><i class="fa-solid fa-triangle-exclamation"></i> TOTALLED — zero HP; this Vehicle cannot operate, attack, or be repaired.</div>{{/if}}
+  <section class="cwnit-drone__vitals">
+    <label><span>HP</span><input name="system.health.value" type="number" value="{{system.health.value}}" {{#unless cwnit.canManage}}disabled{{/unless}} /><b>/</b><input name="system.health.max" type="number" value="{{system.health.max}}" {{#unless cwnit.canManage}}disabled{{/unless}} /></label>
+    <div><span>Effective AC</span><strong>{{cwnit.ac.effective}}</strong><small>{{cwnit.ac.stateLabel}}: base {{cwnit.ac.base}} {{cwnit.ac.modifierText}}</small></div>
+    <div><span>Trauma Target</span><strong>{{system.traumaTarget}}</strong></div>
+    <div><span>Armor</span><strong>{{system.armor.value}} / {{system.armor.max}}</strong></div>
+    <div><span>Speed</span><strong>{{system.speed}}</strong></div>
+    <div><span>Road Speed</span><strong>{{system.kmph}} kph</strong></div>
+    <div><span>Cargo</span><strong>{{cwnit.cargoUsage.used}} / {{cwnit.cargoUsage.maximum}}</strong></div>
+  </section>
+</div>

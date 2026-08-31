@@ -3,12 +3,10 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.11.3 restores reliable CWN Character and NPC sheet registration after
-SWNR completes its native sheet registry. It retains the 0.11.2 work that makes
-Drone pilot linking idempotent and identity-safe, adds
-Linked Drones to Character and NPC Cyberware views, and displays Phase 1
-Maintenance capacity through Combat Enhancements 0.25.0. Legacy unprovenanced
-Drone-like inventory Items are never deleted automatically.
+Version 0.12.0 adds the optional CWN Vehicle Operations Sheet, Linked Vehicles,
+an always-available Character Cyberware tab, Vehicle Advanced Configuration
+permission, and visible Vehicle/Drone capacity failures. Authoritative Vehicle
+AC, mounted attacks, capacity checks, and repair use Combat Enhancements 0.26.0.
 
 ## Current scope
 
@@ -53,6 +51,16 @@ Drone-like inventory Items are never deleted automatically.
   once-per-day Access refresh, while permitted Advanced Configuration users
   have a separate unlimited testing override. Open Cyberdeck sheets refresh
   immediately when their linked hacker's Access changes.
+- Adds an optional **CWN Vehicle Operations Sheet** for SWNR Vehicle Actors.
+  It uses the first native Vehicle crew-member ID as the single Driver, keeps
+  Operating/Stationary state persistent, displays derived AC and native
+  capacities, assigns one explicit Character/NPC Gunner to each mounted
+  `shipWeapon`, and delegates attacks, fitting validation, and repairs to Combat
+  Enhancements 0.26.0. Assigned Gunners may attack only their own weapons and
+  receive no Vehicle ownership or management permissions.
+- Lists visible Driver-linked Vehicles on Character and NPC Cyberware tabs and
+  opens them directly. The Character Cyberware tab is always present even when
+  the Character owns no cyberware, preserving Maintenance and linked assets.
 - Respects Foundry's Photosensitive Mode and the operating system's reduced
   motion preference by disabling pause animations.
 - Does not require CWN Combat Enhancements and does not alter game rules.
@@ -66,25 +74,27 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.11.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.12.0.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
 
-Open an SWNR character, NPC, Drone, or Cyberdeck, choose **Sheet Configuration**
+Open an SWNR character, NPC, Drone, Cyberdeck, or Vehicle, choose **Sheet Configuration**
 from the sheet header, and select the corresponding CWN sheet. Native SWNR
 sheets remain registered and remain the defaults unless a user explicitly
 changes an individual actor's sheet.
 
 The Character and NPC alternatives subclass SWNR's supported actor-sheet
-export. The Drone and Cyberdeck alternatives subclass SWNR's registered native
-sheet classes. All four use SWNR's own item-roll, reload, form-update,
+export. The Drone, Cyberdeck, and Vehicle alternatives subclass SWNR's registered native
+sheet classes. All five use SWNR's own item-roll, reload, form-update,
 drag/drop, and document actions. They add no actor fields, migrations, or
 game-rule automation. The Cyberdeck sheet's Notes tab uses one Theme flag
 because the native Cyberdeck schema has no notes field; all operational data
 remains native or belongs to Combat Enhancements. Linked cyberdecks are read
 from SWNR's existing direct actor links. Linked drones are derived from visible
 Drone actors whose native first crew-member link identifies the Character.
+Linked vehicles are derived independently from Vehicle actors whose native
+first crew-member link identifies the Driver; no inventory proxy is created.
 
 The world setting **Allow Player Cyberdeck Advanced Configuration** controls
 whether player owners may view and edit the Cyberdeck sheet's Advanced
@@ -95,6 +105,11 @@ The separate **Allow Players to Edit Drone Advanced Configuration** setting is
 also disabled by default. The Drone Configuration summary remains visible to
 owners; raw source fields and Effect mutations require GM status or this world
 permission.
+
+The **Allow Players to Edit Vehicle Advanced Configuration** setting follows
+the same disabled-by-default model. Vehicle owners retain operations, weapons,
+fittings, cargo, repair, and the read-only Configuration summary. Raw base
+fields and Effect mutation require GM status or this world permission.
 
 ## Compatibility design
 

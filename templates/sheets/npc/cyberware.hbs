@@ -20,4 +20,12 @@
       {{else}}<p class="cwnit-sheet--npc__empty">No linked drones.</p>{{/each}}
     </div>
   </section>
+  <section class="cwnit-sheet--npc__panel">
+    <h2>Linked Vehicles</h2>
+    <div class="cwnit-sheet--npc__linked-grid">
+      {{#each cwnit.linkedVehicles as |vehicle|}}
+        <button type="button" data-action="openLinkedActor" data-actor-id="{{vehicle.id}}" title="World Vehicle Actor {{vehicle.id}}"><img src="{{vehicle.img}}" alt="" /><span>{{vehicle.name}}</span><small>Size {{vehicle.size}} · {{#if vehicle.operating}}Operating{{else}}Stationary{{/if}}</small><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+      {{else}}<p class="cwnit-sheet--npc__empty">No linked vehicles.</p>{{/each}}
+    </div>
+  </section>
 </section>

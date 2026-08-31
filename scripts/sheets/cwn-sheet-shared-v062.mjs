@@ -111,6 +111,16 @@ export function linkedDronesForPilot(actor, {
     .sort((left, right) => String(left.name).localeCompare(String(right.name)));
 }
 
+export function linkedVehiclesForDriver(actor, {
+  actors = globalThis.game?.actors?.contents ?? globalThis.game?.actors ?? [],
+  user = globalThis.game?.user,
+} = {}) {
+  return Array.from(actors ?? [])
+    .filter((entry) => entry?.type === "vehicle" && String(entry.system?.crewMembers?.[0] ?? "") === String(actor?.id ?? ""))
+    .filter((entry) => user?.isGM || entry.isOwner || entry.testUserPermission?.(user, "OBSERVER"))
+    .sort((left, right) => String(left.name).localeCompare(String(right.name)));
+}
+
 export function prepareCommonSheetContext(actor, {
   resolveActor = () => null,
   actors = globalThis.game?.actors?.contents ?? globalThis.game?.actors ?? [],
@@ -145,6 +155,15 @@ export function prepareCommonSheetContext(actor, {
       img: drone.img,
       model: drone.system?.model === "custom" ? drone.system?.customModel || "Custom" : drone.system?.model || "Drone",
       deployed: Boolean(drone.getFlag?.(MODULE_ID, "deployed") ?? drone.flags?.[MODULE_ID]?.deployed),
+    })),
+    linkedVehicles: linkedVehiclesForDriver(actor, { actors, user }).map((vehicle) => ({
+      actor: vehicle,
+      id: vehicle.id,
+      name: vehicle.name,
+      img: vehicle.img,
+      operating: Boolean(vehicle.getFlag?.("cwn-combat-enhancements", "vehicleOperating")
+        ?? vehicle.flags?.["cwn-combat-enhancements"]?.vehicleOperating),
+      size: String(vehicle.system?.size || "—").toUpperCase(),
     })),
   };
 }

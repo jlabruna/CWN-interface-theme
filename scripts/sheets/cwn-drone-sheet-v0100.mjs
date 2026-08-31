@@ -307,17 +307,22 @@ async function approveFittingCapacity(actor, itemData) {
     globalThis.ui?.notifications?.warn?.(`${message} The GM override dialog is unavailable.`);
     return false;
   }
-  return Boolean(await DialogV2.wait({
-    window: { title: "Exceed Drone Fitting Capacity?" },
-    content: `<p>${escapeHtml(message)}</p><p>Only continue for a custom or intentionally over-capacity drone. Existing Items will not be removed.</p>`,
-    modal: true,
-    rejectClose: false,
-    buttons: [
-      { action: "override", label: "Add Over Capacity", default: true, callback: () => true },
-      { action: "cancel", label: "Cancel", callback: () => false },
-    ],
-    close: () => false,
-  }));
+  try {
+    return Boolean(await DialogV2.wait({
+      window: { title: "Exceed Drone Fitting Capacity?" },
+      content: `<p>${escapeHtml(message)}</p><p>Only continue for a custom or intentionally over-capacity drone. Existing Items will not be removed.</p>`,
+      modal: true,
+      rejectClose: false,
+      buttons: [
+        { action: "override", label: "Add Over Capacity", default: true, callback: () => true },
+        { action: "cancel", label: "Cancel", callback: () => false },
+      ],
+      close: () => false,
+    }));
+  } catch (error) {
+    globalThis.ui?.notifications?.error?.(`${message} ${error?.message ?? "The capacity check could not be completed."}`);
+    return false;
+  }
 }
 
 async function postDroneChat(actor, { title, cost, details = [], note }) {

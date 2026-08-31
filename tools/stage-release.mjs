@@ -5,13 +5,13 @@ import { fileURLToPath } from "node:url";
 const moduleRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const releaseRoot = path.join(moduleRoot, "release");
 const stageRoot = path.join(releaseRoot, "cwn-interface-theme");
-const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.11.3");
-const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.11.3");
-const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.11.3");
+const browserUploadRoot = path.join(releaseRoot, "github-upload-v0.12.0");
+const browserDotfilesRoot = path.join(releaseRoot, "github-dotfiles-upload-v0.12.0");
+const browserWorkflowRoot = path.join(releaseRoot, "github-workflow-v0.12.0");
 const manifest = JSON.parse(await fs.readFile(path.join(moduleRoot, "module.json"), "utf8"));
 
-if (manifest.version !== "0.11.3") {
-  throw new Error(`Expected module version 0.11.3 but found ${manifest.version}.`);
+if (manifest.version !== "0.12.0") {
+  throw new Error(`Expected module version 0.12.0 but found ${manifest.version}.`);
 }
 if (!manifest.download.endsWith(`/v${manifest.version}/cwn-interface-theme-v${manifest.version}.zip`)) {
   throw new Error(`Unexpected module download URL "${manifest.download}".`);
@@ -29,7 +29,7 @@ await fs.mkdir(stageRoot, { recursive: true });
 for (const directory of ["assets", "lang", "scripts", "styles", "templates"]) {
   await fs.cp(path.join(moduleRoot, directory), path.join(stageRoot, directory), { recursive: true });
 }
-for (const filename of ["CHANGELOG.md", "LICENSE", "README.md", "module.json"]) {
+for (const filename of ["CHANGELOG.md", "LICENSE", "MANUAL-TESTS.md", "PERMISSION-AUDIT.md", "README.md", "module.json"]) {
   await fs.copyFile(path.join(moduleRoot, filename), path.join(stageRoot, filename));
 }
 for (const script of manifest.esmodules ?? []) await fs.access(path.join(stageRoot, script));
@@ -40,11 +40,13 @@ await removeTree(browserUploadRoot);
 await fs.mkdir(browserUploadRoot, { recursive: true });
 const browserReleaseFiles = [
   "CHANGELOG.md",
+  "MANUAL-TESTS.md",
+  "PERMISSION-AUDIT.md",
   "README.md",
   "module.json",
   "package.json",
   "lang/en.json",
-  "scripts/cwn-interface-theme-v0113.mjs",
+  "scripts/cwn-interface-theme-v0120.mjs",
   "scripts/cwn-interface-theme-v0101.mjs",
   "scripts/sheet-refresh.mjs",
   "scripts/sheets/cwn-sheet-shared-v062.mjs",
@@ -53,6 +55,7 @@ const browserReleaseFiles = [
   "scripts/sheets/cwn-character-sheet-v091.mjs",
   "scripts/sheets/cwn-drone-sheet-v0100.mjs",
   "scripts/sheets/cwn-cyberdeck-sheet-v0101.mjs",
+  "scripts/sheets/cwn-vehicle-sheet-v0120.mjs",
   "styles/cwn-interface-theme-v0101.css",
   "templates/sheets/character/cyberware-v062.hbs",
   "templates/sheets/npc/cyberware.hbs",
@@ -60,6 +63,13 @@ const browserReleaseFiles = [
   "templates/sheets/drone/configuration-v070.hbs",
   "templates/sheets/cyberdeck/operations-v0100.hbs",
   "templates/sheets/cyberdeck/configuration-v0101.hbs",
+  "templates/sheets/vehicle/header.hbs",
+  "templates/sheets/vehicle/operations.hbs",
+  "templates/sheets/vehicle/weapons.hbs",
+  "templates/sheets/vehicle/fittings.hbs",
+  "templates/sheets/vehicle/cargo.hbs",
+  "templates/sheets/vehicle/configuration.hbs",
+  "templates/sheets/vehicle/notes.hbs",
   "tests/character-sheet.test.mjs",
   "tests/cyberdeck-sheet.test.mjs",
   "tests/drone-sheet.test.mjs",
@@ -67,6 +77,7 @@ const browserReleaseFiles = [
   "tests/npc-sheet.test.mjs",
   "tests/manifest.test.mjs",
   "tests/sheet-refresh.test.mjs",
+  "tests/vehicle-sheet.test.mjs",
   "tools/stage-release.mjs",
 ];
 for (const filename of browserReleaseFiles) {

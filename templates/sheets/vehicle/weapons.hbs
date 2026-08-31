@@ -1,0 +1,9 @@
+<section class="tab cwnit-drone__body {{tab.cssClass}}" data-group="primary" data-tab="weapons">
+  <div class="cwnit-drone__section-heading"><div><p>ARMAMENT DETAIL</p><h2>Mounted Weapons</h2></div>{{#if cwnit.canManage}}<button type="button" data-action="createDoc" data-document-class="Item" data-type="shipWeapon" data-system.type="vehicle" data-system.min-class="s"><i class="fa-solid fa-plus"></i> New Mounted Weapon</button>{{/if}}</div>
+  <p class="cwnit-drone__hint">Every mounted weapon has one persistent Gunner. A Gunner can fire only weapons assigned to an Actor they own; assignment grants no Vehicle editing permission.</p>
+  <ol class="cwnit-drone__fitting-list">
+    {{#each cwnit.mountedWeapons as |weapon|}}
+      <li class="item" data-item-id="{{weapon.item.id}}" data-document-class="Item" data-drag="true"><img src="{{weapon.item.img}}" alt="" /><div><header><h3>{{weapon.item.name}}</h3><span>{{weapon.power}} power · {{weapon.mass}} mass · {{weapon.hardpoints}} HP · min {{weapon.minClass}}</span></header><p>Damage {{weapon.damage}} · AB {{weapon.attackBonus}} · {{weapon.stat}} · Range {{weapon.range}} · Ammo {{weapon.ammo}} · Trauma {{weapon.trauma}}</p><p>{{#if weapon.gunner}}Gunner: <strong>{{weapon.gunner.name}}</strong>{{else}}<strong class="is-missing">No gunner assigned</strong>{{/if}}</p></div><div class="cwnit-drone__item-controls"><button type="button" data-action="viewDoc" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>{{#if weapon.canManage}}<button type="button" data-action="assignGunner" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-user-crosshairs"></i></button><button type="button" data-action="deleteDoc" data-item-id="{{weapon.item.id}}"><i class="fa-solid fa-trash"></i></button>{{/if}}</div></li>
+    {{else}}<li class="cwnit-drone__empty">No mounted weapons installed.</li>{{/each}}
+  </ol>
+</section>

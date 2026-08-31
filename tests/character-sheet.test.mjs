@@ -335,7 +335,8 @@ test("GM advanced configuration exposes native Character fields only to GMs", ()
 test("native capability and pool placement fields affect the alternative layout", () => {
   assert.match(source, /POWER_VISIBILITY_FIELDS/u);
   assert.match(source, /visiblePowers/u);
-  assert.match(source, /showCyberware\) options\.parts\.push\("cyberware"\)/u);
+  assert.match(source, /\["header", "combat", "skills", "inventory", "cyberware"\]/u);
+  assert.doesNotMatch(source, /showCyberware\) options\.parts\.push\("cyberware"\)/u);
   assert.match(templates.features, /#each cwnit\.visiblePowers/u);
   assert.match(templates.header, /showPoolsInHeader/u);
   assert.match(templates.features, /showPoolsInPowers/u);

@@ -345,8 +345,7 @@ export function createCwnCharacterSheetClass(SWNActorSheet) {
         options.defaultTab = "biography";
         return;
       }
-      options.parts = ["header", "combat", "skills", "inventory"];
-      if (this.document.system?.tweak?.showCyberware) options.parts.push("cyberware");
+      options.parts = ["header", "combat", "skills", "inventory", "cyberware"];
       options.parts.push("features", "actions", "biography", "tabs");
     }
 

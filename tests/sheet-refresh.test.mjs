@@ -31,6 +31,20 @@ test("Drone pilot changes rerender both the previous and current open Character 
   assert.equal(current.sheet.renderCount, 1);
 });
 
+test("Vehicle Driver changes rerender both the previous and current open Character sheets", () => {
+  const previous = openActor("old-driver");
+  const current = openActor("new-driver");
+  const actors = new Map([["old-driver", previous], ["new-driver", current]]);
+  const refreshed = refreshDependentSheets(
+    { type: "vehicle", system: { crewMembers: ["new-driver"] } },
+    { system: { crewMembers: ["new-driver"] } },
+    { actors, previousPilotId: "old-driver" },
+  );
+  assert.deepEqual(refreshed, ["old-driver", "new-driver"]);
+  assert.equal(previous.sheet.renderCount, 1);
+  assert.equal(current.sheet.renderCount, 1);
+});
+
 test("Access changes rerender linked open Cyberdeck sheets without opening closed sheets", () => {
   const openDeck = openActor("open");
   const closedDeck = { id: "closed", sheet: { rendered: false, renderCount: 0, render() { this.renderCount += 1; } } };

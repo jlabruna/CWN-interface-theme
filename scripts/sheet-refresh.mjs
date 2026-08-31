@@ -1,4 +1,5 @@
 const previousDronePilots = new Map();
+const previousVehicleDrivers = new Map();
 import { openApplicationsForActor } from "./sheets/drone-pilot-link.mjs?v=0.11.2";
 
 function changedLeafPaths(value, prefix = "", output = []) {
@@ -37,6 +38,11 @@ export function refreshDependentSheets(actor, changes, {
     const currentPilotId = actor.system?.crewMembers?.[0];
     if (currentPilotId) dependentIds.add(String(currentPilotId));
   }
+  if (actor?.type === "vehicle" && updateTouchesPath(changes, "system.crewMembers")) {
+    if (previousPilotId) dependentIds.add(String(previousPilotId));
+    const currentDriverId = actor.system?.crewMembers?.[0];
+    if (currentDriverId) dependentIds.add(String(currentDriverId));
+  }
   if ((actor?.type === "character" || actor?.type === "npc") && updateTouchesPath(changes, "system.access")) {
     for (const cyberdeckId of actor.system?.cyberdecks ?? []) dependentIds.add(String(cyberdeckId));
   }
@@ -46,15 +52,19 @@ export function refreshDependentSheets(actor, changes, {
 export function registerLinkedSheetRefreshHooks(runtime = globalThis) {
   runtime.Hooks?.on?.("preUpdateActor", (actor, changes) => {
     if (runtime.game?.system?.id !== "swnr") return;
-    if (actor?.type !== "drone" || !updateTouchesPath(changes, "system.crewMembers")) return;
-    previousDronePilots.set(actor.uuid ?? actor.id, actor.system?.crewMembers?.[0] ?? null);
+    if (!updateTouchesPath(changes, "system.crewMembers")) return;
+    if (actor?.type === "drone") previousDronePilots.set(actor.uuid ?? actor.id, actor.system?.crewMembers?.[0] ?? null);
+    if (actor?.type === "vehicle") previousVehicleDrivers.set(actor.uuid ?? actor.id, actor.system?.crewMembers?.[0] ?? null);
   });
 
   runtime.Hooks?.on?.("updateActor", (actor, changes) => {
     if (runtime.game?.system?.id !== "swnr") return;
     const key = actor?.uuid ?? actor?.id;
-    const previousPilotId = previousDronePilots.get(key) ?? null;
+    const previousPilotId = actor?.type === "vehicle"
+      ? previousVehicleDrivers.get(key) ?? null
+      : previousDronePilots.get(key) ?? null;
     previousDronePilots.delete(key);
+    previousVehicleDrivers.delete(key);
     refreshDependentSheets(actor, changes, { actors: runtime.game?.actors, previousPilotId, runtime });
   });
 }
