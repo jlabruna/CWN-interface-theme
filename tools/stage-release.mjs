@@ -59,6 +59,7 @@ const browserReleaseFiles = [
   "styles/cwn-interface-theme-v0101.css",
   "styles/cwn-interface-theme-v0121.css",
   "styles/cwn-interface-theme-v0123.css",
+  "templates/sheets/character/combat-v081.hbs",
   "templates/sheets/character/cyberware-v062.hbs",
   "templates/sheets/npc/cyberware.hbs",
   "templates/sheets/drone/operations-v092.hbs",

@@ -45,7 +45,7 @@
     <section class="cwnit-sheet__panel cwnit-sheet__armor-panel">
       <h2>{{localize "CWNIT.Sheet.Character.Armor"}}</h2>
       <ol class="cwnit-sheet__compact-list cwnit-sheet__armor-list">
-        {{#each cwnit.armor as |armor|}}
+        {{#each cwnit.readiedArmor as |armor|}}
           <li class="item" data-item-id="{{armor.item._id}}" data-document-class="Item" data-drag="true">
             <img src="{{armor.item.img}}" alt="" />
             <button type="button" class="cwnit-sheet__armor-name" data-action="viewDoc">{{armor.item.name}}</button>
