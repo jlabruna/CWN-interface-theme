@@ -3,11 +3,11 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.12.3 polishes the Character Accounts panel with a compact labelled
-Monthly Expenses launcher and limits Combat-tab armor cards to native Readied
-armor. Inventory continues to expose every armor Item. Monthly Expenses dialog
-transactions and authorized player HIT damage are supplied by Combat
-Enhancements 0.26.1.
+Version 0.12.4 presents Monthly Expenses as a solid account-style row, with a
+right-aligned read-only total that no longer resembles an editable field and
+the established labelled management button. The 0.12.3 native Readied-armor
+filter remains intact. Monthly Expenses transactions and authorized player HIT
+damage are supplied by Combat Enhancements 0.26.1.
 
 ## Current scope
 
@@ -76,7 +76,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.12.3.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.12.4.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet

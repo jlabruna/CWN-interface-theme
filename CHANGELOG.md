@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.4
+
+- Restyled Monthly Expenses as a full-width solid account row using the same raised panel, border, height, spacing, and right-aligned balance language as ordinary accounts.
+- Removed the input-like border and background from the read-only Monthly Expenses total while retaining the labelled management button.
+- Added focused account-row presentation regression coverage.
+
 ## 0.12.3
 
 - Made the Character Accounts Monthly Expenses amount compact and replaced the icon-only launcher plus redundant lower label with one established labelled button.

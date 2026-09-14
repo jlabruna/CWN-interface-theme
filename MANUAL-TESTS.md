@@ -1,10 +1,10 @@
-# Manual Tests — CWN Interface Theme 0.12.3
+# Manual Tests — CWN Interface Theme 0.12.4
 
 Install CWN Combat Enhancements 0.26.1 before testing this release. Hard-refresh Foundry after both modules update.
 
-## 0.12.3 focused tests
+## 0.12.4 focused tests
 
-1. Open Character Inventory > Accounts & Monthly Expenses. Confirm the total is compact, the launcher reads **Monthly Expenses** with its dollar icon, no redundant label appears underneath, and normal sheet widths do not clip or overflow.
+1. Open Character Inventory > Accounts & Monthly Expenses. Confirm Monthly Expenses is a full-width solid row matching the account rows, its amount is right-aligned and does not resemble an input, the launcher reads **Monthly Expenses** with its dollar icon, and normal sheet widths do not clip or overflow.
 2. Open Monthly Expenses, change Lifestyle and custom rows, then Cancel. Reopen and confirm the previous values and total. Repeat with X, then Save a change and confirm only the saved version persists.
 3. Give a Character one Readied armor and one Stowed armor. Confirm Inventory shows both while Combat shows only the Readied armor.
 4. Change Readied to Stowed and confirm it leaves Combat; Ready the other armor and confirm it appears. Confirm native AC/equipped behavior remains correct.

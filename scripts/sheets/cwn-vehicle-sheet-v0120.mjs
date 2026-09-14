@@ -3,8 +3,8 @@ import {
   number,
   queueMissingBaseWarning,
   sortDocuments,
-} from "./cwn-sheet-shared-v062.mjs?v=0.12.3";
-import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.3";
+} from "./cwn-sheet-shared-v062.mjs?v=0.12.4";
+import { resolveSwnrVehicleSheet } from "./cwn-drone-sheet-v0100.mjs?v=0.12.4";
 
 export const VEHICLE_SHEET_LABEL = "CWN Vehicle Operations Sheet";
 export const PLAYER_VEHICLE_ADVANCED_CONFIG_SETTING = "allowPlayerVehicleAdvancedConfiguration";

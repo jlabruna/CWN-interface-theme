@@ -15,6 +15,7 @@ const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-
 const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0101.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v090.css", import.meta.url), "utf8");
 const patchCss = await fs.readFile(new URL("../styles/cwn-interface-theme-v0123.css", import.meta.url), "utf8");
+const accountsPatchCss = await fs.readFile(new URL("../styles/cwn-interface-theme-v0124.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v090", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -487,4 +488,14 @@ test("Monthly Expenses uses a compact labelled launcher without a redundant lowe
   assert.match(patchCss, /display:\s*inline-flex/u);
   assert.match(patchCss, /white-space:\s*nowrap/u);
   assert.doesNotMatch(patchCss, /\.cwnce-monthly-expenses-summary\s*>\s*span/u);
+});
+
+test("Monthly Expenses matches the solid account-row presentation without an input-like total", () => {
+  assert.match(accountsPatchCss, /grid-template-columns:\s*minmax\(0, 1fr\) auto auto/u);
+  assert.match(accountsPatchCss, /width:\s*100%/u);
+  assert.match(accountsPatchCss, /background:\s*var\(--cwnit-sheet-panel-raised\)/u);
+  assert.match(accountsPatchCss, /border:\s*1px solid var\(--cwnit-sheet-border\)/u);
+  assert.match(accountsPatchCss, /\.cwnce-monthly-total[\s\S]*border:\s*0/u);
+  assert.match(accountsPatchCss, /\.cwnce-monthly-total[\s\S]*background:\s*transparent/u);
+  assert.match(accountsPatchCss, /\.cwnce-monthly-total[\s\S]*text-align:\s*right/u);
 });
