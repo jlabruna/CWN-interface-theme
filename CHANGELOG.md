@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.3
+
+- Made the Character Accounts Monthly Expenses amount compact and replaced the icon-only launcher plus redundant lower label with one established labelled button.
+- Limited Character Combat armor cards to Items whose authoritative native SWNR location is exactly Readied; Inventory continues to show Readied, Stowed, contained, and other armor normally.
+- Added responsive Monthly Expenses layout and native-location armor filtering regression coverage.
+
 ## 0.12.2
 
 - Added an owner/GM **Unmount** control to every mounted Vehicle weapon on both Operations and Weapons.

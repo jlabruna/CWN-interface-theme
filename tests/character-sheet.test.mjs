@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   ACTION_REFERENCES,
   CHARACTER_SHEET_LABEL,
+  readiedArmorEntries,
   registerCwnCharacterSheet,
   skillRankTier,
 } from "../scripts/sheets/cwn-character-sheet-v091.mjs";
@@ -13,6 +14,7 @@ import { linkedDronesForPilot, weaponClassification } from "../scripts/sheets/cw
 const source = await fs.readFile(new URL("../scripts/sheets/cwn-character-sheet-v091.mjs", import.meta.url), "utf8");
 const moduleSource = await fs.readFile(new URL("../scripts/cwn-interface-theme-v0101.mjs", import.meta.url), "utf8");
 const css = await fs.readFile(new URL("../styles/cwn-interface-theme-v090.css", import.meta.url), "utf8");
+const patchCss = await fs.readFile(new URL("../styles/cwn-interface-theme-v0123.css", import.meta.url), "utf8");
 const templateNames = ["header", "combat", "skills", "inventory", "cyberware", "features", "actions", "biography"];
 const templateVersions = { header: "v081", combat: "v081", skills: "v082", inventory: "v090", features: "v081", actions: "v080" };
 const templates = Object.fromEntries(await Promise.all(templateNames.map(async (name) => [
@@ -263,12 +265,29 @@ test("combat keeps one initiative launcher and uses the NPC-style armor lower pa
   assert.doesNotMatch(templates.combat, /data-action="openActionsTab"|data-action="declareAction"/u);
   assert.doesNotMatch(source, /openActionsTab|_onOpenActionsTab/u);
   assert.match(templates.combat, /cwnit-sheet__combat-columns--loadout/u);
-  assert.match(templates.combat, /#each cwnit\.armor as \|armor\|/u);
+  assert.match(templates.combat, /#each cwnit\.readiedArmor as \|armor\|/u);
   assert.match(templates.combat, /cwnit-sheet__armor-toggle \{\{#if armor\.isActive\}\}is-active/u);
   assert.match(templates.actions, /data-action="declareAction"/u);
   assert.doesNotMatch(templates.actions, /data-action="rollSave"/u);
   assert.match(css, /\.cwnit-sheet__armor-toggle\.is-active/u);
   assert.match(templates.combat, /cwnit-sheet__armor-empty/u);
+});
+
+test("Combat armor derives exclusively from native Readied location while Inventory retains every armor Item", () => {
+  const armor = (id, location) => ({ item: { id, type: "armor", system: { location } }, isActive: id === "active" });
+  const entries = [
+    armor("readied-one", "readied"),
+    armor("stowed", "stowed"),
+    armor("container", "container"),
+    armor("other", "other"),
+    armor("readied-two", "Readied"),
+  ];
+  assert.deepEqual(readiedArmorEntries(entries).map((entry) => entry.item.id), ["readied-one", "readied-two"]);
+  entries[1].item.system.location = "readied";
+  entries[0].item.system.location = "stowed";
+  assert.deepEqual(readiedArmorEntries(entries).map((entry) => entry.item.id), ["stowed", "readied-two"]);
+  assert.match(templates.inventory, /itemList=actor\.itemTypes\.armor/u);
+  assert.doesNotMatch(templates.inventory, /readiedArmor/u);
 });
 
 test("character vitals distinguish ranged and melee AC and expose native Soak", () => {
@@ -460,4 +479,12 @@ test("sheet design tokens are shared and rich text toolbar is placed in its own 
   assert.match(css, /prose-mirror :is\(menu, \.editor-menu, \.prosemirror-menu\)/u);
   assert.match(css, /\.cwnit-chat-message :is\(\.cwnit-action-reference, \.cwnit-skill-upgrade\)/u);
   assert.match(css, /dt, dd/u);
+});
+
+test("Monthly Expenses uses a compact labelled launcher without a redundant lower label", () => {
+  assert.match(patchCss, /grid-template-columns:\s*minmax\(5\.5rem, 9rem\) max-content auto/u);
+  assert.match(patchCss, /\.cwnce-monthly-expenses-button\s*\{/u);
+  assert.match(patchCss, /display:\s*inline-flex/u);
+  assert.match(patchCss, /white-space:\s*nowrap/u);
+  assert.doesNotMatch(patchCss, /\.cwnce-monthly-expenses-summary\s*>\s*span/u);
 });

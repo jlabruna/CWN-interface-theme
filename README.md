@@ -3,11 +3,11 @@
 An adaptive light and dark interface theme for **Cities Without Number** games
 running on **Systems Without Number Redux (SWNR) 2.3.1** in Foundry VTT v14.
 
-Version 0.12.2 makes Vehicle weapon installation reversible. A Vehicle owner or
-GM can unmount a native mounted weapon back to ordinary Stowed Cargo while
-preserving its current combat and ammunition data, releasing its mounting
-capacity, and clearing the obsolete Gunner relationship. Authoritative Vehicle
-AC, attacks, capacity checks, and repair continue to use Combat Enhancements 0.26.0.
+Version 0.12.3 polishes the Character Accounts panel with a compact labelled
+Monthly Expenses launcher and limits Combat-tab armor cards to native Readied
+armor. Inventory continues to expose every armor Item. Monthly Expenses dialog
+transactions and authorized player HIT damage are supplied by Combat
+Enhancements 0.26.1.
 
 ## Current scope
 
@@ -76,7 +76,7 @@ https://github.com/jlabruna/CWN-interface-theme/releases/latest/download/module.
 ```
 
 For a manual Forge import, upload the versioned
-`cwn-interface-theme-v0.12.2.zip` release asset. The ZIP must contain
+`cwn-interface-theme-v0.12.3.zip` release asset. The ZIP must contain
 `module.json` at its root.
 
 ## Selecting an optional sheet
@@ -129,6 +129,10 @@ Open **Inventory > Accounts & Monthly Expenses**, then choose
 whole numbers and every committed transaction requires a description. The
 history records the signed change, resulting balance, user, and local date/time
 and is shown newest first. Negative balances are supported.
+
+The Monthly Expenses total uses a compact value field beside one labelled
+launcher. The dialog is provided by Combat Enhancements 0.26.1, where Save is
+the only commit path and Cancel/X discard provisional edits.
 
 The visible balance is always read from SWNR's native Character data. Combat
 Enhancements stores only identity and append-only history in actor flags. New

@@ -158,10 +158,16 @@ function prepareCharacterContext(actor, resolveActor, {
     },
     stats,
     actionReferences: Object.entries(ACTION_REFERENCES).map(([key, value]) => ({ key, ...value })),
-    readiedArmor: cwnit.armor.filter((entry) => entry.isActive),
+    readiedArmor: readiedArmorEntries(cwnit.armor),
     readyPercentage: number(system.encumbrance?.ready?.percentage),
     stowedPercentage: number(system.encumbrance?.stowed?.percentage),
   };
+}
+
+export function readiedArmorEntries(entries = []) {
+  return Array.from(entries).filter(
+    (entry) => String(entry?.item?.system?.location ?? "").trim().toLocaleLowerCase("en") === "readied",
+  );
 }
 
 function escapeHtml(value) {
